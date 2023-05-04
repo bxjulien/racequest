@@ -1,0 +1,15 @@
+{
+  "name": "racequest",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "bootstrap": "lerna bootstrap"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "private": true,
+  "devDependencies": {
+    "lerna": "^6.6.1"
+  }
+}
