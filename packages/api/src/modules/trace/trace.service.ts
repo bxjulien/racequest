@@ -44,7 +44,7 @@ export class TraceService {
       geoJson.geometry.coordinates = coordinates;
 
       const line = turf.lineString(coordinates);
-      const distance = turf.lineDistance(line, { units: 'kilometers' });
+      const distance = turf.lineDistance(line, 'kilometers');
 
       const minDistance = createTraceDto.distance * 0.5;
       const maxDistance = createTraceDto.distance * 1.5;
