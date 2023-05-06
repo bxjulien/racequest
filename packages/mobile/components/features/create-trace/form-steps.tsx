@@ -1,14 +1,11 @@
-import React, { useState } from "react";
-import { View, StyleSheet, Text } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Step } from "./step";
-import { ProgressBar } from "react-native-paper";
-import { RadioButton } from "../../shared/radio/radio";
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+
+import ProgressBar from '../../shared/progress-bar/progress-bar';
+import { RadioButton } from '../../shared/radio/radio';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export const FormSteps = () => {
-  const [currentStep, setCurrentStep] = useState(1);
-  const progress = currentStep / 3;
-
   const handleNext = () => {
     setCurrentStep(currentStep + 1);
   };
@@ -17,23 +14,34 @@ export const FormSteps = () => {
     setCurrentStep(currentStep - 1);
   };
 
+  const [steps, setSteps] = useState([
+    {
+      id: 1,
+      name: 'Distance',
+      active: true,
+      component: (
+        <StepDistance onNext={handleNext} onPrevious={handlePrevious} />
+      ),
+    },
+  ]);
+
+  const [currentStep, setCurrentStep] = useState(1);
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    setProgress((currentStep / 3) * 100);
+  }, [currentStep]);
+
   return (
     <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>🚀 Créer une trace</Text>
+
+      <View style={styles.stepsContainer}>
+        {steps.map((step) => (
+          <View key={step.id} style={styles.stepContainer}>
+
       <Text style={styles.title}>📏 On pars sur quelle distance ?</Text>
-      <ProgressBar
-        progress={progress}
-        color={"#6200ee"}
-        style={styles.progressBar}
-      />
-      {currentStep === 1 && (
-        <Step1 onNext={handleNext} onPrevious={handlePrevious} />
-      )}
-      {currentStep === 2 && (
-        <Step2 onNext={handleNext} onPrevious={handlePrevious} />
-      )}
-      {currentStep === 3 && (
-        <Step3 onNext={handleNext} onPrevious={handlePrevious} />
-      )}
+      <ProgressBar progress={progress} color='violet' height={2} />
     </SafeAreaView>
   );
 };
@@ -43,30 +51,29 @@ type StepProps = {
   onPrevious: () => void;
 };
 
-const Step1 = ({ onNext, onPrevious }: StepProps) => {
-  const [selectedValue, setSelectedValue] = useState("option1");
+const Step = ({ step }: { steps: Step }) => {
+  return <View style={styles.stepContainer}>{step.component}</View>;
+};
+
+const StepDistance = ({ onNext, onPrevious }: StepProps) => {
+  const [selectedValue, setSelectedValue] = useState('option1');
 
   return (
-    <Step
-      currentStep={1}
-      totalSteps={3}
-      onNext={onNext}
-      onPrevious={onPrevious}
-    >
+    <View>
       <Text>Step 1</Text>
       <RadioButton
-        label="Option 1"
-        value="option1"
+        label='Option 1'
+        value='option1'
         selectedValue={selectedValue}
         onValueChange={setSelectedValue}
       />
       <RadioButton
-        label="Option 2"
-        value="option2"
+        label='Option 2'
+        value='option2'
         selectedValue={selectedValue}
         onValueChange={setSelectedValue}
       />
-    </Step>
+    </View>
   );
 };
 
@@ -100,15 +107,30 @@ const Step3 = ({ onNext, onPrevious }: StepProps) => {
   );
 };
 
+const Footer = ({ onNext, onPrevious }: StepProps) => {
+  return (
+    <View>
+      {currentStep > 1 && (
+        <Button onPress={onPrevious} title='Previous' color='#6200ee' />
+      )}
+      {currentStep < totalSteps ? (
+        <Button onPress={onNext} title='Next' color='#6200ee' />
+      ) : (
+        <Button onPress={onNext} title='Create trace' color='#6200ee' />
+      )}
+    </View>
+  );
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
   title: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginVertical: 40,
-    textAlign: "center",
+    textAlign: 'center',
   },
   progressBar: {
     height: 2,
