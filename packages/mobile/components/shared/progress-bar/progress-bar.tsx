@@ -28,7 +28,7 @@ export default function ProgressBar({
   });
 
   return (
-    <View style={[styles.container, { height }]}>
+    <View style={[styles.container]}>
       <Animated.View
         style={[
           styles.progressBar,
@@ -41,8 +41,13 @@ export default function ProgressBar({
 }
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    height: 10,
+    backgroundColor: '#ccc',
+    borderRadius: 4,
+  },
   progressBar: {
     height: '100%',
+    borderRadius: 4,
   },
 });

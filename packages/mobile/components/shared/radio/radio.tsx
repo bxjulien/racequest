@@ -4,8 +4,9 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 type RadioButtonProps = {
   label: string;
   value: string;
-  selectedValue: string;
+  selectedValue?: string;
   onValueChange: (value: string) => void;
+  description?: string;
 };
 
 export const RadioButton = ({
@@ -13,27 +14,43 @@ export const RadioButton = ({
   value,
   selectedValue,
   onValueChange,
+  description,
 }: RadioButtonProps) => {
   const isChecked = selectedValue === value;
 
   return (
     <TouchableOpacity
-      style={styles.radioButtonContainer}
+      style={[styles.container, isChecked && styles.checked]}
       onPress={() => onValueChange(value)}
     >
-      <View style={[styles.circle, isChecked && styles.circleChecked]}>
-        {isChecked && <View style={styles.innerCircle} />}
+      <View style={styles.main}>
+        <View style={[styles.circle, isChecked && styles.circleChecked]}>
+          {isChecked && <View style={styles.innerCircle} />}
+        </View>
+        <Text style={styles.label}>{label}</Text>
       </View>
-      <Text style={styles.label}>{label}</Text>
+      <View style={styles.description}>
+        <Text>{description}</Text>
+      </View>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  radioButtonContainer: {
+  container: {
+    paddingHorizontal: 20,
+    paddingVertical: 30,
+    borderWidth: 2,
+    borderColor: "#ccc",
+    borderRadius: 15,
+  },
+  checked: {
+    borderColor: "#6200ee",
+    backgroundColor: "#ebeaf5",
+  },
+  main: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 10,
   },
   circle: {
     width: 24,
@@ -54,7 +71,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#6200ee",
   },
   label: {
-    marginLeft: 8,
-    fontSize: 16,
+    marginLeft: 20,
+    fontSize: 18,
+  },
+  description: {
+    marginTop: 10,
+    marginLeft: 45,
+    opacity: 0.7,
   },
 });
