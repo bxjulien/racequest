@@ -5,17 +5,18 @@ import FormSteps from "../../shared/form-steps/form-steps";
 import CreateTraceDistance from "./distance/create-trace-distance";
 import Button from "../../shared/button/button";
 import { DistanceType } from "../../../shared/enums/DistanceType.enum";
+import FormStepsFooter from "../../shared/form-steps/form-steps-footer";
 
 export default function CreateTrace() {
   const [formData, setFormData] = useState({
     distance: DistanceType.Short,
   });
 
-  const handleNext = () => {
+  const goNext = () => {
     setCurrentStep(currentStep + 1);
   };
 
-  const handleBack = () => {
+  const goBack = () => {
     setCurrentStep(currentStep - 1);
   };
 
@@ -30,7 +31,7 @@ export default function CreateTrace() {
         />
       ),
       footer: (
-        <MainFooter goNext={handleNext} goBack={handleBack} canGoBack={true} />
+        <FormStepsFooter goNext={goNext} goBack={goBack} canGoBack={true} />
       ),
     },
     {
@@ -42,7 +43,7 @@ export default function CreateTrace() {
         </View>
       ),
       footer: (
-        <MainFooter goNext={handleNext} goBack={handleBack} canGoBack={true} />
+        <FormStepsFooter goNext={goNext} goBack={goBack} canGoBack={true} />
       ),
     },
   ];
@@ -60,49 +61,9 @@ export default function CreateTrace() {
   );
 }
 
-const MainFooter = ({
-  goNext,
-  canGoNext = true,
-  goBack,
-  canGoBack = true,
-}: {
-  goNext: () => void;
-  canGoNext?: boolean;
-  goBack: () => void;
-  canGoBack: boolean;
-}) => {
-  return (
-    <View style={styles.footer}>
-      <Button
-        title="Retour"
-        style={styles.backButton}
-        onPress={goBack}
-        disabled={!canGoBack}
-      />
-      <Button
-        style={styles.nextButton}
-        title="Continuer"
-        onPress={goNext}
-        disabled={!canGoNext}
-      />
-    </View>
-  );
-};
-
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 15,
     paddingBottom: 20,
-  },
-  footer: {
-    flexDirection: "row",
-    gap: 10,
-  },
-  backButton: {
-    flex: 0.4,
-  },
-  nextButton: {
-    flex: 1,
-    height: 80,
-  },
+  }
 });

@@ -1,24 +1,24 @@
-import React from "react";
-import { StyleSheet, View, Text } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { StyleSheet, Text } from 'react-native';
 
-import { StatusBar } from "expo-status-bar";
-import useTracesQuery from "../shared/hooks/useTracesQuery.hook";
+import Button from '../components/shared/button/button';
+import NearbyTraces from '../components/features/nearby-traces/nearby-traces';
+import React from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 
 export default function HomeScreen() {
-  const { data: countries, isError, isLoading } = useTracesQuery();
-
-  if (isLoading) return <Text>Loading...</Text>;
-
-  if (isError) return <Text>Error</Text>;
+  const navigation = useNavigation();
 
   return (
     <SafeAreaView style={styles.container}>
       <Text>Home</Text>
-      {countries?.map((country: any) => (
-        <Text key={country.id}>{country.name}</Text>
-      ))}
-      <StatusBar style="auto" />
+
+      <NearbyTraces />
+
+      <Button
+        title={'Créer une course'}
+        onPress={() => navigation.navigate('create-trace' as never)}
+      />
     </SafeAreaView>
   );
 }
