@@ -1,7 +1,7 @@
 import { Text, View } from 'react-native';
 
 import { useLocationContext } from '../../../shared/contexts/location.context';
-import useNearbyTracesQuery from '../../../shared/hooks/useNearbyTracesQuery.hook';
+import useNearbyTracesQuery from '../../../shared/hooks/queries/useNearbyTracesQuery.hook';
 
 export default function NearbyTraces() {
   const { location } = useLocationContext();

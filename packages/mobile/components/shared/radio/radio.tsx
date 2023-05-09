@@ -1,12 +1,14 @@
-import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+
+import React from 'react';
 
 type RadioButtonProps = {
   label: string;
   value: string;
   selectedValue?: string;
-  onValueChange: (value: string) => void;
+  onValueChange?: (value: string) => void;
   description?: string;
+  style?: any;
 };
 
 export const RadioButton = ({
@@ -15,23 +17,28 @@ export const RadioButton = ({
   selectedValue,
   onValueChange,
   description,
+  style,
 }: RadioButtonProps) => {
   const isChecked = selectedValue === value;
 
   return (
     <TouchableOpacity
-      style={[styles.container, isChecked && styles.checked]}
-      onPress={() => onValueChange(value)}
+      style={[style, styles.container, isChecked && styles.checked]}
+      onPress={() => onValueChange && onValueChange(value)}
     >
       <View style={styles.main}>
         <View style={[styles.circle, isChecked && styles.circleChecked]}>
           {isChecked && <View style={styles.innerCircle} />}
         </View>
-        <Text style={styles.label}>{label}</Text>
+        <Text style={[styles.label, Boolean(description) && styles.bold]}>
+          {label}
+        </Text>
       </View>
-      <View style={styles.description}>
-        <Text>{description}</Text>
-      </View>
+      {description && (
+        <View style={styles.description}>
+          <Text>{description}</Text>
+        </View>
+      )}
     </TouchableOpacity>
   );
 };
@@ -41,37 +48,40 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 30,
     borderWidth: 2,
-    borderColor: "#ccc",
-    borderRadius: 15,
+    borderColor: '#ccc',
+    borderRadius: 20,
   },
   checked: {
-    borderColor: "#6200ee",
-    backgroundColor: "#ebeaf5",
+    borderColor: '#6200ee',
+    backgroundColor: '#ebeaf5',
   },
   main: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   circle: {
     width: 24,
     height: 24,
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: "#6200ee",
-    alignItems: "center",
-    justifyContent: "center",
+    borderColor: '#ccc',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   circleChecked: {
-    borderColor: "#6200ee",
+    borderColor: '#6200ee',
   },
   innerCircle: {
-    width: 12,
-    height: 12,
+    width: 13,
+    height: 13,
     borderRadius: 6,
-    backgroundColor: "#6200ee",
+    backgroundColor: '#6200ee',
   },
   label: {
     marginLeft: 20,
+  },
+  bold: {
+    fontWeight: 'bold',
     fontSize: 18,
   },
   description: {

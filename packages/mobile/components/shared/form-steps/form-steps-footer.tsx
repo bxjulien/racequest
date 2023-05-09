@@ -21,9 +21,11 @@ export default function FormStepsFooter({
         style={styles.backButton}
         onPress={goBack}
         disabled={!canGoBack}
+        color='orange'
       />
       <Button
         style={styles.nextButton}
+        color='#6200ee'
         title='Continuer'
         onPress={goNext}
         disabled={!canGoNext}
@@ -34,11 +36,13 @@ export default function FormStepsFooter({
 
 const styles = StyleSheet.create({
   footer: {
+    paddingVertical: 10,
     flexDirection: 'row',
     gap: 10,
   },
   backButton: {
     flex: 0.25,
+    color: 'red',
   },
   nextButton: {
     flex: 1,

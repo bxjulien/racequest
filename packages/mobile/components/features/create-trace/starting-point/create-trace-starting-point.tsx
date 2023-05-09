@@ -1,34 +1,79 @@
-import React from "react";
-import { View, Text } from "react-native";
-import { useState } from "react";
-import { getPlaces } from "../../../../shared/services/mapbox.service";
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
+import InputText from '../../../shared/input/input-text';
+import { Place } from '../../../../shared/types/place.type';
+import { RadioButton } from '../../../shared/radio/radio';
+import React from 'react';
+import useDebounce from '../../../../shared/hooks/useDebounce';
+import usePlacesGeocodingQuery from '../../../../shared/hooks/queries/usePlacesGeocodingQuery.hook';
+import { useState } from 'react';
 
 export default function CreateTraceStartingPoint() {
   const [query, setQuery] = useState('');
-  const debouncedQuery = useDebounce(query, 300); // debounce the query with a 300ms delay
-  const { data: results, isLoading } = useNearbyTracesQuery(debouncedQuery, { enabled: debouncedQuery.length > 0 });
+  const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
+  const debouncedQuery = useDebounce(query, 300);
+  const { data: places, isLoading } = usePlacesGeocodingQuery(debouncedQuery, {
+    enabled: Boolean(debouncedQuery.length && !selectedPlace),
+  });
 
-  const renderItem = ({ item }) => (
-    <TouchableOpacity style={styles.resultItem} onPress={() => setQuery(item.place_name)}>
-      <Text>{item.place_name}</Text>
-    </TouchableOpacity>
+  const renderItem = ({ item }: { item: Place }) => (
+    <RadioButton
+      label={item.place_name}
+      value={item.place_name}
+      selectedValue={selectedPlace?.place_name}
+      onValueChange={(value) => {
+        setQuery(value);
+        setSelectedPlace(item);
+      }}
+      style={styles.place}
+    />
   );
 
   return (
     <View style={styles.container}>
-      <TextInput
-        style={styles.input}
-        value={query}
-        onChangeText={setQuery}
-        placeholder="Search for a location"
-      />
-      {isLoading && <Text>Loading...</Text>}
-      <FlatList
-        data={results}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        keyboardShouldPersistTaps="handled"
+      {!selectedPlace && (
+        <InputText
+          query={query}
+          onChange={setQuery}
+          placeholder='Rechercher une ville, un lieu, ...'
+        />
+      )}
+
+      {selectedPlace && (
+        <RadioButton
+          label={selectedPlace.place_name}
+          value={selectedPlace.place_name}
+          selectedValue={selectedPlace.place_name}
+          style={styles.selectedPlace}
+        />
+      )}
+
+      {!selectedPlace && (
+        <FlatList
+          data={places}
+          renderItem={renderItem as any}
+          keyExtractor={(item: Place) => item.id}
+          keyboardShouldPersistTaps='handled'
+          showsVerticalScrollIndicator={false}
+        />
+      )}
+
+      <RadioButton
+        label={'Ma position actuelle'}
+        value={'Ma position actuelle'}
+        selectedValue={selectedPlace?.place_name}
+        onValueChange={(value) => {
+          setQuery(value);
+          setSelectedPlace(null);
+        }}
+        style={styles.actualPosition}
       />
     </View>
   );
@@ -37,19 +82,15 @@ export default function CreateTraceStartingPoint() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 40,
-    paddingHorizontal: 20,
+    marginTop: 40,
   },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    paddingLeft: 10,
-    marginBottom: 10,
+  place: {
+    marginVertical: 5,
   },
-  resultItem: {
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+  selectedPlace: {
+    marginTop: 20,
+  },
+  actualPosition: {
+    marginTop: 20,
   },
 });

@@ -1,6 +1,8 @@
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import ProgressBar from "../progress-bar/progress-bar";
+import { StyleSheet, Text, View } from 'react-native';
+
+import ProgressBar from '../progress-bar/progress-bar';
+import React from 'react';
+import { ScrollView } from 'react-native-gesture-handler';
 
 type FormStepsProps = {
   title: string;
@@ -29,7 +31,7 @@ export default function FormSteps({
       <View>
         <Text style={styles.title}>{title}</Text>
         {withProgressBar && (
-          <ProgressBar progress={progress} color="violet" height={2} />
+          <ProgressBar progress={progress} color='#6200ee' height={2} />
         )}
         {steps[activeStep].title && (
           <Text style={styles.stepTitle}>{steps[activeStep].title}</Text>
@@ -45,18 +47,18 @@ export default function FormSteps({
 
 const styles = StyleSheet.create({
   container: {
-    height: "100%",
-    justifyContent: "space-between",
+    height: '100%',
+    justifyContent: 'space-between',
   },
   title: {
     fontSize: 24,
-    fontWeight: "bold",
-    textAlign: "center",
+    fontWeight: 'bold',
+    textAlign: 'center',
     paddingVertical: 20,
   },
   stepTitle: {
     fontSize: 22,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginTop: 40,
   },
 });
