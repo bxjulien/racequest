@@ -2,17 +2,17 @@ import { TraceDirection } from '../../enums/trace-direction.enum';
 import { Coordinates } from '../../types/coordinates.type';
 
 export function createWaypoints(
-  distanceType: number,
+  formatType: number,
   startingPoint: Coordinates,
   direction: TraceDirection = TraceDirection.Clockwise,
 ): Coordinates[] {
-  const waypointsNb = getNumberOfWaypoints(distanceType);
+  const waypointsNb = getNumberOfWaypoints(formatType);
 
   const angleIncrement: number =
     ((2 * Math.PI) / waypointsNb) *
     (direction === TraceDirection.Clockwise ? 1 : -1);
 
-  const waypointDistance: number = distanceType / waypointsNb;
+  const waypointDistance: number = formatType / waypointsNb;
   const waypoints: Coordinates[] = [startingPoint];
 
   for (let i = 1; i <= waypointsNb; i++) {
@@ -29,7 +29,7 @@ export function createWaypoints(
   return waypoints;
 }
 
-function getNumberOfWaypoints(distanceType: number) {
+function getNumberOfWaypoints(formatType: number) {
   const shortDistanceThreshold = 5;
   const mediumDistanceThreshold = 10;
 
@@ -37,9 +37,9 @@ function getNumberOfWaypoints(distanceType: number) {
   const mediumDistanceWaypoints = 7;
   const longDistanceWaypoints = 11;
 
-  if (distanceType <= shortDistanceThreshold) {
+  if (formatType <= shortDistanceThreshold) {
     return shortDistanceWaypoints;
-  } else if (distanceType <= mediumDistanceThreshold) {
+  } else if (formatType <= mediumDistanceThreshold) {
     return mediumDistanceWaypoints;
   } else {
     return longDistanceWaypoints;

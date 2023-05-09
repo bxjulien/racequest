@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
-import { DistanceType } from "../../../../shared/enums/DistanceType.enum";
+import { FormatType } from "../../../../shared/enums/FormatType.enum";
 import { RadioButton } from "../../../shared/radio/radio";
 
 export default function CreateTraceDistance({
@@ -9,21 +9,21 @@ export default function CreateTraceDistance({
   setValue,
 }: {
   value: string;
-  setValue: (value: DistanceType) => void;
+  setValue: (value: FormatType) => void;
 }) {
   const inputs = [
     {
-      value: DistanceType.Short,
+      value: FormatType.Short,
       label: "Court",
       description: "Moins de 5 km, parfait pour débuter !",
     },
     {
-      value: DistanceType.Medium,
+      value: FormatType.Medium,
       label: "Moyen",
       description: "Entre 5 et 10 km, ça commence à être sérieux !",
     },
     {
-      value: DistanceType.Long,
+      value: FormatType.Long,
       label: "Long",
       description: "Plus de 10 km, pour les plus aguerris !",
     },
@@ -38,7 +38,7 @@ export default function CreateTraceDistance({
             label={input.label}
             value={input.value}
             selectedValue={value}
-            onValueChange={setValue}
+            onValueChange={(value) => setValue(value as FormatType)}
             description={input.description}
           />
         ))}
