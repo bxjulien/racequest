@@ -1,14 +1,16 @@
 import { StyleSheet, Text, View } from 'react-native';
+import { useCallback, useRef, useState } from 'react';
 
 import ProgressBar from '../progress-bar/progress-bar';
 import React from 'react';
-import { ScrollView } from 'react-native-gesture-handler';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type FormStepsProps = {
   title: string;
   withProgressBar?: boolean;
   steps: Step[];
   activeStep: number;
+  style?: any;
 };
 
 type Step = {
@@ -23,24 +25,24 @@ export default function FormSteps({
   withProgressBar = true,
   steps,
   activeStep,
+  style,
 }: FormStepsProps) {
   const progress = (activeStep / steps.length) * 100;
 
   return (
-    <View style={styles.container}>
-      <View>
-        <Text style={styles.title}>{title}</Text>
-        {withProgressBar && (
-          <ProgressBar progress={progress} color='#6200ee' height={2} />
-        )}
-        {steps[activeStep].title && (
-          <Text style={styles.stepTitle}>{steps[activeStep].title}</Text>
-        )}
-      </View>
+    <View style={[style, styles.container]}>
+      <SafeAreaView>
+        <View>
+          <Text style={styles.title}>{title}</Text>
+          {withProgressBar && (
+            <ProgressBar progress={progress} color='#6200ee' height={2} />
+          )}
+        </View>
 
-      {steps[activeStep].component}
+        {steps[activeStep].component}
+      </SafeAreaView>
 
-      {steps[activeStep].footer}
+      {steps[activeStep].footer && <View>{steps[activeStep].footer}</View>}
     </View>
   );
 }
@@ -54,11 +56,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
-    paddingVertical: 20,
-  },
-  stepTitle: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginTop: 40,
+    paddingBottom: 20,
   },
 });

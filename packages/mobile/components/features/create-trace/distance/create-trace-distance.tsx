@@ -1,9 +1,8 @@
-import { FlatList, StyleSheet } from 'react-native';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 
 import { FormatType } from '../../../../shared/enums/FormatType.enum';
 import { RadioButton } from '../../../shared/radio/radio';
 import React from 'react';
-import { ScrollView } from 'react-native-gesture-handler';
 
 export default function CreateTraceDistance({
   value,
@@ -31,28 +30,36 @@ export default function CreateTraceDistance({
   ];
 
   return (
-    <FlatList
-      data={inputs}
-      renderItem={({ item }) => (
-        <RadioButton
-          label={item.label}
-          value={item.value}
-          selectedValue={value}
-          onValueChange={(v) => setValue(v as FormatType)}
-          description={item.description}
-          style={styles.input}
-        />
-      )}
-      keyExtractor={(item) => item.value}
-      keyboardShouldPersistTaps='handled'
-      style={styles.inputs}
-    />
+    <View style={styles.container}>
+      <Text style={styles.stepTitle}>On pars sur quel format ?</Text>
+
+      <FlatList
+        data={inputs}
+        renderItem={({ item }) => (
+          <RadioButton
+            label={item.label}
+            value={item.value}
+            selectedValue={value}
+            onValueChange={(v) => setValue(v as FormatType)}
+            description={item.description}
+            style={styles.input}
+          />
+        )}
+        keyExtractor={(item) => item.value}
+        keyboardShouldPersistTaps='handled'
+      />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  inputs: {
+  container: {
     marginTop: 40,
+  },
+  stepTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginBottom: 20,
   },
   input: {
     marginBottom: 20,
