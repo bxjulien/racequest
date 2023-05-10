@@ -30,7 +30,7 @@ export default function LocationProvider({
         return;
       }
 
-      let location = await Location.getCurrentPositionAsync({});
+      const location = await Location.getCurrentPositionAsync();
       setLocation(location);
     })();
   }, []);
