@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import CreateTraceDistance from './distance/create-trace-distance';
-import CreateTraceStartingPoint from './starting-point/create-trace-starting-point';
+import CreateTraceStartingPoint from './starting-point/starting-point';
 import FormSteps from '../../shared/form-steps/form-steps';
 import FormStepsFooter from '../../shared/form-steps/form-steps-footer';
 import { FormatType } from '../../../shared/enums/FormatType.enum';

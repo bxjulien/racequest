@@ -1,5 +1,6 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 
+import ChooseOnMap from './choose-on-map/choose-on-map';
 import InputText from '../../../shared/input/input-text';
 import { Place } from '../../../../shared/types/place.type';
 import { RadioButton } from '../../../shared/radio/radio';
@@ -43,19 +44,22 @@ const UseMyCurrentLocation = ({
     );
 
   return (
-    <RadioButton
-      label='Utiliser ma position actuelle'
-      value={value?.name}
-      selectedValue={value?.name}
-      onValueChange={() => {
-        setValue({
-          name: 'Ma position actuelle',
-          longitude: location.coords.longitude,
-          latitude: location.coords.latitude,
-        });
-      }}
-      description='La course commencera là où vous êtes actuellement !'
-    />
+    <View>
+      <RadioButton
+        label='Utiliser ma position actuelle'
+        value={value?.name}
+        selectedValue={value?.name}
+        onValueChange={() => {
+          setValue({
+            name: 'Ma position actuelle',
+            longitude: location.coords.longitude,
+            latitude: location.coords.latitude,
+          });
+        }}
+        description='La course commencera là où vous êtes actuellement !'
+      />
+      <ChooseOnMap />
+    </View>
   );
 };
 
@@ -117,14 +121,6 @@ const SearchPlace = () => {
       />
     );
   }
-};
-
-const SetOnMap = () => {
-  return (
-    <View>
-      <Text>SetOnMap</Text>
-    </View>
-  );
 };
 
 const styles = StyleSheet.create({
