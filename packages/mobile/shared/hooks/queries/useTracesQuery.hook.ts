@@ -1,5 +1,5 @@
 import { useQuery } from "react-query";
-import { getTraces } from "../services/supabase.service";
+import { getTraces } from "../../services/supabase.service";
 
 const useTracesQuery = () => {
   const key = ["traces"];

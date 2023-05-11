@@ -6,18 +6,22 @@ import React from 'react';
 export default function FormStepsFooter({
   goNext,
   canGoNext = true,
+  goNextTitle = 'Continuer',
   goBack,
   canGoBack = true,
+  goBackTitle = 'Retour',
 }: {
   goNext: () => void;
   canGoNext?: boolean;
+  goNextTitle?: string;
   goBack: () => void;
   canGoBack: boolean;
+  goBackTitle?: string;
 }) {
   return (
     <View style={styles.footer}>
       <Button
-        title='Retour'
+        title={goBackTitle}
         style={styles.backButton}
         onPress={goBack}
         disabled={!canGoBack}
@@ -26,7 +30,7 @@ export default function FormStepsFooter({
       <Button
         style={styles.nextButton}
         color='#6200ee'
-        title='Continuer'
+        title={goNextTitle}
         onPress={goNext}
         disabled={!canGoNext}
       />

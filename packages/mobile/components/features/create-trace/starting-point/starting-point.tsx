@@ -1,15 +1,15 @@
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet, Text, View } from "react-native";
 
-import ChooseOnMap from './choose-on-map/choose-on-map';
-import InputText from '../../../shared/input/input-text';
-import { Place } from '../../../../shared/types/place.type';
-import { RadioButton } from '../../../shared/radio/radio';
-import React from 'react';
-import { StartingPoint } from '../../../../shared/types/starting-point.type';
-import useDebounce from '../../../../shared/hooks/useDebounce';
-import { useLocationContext } from '../../../../shared/contexts/location.context';
-import usePlacesGeocodingQuery from '../../../../shared/hooks/queries/usePlacesGeocodingQuery.hook';
-import { useState } from 'react';
+import ChooseOnMap from "./choose-on-map/choose-on-map";
+import InputText from "../../../shared/input/input-text";
+import { Place } from "../../../../shared/types/place.type";
+import { RadioButton } from "../../../shared/radio/radio";
+import React from "react";
+import { StartingPoint } from "../../../../shared/types/starting-point.type";
+import useDebounce from "../../../../shared/hooks/useDebounce";
+import { useLocationContext } from "../../../../shared/contexts/location.context";
+import usePlacesGeocodingQuery from "../../../../shared/hooks/queries/usePlacesGeocodingQuery.hook";
+import { useState } from "react";
 
 export default function CreateTraceStartingPoint({
   value,
@@ -22,7 +22,10 @@ export default function CreateTraceStartingPoint({
     <View style={styles.container}>
       <Text style={styles.stepTitle}>On pars d'où ?</Text>
 
-      <UseMyCurrentLocation setValue={setValue} value={value} />
+      <View style={styles.choices}>
+        <UseMyCurrentLocation setValue={setValue} value={value} />
+        <ChooseOnMap />
+      </View>
     </View>
   );
 }
@@ -46,25 +49,24 @@ const UseMyCurrentLocation = ({
   return (
     <View>
       <RadioButton
-        label='Utiliser ma position actuelle'
+        label="Utiliser ma position actuelle"
         value={value?.name}
         selectedValue={value?.name}
         onValueChange={() => {
           setValue({
-            name: 'Ma position actuelle',
+            name: "Ma position actuelle",
             longitude: location.coords.longitude,
             latitude: location.coords.latitude,
           });
         }}
-        description='La course commencera là où vous êtes actuellement !'
+        description="La course commencera là où vous êtes actuellement !"
       />
-      <ChooseOnMap />
     </View>
   );
 };
 
 const SearchPlace = () => {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
   const debouncedQuery = useDebounce(query, 300);
   const { data: places, isLoading } = usePlacesGeocodingQuery(debouncedQuery, {
@@ -77,7 +79,7 @@ const SearchPlace = () => {
       value={item.place_name}
       selectedValue={selectedPlace?.place_name}
       onValueChange={(value) => {
-        setQuery(value);
+        setQuery(value as string);
         setSelectedPlace(item);
       }}
       style={styles.place}
@@ -89,7 +91,7 @@ const SearchPlace = () => {
       <InputText
         query={query}
         onChange={setQuery}
-        placeholder='Rechercher une ville, un lieu, ...'
+        placeholder="Rechercher une ville, un lieu, ..."
       />
     );
   }
@@ -103,7 +105,7 @@ const SearchPlace = () => {
         style={styles.selectedPlace}
         canUnselect={true}
         onValueChange={() => {
-          setQuery('');
+          setQuery("");
           setSelectedPlace(null);
         }}
       />
@@ -116,7 +118,7 @@ const SearchPlace = () => {
         data={places}
         renderItem={renderPlaces}
         keyExtractor={(item: Place) => item.id}
-        keyboardShouldPersistTaps='handled'
+        keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       />
     );
@@ -129,7 +131,7 @@ const styles = StyleSheet.create({
   },
   stepTitle: {
     fontSize: 22,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 20,
   },
   choices: {
