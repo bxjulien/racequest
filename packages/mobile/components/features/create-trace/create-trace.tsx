@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { useMutation } from "react-query";
-import { StyleSheet, Text, View } from "react-native";
-import CreateTraceDistance from "./distance/create-trace-distance";
-import CreateTraceStartingPoint from "./starting-point/starting-point";
-import FormSteps from "../../shared/form-steps/form-steps";
-import FormStepsFooter from "../../shared/form-steps/form-steps-footer";
-import { FormatType } from "../../../shared/enums/FormatType.enum";
-import { StartingPoint } from "../../../shared/types/starting-point.type";
-import { useLocationContext } from "../../../shared/contexts/location.context";
-import SelectTrace from "./select-trace/select-trace";
-import { Trace } from "../../../../api/src/shared/models/trace.model";
-import { getCreationTraces } from "../../../shared/services/api.service";
+import React, { useCallback, useEffect, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+
+import CreateTraceDistance from './distance/create-trace-distance';
+import CreateTraceStartingPoint from './starting-point/starting-point';
+import FormSteps from '../../shared/form-steps/form-steps';
+import FormStepsFooter from '../../shared/form-steps/form-steps-footer';
+import { FormatType } from '../../../shared/enums/FormatType.enum';
+import SelectTrace from './select-trace/select-trace';
+import { StartingPoint } from '../../../shared/types/starting-point.type';
+import { Trace } from '../../../../api/src/shared/models/trace.model';
+import useCreationTracesMutation from '../../../shared/hooks/queries/useCreationTracesMutation.hook';
+import { useLocationContext } from '../../../shared/contexts/location.context';
 
 type CreateTrace = {
   format: FormatType;
@@ -21,27 +21,17 @@ type CreateTrace = {
 export default function CreateTrace() {
   const { location } = useLocationContext();
 
+  const creationTracesMutation = useCreationTracesMutation();
+
   const [formData, setFormData] = useState<CreateTrace>({
     format: FormatType.Short,
     startingPoint: {
-      name: "Ma position actuelle",
+      name: 'Ma position actuelle',
       longitude: location?.coords.longitude || 0,
       latitude: location?.coords.latitude || 0,
     },
     traces: null,
   });
-
-  const createTracesMutation = useMutation(
-    ({
-      longitude,
-      latitude,
-      distance,
-    }: {
-      longitude: number;
-      latitude: number;
-      distance: number;
-    }) => getCreationTraces(longitude, latitude, distance)
-  );
 
   const goNext = () => {
     setCurrentStep(currentStep + 1);
@@ -51,37 +41,6 @@ export default function CreateTrace() {
     setCurrentStep(currentStep - 1);
   };
 
-  const getTraces = () => {
-    createTracesMutation.mutate({
-      longitude: location?.coords.longitude || 0,
-      latitude: location?.coords.latitude || 0,
-      distance:
-        formData.format === FormatType.Short
-          ? 5
-          : formData.format === FormatType.Medium
-          ? 10
-          : 15,
-    });
-    goNext();
-  };
-
-  useEffect(() => {
-    if (
-      !createTracesMutation.isLoading &&
-      !createTracesMutation.isError &&
-      createTracesMutation.data
-    ) {
-      setFormData((prevData) => ({
-        ...prevData,
-        traces: createTracesMutation.data,
-      }));
-    }
-  }, [
-    createTracesMutation.isLoading,
-    createTracesMutation.isError,
-    createTracesMutation.data,
-  ]);
-
   useEffect(() => {
     console.log(formData);
   }, [formData]);
@@ -89,7 +48,7 @@ export default function CreateTrace() {
   const steps = [
     {
       id: 1,
-      title: "On pars sur quel format ?",
+      title: 'On pars sur quel format ?',
       component: (
         <CreateTraceDistance
           value={formData.format}
@@ -102,7 +61,7 @@ export default function CreateTrace() {
     },
     {
       id: 2,
-      title: "On démarre où ?",
+      title: 'On démarre où ?',
       component: (
         <CreateTraceStartingPoint
           value={formData.startingPoint}
@@ -114,6 +73,15 @@ export default function CreateTrace() {
       footer: (
         <FormStepsFooter
           goNext={() => {
+            creationTracesMutation.mutate([
+              formData.startingPoint?.longitude || 0,
+              formData.startingPoint?.latitude || 0,
+              formData.format === FormatType.Short
+                ? 5
+                : formData.format === FormatType.Medium
+                ? 10
+                : 15,
+            ]);
             goNext();
           }}
           goBack={goBack}
@@ -123,12 +91,12 @@ export default function CreateTrace() {
     },
     {
       id: 3,
-      title: "Test ?",
+      title: '',
       component: (
         <SelectTrace
-          loading={createTracesMutation.isLoading}
-          error={createTracesMutation.isError}
-          traces={formData.traces}
+          loading={creationTracesMutation.isLoading}
+          error={creationTracesMutation.isError}
+          traces={creationTracesMutation.data}
         />
       ),
       footer: (
@@ -140,29 +108,13 @@ export default function CreateTrace() {
         />
       ),
     },
-    {
-      id: 4,
-      title: "Test ?",
-      component: <View></View>,
-      footer: (
-        <FormStepsFooter goNext={goNext} goBack={goBack} canGoBack={true} />
-      ),
-    },
-    {
-      id: 5,
-      title: "Test ?",
-      component: <View></View>,
-      footer: (
-        <FormStepsFooter goNext={goNext} goBack={goBack} canGoBack={true} />
-      ),
-    },
   ];
 
   const [currentStep, setCurrentStep] = useState(0);
 
   return (
     <FormSteps
-      title="🚀 Créer une course"
+      title='🚀 Créer une course'
       steps={steps}
       activeStep={currentStep}
       style={styles.container}

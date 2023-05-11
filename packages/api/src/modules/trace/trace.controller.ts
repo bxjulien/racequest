@@ -10,6 +10,7 @@ export class TraceController {
 
   @Get()
   createTrace(@Query() createTraceDto: CreateTraceDto): Promise<Trace[]> {
+    console.log('createTraceDto', createTraceDto);
     return this.traceService.createTrace(createTraceDto);
   }
 }

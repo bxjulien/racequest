@@ -1,15 +1,16 @@
-import { CreateTraceDto } from '../../shared/dtos/create-trace.dto';
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { MapboxService } from '../mapbox/mapbox.service';
-import { removeDuplicatePoints } from '../../shared/utils/geojson/duplicates.utils';
-import { removeSharpAngles } from '../../shared/utils/geojson/angles.utils';
-import togpx from 'togpx';
 import * as fs from 'fs';
 import * as turf from '@turf/turf';
 
-import { TraceDirection } from '../../shared/enums/trace-direction.enum';
-import { Trace } from '../../shared/models/trace.model';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+
 import { ConfigService } from '@nestjs/config';
+import { CreateTraceDto } from '../../shared/dtos/create-trace.dto';
+import { MapboxService } from '../mapbox/mapbox.service';
+import { Trace } from '../../shared/models/trace.model';
+import { TraceDirection } from '../../shared/enums/trace-direction.enum';
+import { removeDuplicatePoints } from '../../shared/utils/geojson/duplicates.utils';
+import { removeSharpAngles } from '../../shared/utils/geojson/angles.utils';
+import togpx from 'togpx';
 
 @Injectable()
 export class TraceService {
@@ -53,7 +54,7 @@ export class TraceService {
         traces.push({
           ...createTraceDto,
           geoJson,
-          distance,
+          distance: +distance.toFixed(2),
           direction,
         });
 

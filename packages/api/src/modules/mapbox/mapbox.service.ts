@@ -1,11 +1,10 @@
 import { ConfigService } from '@nestjs/config';
+import { Coordinates } from '../../shared/types/coordinates.type';
 import { CreateTraceDto } from '../../shared/dtos/create-trace.dto';
 import { Injectable } from '@nestjs/common';
-import { createWaypoints } from '../../shared/utils/geojson/waypoints.utils';
-
-import { Coordinates } from '../../shared/types/coordinates.type';
-import { getOptimization } from './mapbox.client';
 import { TraceDirection } from '../../shared/enums/trace-direction.enum';
+import { createWaypoints } from '../../shared/utils/geojson/waypoints.utils';
+import { getOptimization } from './mapbox.client';
 
 @Injectable()
 export class MapboxService {
@@ -15,6 +14,10 @@ export class MapboxService {
     this.mapBoxAccessToken = this.configService.get<string>(
       'MAPBOX_ACCESS_TOKEN',
     );
+
+    if (!this.mapBoxAccessToken) {
+      throw new Error('Missing Mapbox access token');
+    }
   }
 
   async getGeoJson(createTraceDto: CreateTraceDto, direction: TraceDirection) {

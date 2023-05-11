@@ -1,6 +1,6 @@
-import axios from "axios";
+import axios from 'axios';
 
-const baseUrl = "http://localhost:3000/api"; //"https://racequest-production.up.railway.app/api";
+const baseUrl = 'http://192.168.1.84:3000/api'; //"https://racequest-production.up.railway.app/api";
 
 export const getCreationTraces = async (
   longitude: number,
@@ -9,9 +9,7 @@ export const getCreationTraces = async (
 ) => {
   const url = `${baseUrl}/trace?longitude=${longitude}&latitude=${latitude}&distance=${distance}`;
 
-  console.log(url);
-
-  const { data } = await axios.get(url);
+  const { data } = await axios.get(encodeURI(url));
 
   return data;
 };

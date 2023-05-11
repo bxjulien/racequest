@@ -1,10 +1,11 @@
-import React from "react";
-import { Text, View } from "react-native";
-import SelectTraceSkeleton from "./select-trace.skeleton";
-import { Trace } from "../../../../../api/src/shared/models/trace.model";
+import { Text, View } from 'react-native';
+
+import React from 'react';
+import SelectTraceSkeleton from './select-trace.skeleton';
+import { Trace } from '../../../../../api/src/shared/models/trace.model';
 
 type SelectTraceProps = {
-  traces: Trace[] | null;
+  traces: Trace[] | undefined | null;
   error: boolean;
   loading: boolean;
 };
@@ -20,12 +21,25 @@ export default function SelectTrace({
 
   return (
     <View>
-      <Text>Traces</Text>
+      <Text>Created traces</Text>
 
       {traces?.map((trace, i) => (
-        <Text key={i}>
-          {trace.longitude} - {trace.latitude} - {trace.distance}
-        </Text>
+        <View
+          key={i}
+          style={{
+            borderWidth: 1,
+            borderColor: 'lightgrey',
+            borderRadius: 15,
+            padding: 10,
+            margin: 10,
+          }}
+        >
+          <Text>
+            Starting point : {trace.longitude} - {trace.latitude}
+          </Text>
+
+          <Text>Distance : {trace.distance}km</Text>
+        </View>
       ))}
     </View>
   );
