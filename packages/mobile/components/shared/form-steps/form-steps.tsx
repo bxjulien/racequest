@@ -30,7 +30,7 @@ export default function FormSteps({
 
   return (
     <View style={[style, styles.container]}>
-      <SafeAreaView>
+      <SafeAreaView style={styles.content}>
         <View>
           <Text style={styles.title}>{title}</Text>
           {withProgressBar && (
@@ -48,8 +48,11 @@ export default function FormSteps({
 
 const styles = StyleSheet.create({
   container: {
-    height: "100%",
+    flex: 1,
     justifyContent: "space-between",
+  },
+  content: {
+    flex: 1,
   },
   title: {
     fontSize: 24,

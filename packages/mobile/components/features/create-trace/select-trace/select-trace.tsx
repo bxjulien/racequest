@@ -1,8 +1,10 @@
-import { Text, View } from 'react-native';
+import { Text, View, StyleSheet } from "react-native";
 
-import React from 'react';
-import SelectTraceSkeleton from './select-trace.skeleton';
-import { Trace } from '../../../../../api/src/shared/models/trace.model';
+import React, { useEffect, useState } from "react";
+import SelectTraceSkeleton from "./select-trace.skeleton";
+import { Trace } from "../../../../../api/src/shared/models/trace.model";
+import MapTrace from "../../../shared/map-trace/map-trace";
+import { RadioButton } from "../../../shared/radio/radio";
 
 type SelectTraceProps = {
   traces: Trace[] | undefined | null;
@@ -15,32 +17,66 @@ export default function SelectTrace({
   error,
   loading,
 }: SelectTraceProps) {
-  if (loading) return <SelectTraceSkeleton />;
+  const [selectedTrace, setSelectedTrace] = useState<Trace | null>(null);
+
+  useEffect(() => {
+    if (traces && traces.length > 0) {
+      setSelectedTrace(traces[0]);
+    }
+  }, [traces]);
 
   if (error) return <Text>Erreur</Text>;
 
+  if (loading) return <SelectTraceSkeleton />;
+
+  if (!traces?.length) return <Text>Aucune trace</Text>;
+
   return (
-    <View>
-      <Text>Created traces</Text>
+    <View style={styles.container}>
+      <Text style={styles.stepTitle}>On a généré {traces.length} traces</Text>
 
-      {traces?.map((trace, i) => (
-        <View
-          key={i}
-          style={{
-            borderWidth: 1,
-            borderColor: 'lightgrey',
-            borderRadius: 15,
-            padding: 10,
-            margin: 10,
-          }}
-        >
-          <Text>
-            Starting point : {trace.longitude} - {trace.latitude}
-          </Text>
+      {selectedTrace && (
+        <MapTrace
+          style={styles.map}
+          height={350}
+          trace={selectedTrace as Trace}
+          strokeWidth={4}
+        />
+      )}
 
-          <Text>Distance : {trace.distance}km</Text>
-        </View>
-      ))}
+      <View style={styles.radios}>
+        {traces?.map((trace, i) => (
+          <RadioButton
+            key={trace.distance}
+            label={selectedTrace?.distance + "km"}
+            value={selectedTrace?.distance}
+            selectedValue={trace.distance as never}
+            onValueChange={() => {
+              setSelectedTrace(trace);
+            }}
+          />
+        ))}
+      </View>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    marginTop: 40,
+    gap: 20,
+  },
+  stepTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+  },
+  map: {
+    borderWidth: 2,
+    borderColor: "lightgrey",
+    borderRadius: 20,
+  },
+  radios: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  }
+});

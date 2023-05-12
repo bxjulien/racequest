@@ -1,10 +1,11 @@
-import { StyleSheet, Text } from 'react-native';
+import { StyleSheet, Text } from "react-native";
 
-import Button from '../components/shared/button/button';
-import NearbyTraces from '../components/features/nearby-traces/nearby-traces';
-import React from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+import Button from "../components/shared/button/button";
+import NearbyTraces from "../components/features/nearby-traces/nearby-traces";
+import React from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useNavigation } from "@react-navigation/native";
+import MapTrace from "../components/shared/map-trace/map-trace";
 
 export default function HomeScreen() {
   const navigation = useNavigation();
@@ -16,8 +17,8 @@ export default function HomeScreen() {
       <NearbyTraces />
 
       <Button
-        title={'Créer une course'}
-        onPress={() => navigation.navigate('create-trace' as never)}
+        title={"Créer une course"}
+        onPress={() => navigation.navigate("create-trace" as never)}
       />
     </SafeAreaView>
   );
