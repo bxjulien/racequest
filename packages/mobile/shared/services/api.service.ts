@@ -1,6 +1,6 @@
-import axios from "axios";
+import axios from 'axios';
 
-const baseUrl = "https://racequest-production.up.railway.app/api";
+const baseUrl = 'https://racequest-production.up.railway.app/api';
 
 export const getCreationTraces = async (
   longitude: number,

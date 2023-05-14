@@ -2,12 +2,12 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import React from 'react';
 
-type RadioButtonValue = string | number | boolean | undefined;
+type RadioButtonValue = string | number | boolean | Date | undefined;
 
 type RadioButtonProps = {
   label: string;
   value: RadioButtonValue;
-  selectedValue?: string;
+  selectedValue?: string | number | boolean | Date | undefined;
   onValueChange?: (value: RadioButtonValue) => void;
   description?: string;
   style?: any;

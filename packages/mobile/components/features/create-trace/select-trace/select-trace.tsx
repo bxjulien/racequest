@@ -1,27 +1,34 @@
-import { Text, View, StyleSheet } from "react-native";
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 
-import React, { useEffect, useState } from "react";
-import SelectTraceSkeleton from "./select-trace.skeleton";
-import { Trace } from "../../../../../api/src/shared/models/trace.model";
-import MapTrace from "../../../shared/map-trace/map-trace";
-import { RadioButton } from "../../../shared/radio/radio";
+import MapTrace from '../../../shared/map-trace/map-trace';
+import { RadioButton } from '../../../shared/radio/radio';
+import SelectTraceSkeleton from './select-trace.skeleton';
+import { Trace } from '../../../../../api/src/shared/models/trace.model';
 
 type SelectTraceProps = {
+  value: Trace | null;
+  setValue: (value: Trace) => void;
   traces: Trace[] | undefined | null;
   error: boolean;
   loading: boolean;
 };
 
 export default function SelectTrace({
+  value,
+  setValue,
   traces,
   error,
   loading,
 }: SelectTraceProps) {
-  const [selectedTrace, setSelectedTrace] = useState<Trace | null>(null);
+  const [selectedTrace, setSelectedTrace] = useState<Trace | null>(
+    value || null
+  );
 
   useEffect(() => {
-    if (traces && traces.length > 0) {
+    if (!value && !selectedTrace && traces && traces.length > 0) {
       setSelectedTrace(traces[0]);
+      setValue(traces[0]);
     }
   }, [traces]);
 
@@ -33,7 +40,10 @@ export default function SelectTrace({
 
   return (
     <View style={styles.container}>
-      <Text style={styles.stepTitle}>On a généré {traces.length} traces</Text>
+      <Text style={styles.title}>
+        On vous a généré{' '}
+        {traces.length == 1 ? 'une trace' : traces.length + ' traces'}
+      </Text>
 
       {selectedTrace && (
         <MapTrace
@@ -48,11 +58,12 @@ export default function SelectTrace({
         {traces?.map((trace, i) => (
           <RadioButton
             key={trace.distance}
-            label={selectedTrace?.distance + "km"}
+            label={trace?.distance + 'km'}
             value={selectedTrace?.distance}
             selectedValue={trace.distance as never}
             onValueChange={() => {
               setSelectedTrace(trace);
+              setValue(trace);
             }}
           />
         ))}
@@ -66,17 +77,21 @@ const styles = StyleSheet.create({
     marginTop: 40,
     gap: 20,
   },
-  stepTitle: {
+  title: {
     fontSize: 22,
     fontWeight: 'bold',
   },
+  subtitle: {
+    fontSize: 16,
+    color: 'grey',
+  },
   map: {
     borderWidth: 2,
-    borderColor: "lightgrey",
+    borderColor: 'lightgrey',
     borderRadius: 20,
   },
   radios: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  }
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
 });
