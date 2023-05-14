@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
+import { CreateTraceForm } from '../../../../shared/types/create-trace-form';
 import MapTrace from '../../../shared/map-trace/map-trace';
+import React from 'react';
 
 type CreateTraceSubmitProps = {
-  value: any;
+  value: CreateTraceForm;
 };
 
 export default function CreateTraceSubmit({ value }: CreateTraceSubmitProps) {
+  if (!value.trace) return <Retry />;
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Tout est prêt !</Text>
@@ -37,6 +40,16 @@ export default function CreateTraceSubmit({ value }: CreateTraceSubmitProps) {
     </View>
   );
 }
+
+const Retry = () => (
+  <View style={styles.container}>
+    <Text style={styles.title}>Oups !</Text>
+    <Text style={styles.subtitle}>
+      Une erreur innatendue s'est produite lors de la création de votre course.
+      Il semble que vous n'ayez pas sélectionné de tracé.
+    </Text>
+  </View>
+);
 
 const styles = StyleSheet.create({
   container: {

@@ -3,7 +3,9 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import CreateTraceDistance from './distance/create-trace-distance';
 import CreateTraceDuration from './duration/create-trace-duration';
+import { CreateTraceForm } from '../../../shared/types/create-trace-form';
 import CreateTraceStartingPoint from './starting-point/starting-point';
+import { CreateTraceStep } from '../../../shared/types/create-trace-step';
 import CreateTraceSubmit from './submit/create-trace-submit';
 import FormSteps from '../../shared/form-steps/form-steps';
 import FormStepsFooter from '../../shared/form-steps/form-steps-footer';
@@ -14,19 +16,12 @@ import { Trace } from '../../../../api/src/shared/models/trace.model';
 import useCreationTracesMutation from '../../../shared/hooks/queries/useCreationTracesMutation.hook';
 import { useLocationContext } from '../../../shared/contexts/location.context';
 
-type CreateTrace = {
-  format: FormatType;
-  startingPoint: StartingPoint | null;
-  trace: Trace | null;
-  closingIn: number;
-};
-
 export default function CreateTrace() {
   const { location } = useLocationContext();
 
   const creationTracesMutation = useCreationTracesMutation();
 
-  const [formData, setFormData] = useState<CreateTrace>({
+  const [formData, setFormData] = useState<CreateTraceForm>({
     format: FormatType.Short,
     startingPoint: {
       name: 'Ma position actuelle',
@@ -49,7 +44,7 @@ export default function CreateTrace() {
     console.log(formData);
   }, [formData]);
 
-  const steps = [
+  const steps: CreateTraceStep[] = [
     {
       id: 1,
       component: (

@@ -1,22 +1,16 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from 'react-native';
 
-import ProgressBar from "../progress-bar/progress-bar";
-import React from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { CreateTraceStep } from '../../../shared/types/create-trace-step';
+import ProgressBar from '../progress-bar/progress-bar';
+import React from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type FormStepsProps = {
   title: string;
   withProgressBar?: boolean;
-  steps: Step[];
+  steps: CreateTraceStep[];
   activeStep: number;
   style?: any;
-};
-
-type Step = {
-  id: number;
-  title?: string;
-  component: React.ReactNode;
-  footer: React.ReactNode;
 };
 
 export default function FormSteps({
@@ -34,11 +28,11 @@ export default function FormSteps({
         <View>
           <Text style={styles.title}>{title}</Text>
           {withProgressBar && (
-            <ProgressBar progress={progress} color="#6200ee" height={2} />
+            <ProgressBar progress={progress} color='#6200ee' height={2} />
           )}
         </View>
 
-        {steps[activeStep].component}
+        {steps[activeStep].component && steps[activeStep].component}
       </SafeAreaView>
 
       {steps[activeStep].footer && steps[activeStep].footer}
@@ -49,15 +43,15 @@ export default function FormSteps({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
   },
   content: {
     flex: 1,
   },
   title: {
     fontSize: 24,
-    fontWeight: "bold",
-    textAlign: "center",
+    fontWeight: 'bold',
+    textAlign: 'center',
     paddingBottom: 20,
   },
 });
