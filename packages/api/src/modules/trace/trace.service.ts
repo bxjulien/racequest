@@ -1,3 +1,5 @@
+import { SupabaseService } from './../supabase/supabase.service';
+import { PostTraceDto } from './../../shared/dtos/post-trace.dto';
 import * as fs from 'fs';
 import * as turf from '@turf/turf';
 
@@ -18,6 +20,7 @@ export class TraceService {
 
   constructor(
     private readonly mapboxService: MapboxService,
+    private readonly supabaseService: SupabaseService,
     private readonly configService: ConfigService,
   ) {
     this.isDevelopment =
@@ -54,6 +57,7 @@ export class TraceService {
         traces.push({
           ...createTraceDto,
           geoJson,
+          geo_json: geoJson,
           distance: +distance.toFixed(2),
           direction,
         });
@@ -71,5 +75,19 @@ export class TraceService {
       'Unable to generate a suitable trace with the desired distance.',
       HttpStatus.BAD_REQUEST,
     );
+  }
+
+  async postTrace(postTraceDto: PostTraceDto): Promise<Trace> {
+    const supabase = this.supabaseService.getSupabase();
+    postTraceDto.trace.geo_json = postTraceDto.trace.geoJson;
+    delete postTraceDto.trace.geoJson;
+    const { data, error } = await supabase
+      .from('traces')
+      .insert(postTraceDto.trace)
+      .single(); // .single() is used to return a single inserted row.
+
+    if (error) throw error;
+
+    return data as Trace;
   }
 }

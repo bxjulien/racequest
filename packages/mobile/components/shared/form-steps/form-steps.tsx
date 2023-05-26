@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, ViewStyle } from 'react-native';
 
 import { CreateTraceStep } from '../../../shared/types/create-trace-step';
 import ProgressBar from '../progress-bar/progress-bar';
@@ -10,7 +10,7 @@ type FormStepsProps = {
   withProgressBar?: boolean;
   steps: CreateTraceStep[];
   activeStep: number;
-  style?: any;
+  style?: ViewStyle;
 };
 
 export default function FormSteps({

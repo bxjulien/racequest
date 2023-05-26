@@ -1,30 +1,30 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from "react";
+import { StyleSheet } from "react-native";
 
-import CreateTraceDistance from './distance/create-trace-distance';
-import CreateTraceDuration from './duration/create-trace-duration';
-import { CreateTraceForm } from '../../../shared/types/create-trace-form';
-import CreateTraceStartingPoint from './starting-point/starting-point';
-import { CreateTraceStep } from '../../../shared/types/create-trace-step';
-import CreateTraceSubmit from './submit/create-trace-submit';
-import FormSteps from '../../shared/form-steps/form-steps';
-import FormStepsFooter from '../../shared/form-steps/form-steps-footer';
-import { FormatType } from '../../../shared/enums/FormatType.enum';
-import SelectTrace from './select-trace/select-trace';
-import { StartingPoint } from '../../../shared/types/starting-point.type';
-import { Trace } from '../../../../api/src/shared/models/trace.model';
-import useCreationTracesMutation from '../../../shared/hooks/queries/useCreationTracesMutation.hook';
-import { useLocationContext } from '../../../shared/contexts/location.context';
+import CreateTraceDistance from "./distance/create-trace-distance";
+import CreateTraceDuration from "./duration/create-trace-duration";
+import { CreateTraceForm } from "../../../shared/types/create-trace-form";
+import CreateTraceStartingPoint from "./starting-point/starting-point";
+import { CreateTraceStep } from "../../../shared/types/create-trace-step";
+import CreateTraceSubmit from "./submit/create-trace-submit";
+import FormSteps from "../../shared/form-steps/form-steps";
+import FormStepsFooter from "../../shared/form-steps/form-steps-footer";
+import { FormatType } from "../../../shared/enums/FormatType.enum";
+import SelectTrace from "./select-trace/select-trace";
+import useCreationTracesMutation from "../../../shared/hooks/queries/useCreationTracesMutation.hook";
+import { useLocationContext } from "../../../shared/contexts/location.context";
+import useCreateTraceMutation from "../../../shared/hooks/queries/useCreateTraceMutation.hook";
 
 export default function CreateTrace() {
   const { location } = useLocationContext();
 
   const creationTracesMutation = useCreationTracesMutation();
+  const createTraceMutation = useCreateTraceMutation();
 
   const [formData, setFormData] = useState<CreateTraceForm>({
     format: FormatType.Short,
     startingPoint: {
-      name: 'Ma position actuelle',
+      name: "Ma position actuelle",
       longitude: location?.coords.longitude || 0,
       latitude: location?.coords.latitude || 0,
     },
@@ -33,16 +33,14 @@ export default function CreateTrace() {
   });
 
   const goNext = () => {
+    if (currentStep === steps.length - 1) return;
     setCurrentStep(currentStep + 1);
   };
 
   const goBack = () => {
+    if (currentStep === 0) return;
     setCurrentStep(currentStep - 1);
   };
-
-  useEffect(() => {
-    console.log(formData);
-  }, [formData]);
 
   const steps: CreateTraceStep[] = [
     {
@@ -97,7 +95,7 @@ export default function CreateTrace() {
       footer: (
         <FormStepsFooter
           goNext={goNext}
-          canGoNext={Boolean(formData.trace && formData.trace)}
+          canGoNext={Boolean(formData.trace)}
           goBack={goBack}
         />
       ),
@@ -123,19 +121,26 @@ export default function CreateTrace() {
       component: <CreateTraceSubmit value={formData} />,
       footer: (
         <FormStepsFooter
-          goNext={goNext}
+          goNext={async () => {
+            await createTraceMutation.mutateAsync(formData);
+            goNext();
+          }}
           goBack={goBack}
-          goNextTitle='Créer la course'
+          goNextTitle={
+            createTraceMutation.isLoading
+              ? "Création en cours..."
+              : "Créer la course"
+          }
         />
       ),
     },
   ];
 
-  const [currentStep, setCurrentStep] = useState(0);
+  const [currentStep, setCurrentStep] = useState<number>(0);
 
   return (
     <FormSteps
-      title='🚀 Créer une course'
+      title="🚀 Créer une course"
       steps={steps}
       activeStep={currentStep}
       style={styles.container}
