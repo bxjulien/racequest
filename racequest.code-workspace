@@ -1,0 +1,11 @@
+{
+  "folders": [
+	{
+		"path": "packages/api"
+	},
+	{
+		"path": "packages/mobile"
+	}
+],
+  "settings": {}
+}

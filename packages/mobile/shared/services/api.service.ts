@@ -1,7 +1,7 @@
-import axios from "axios";
-import { CreateTraceForm } from "../types/create-trace-form";
-// 10.15.190.225
-const baseUrl = "http://10.15.190.225:3000/api";
+import { CreateTraceForm } from '../types/create-trace-form';
+import axios from 'axios';
+
+const baseUrl = 'http://192.168.1.84:3000/api';
 
 export const getCreationTraces = async (
   longitude: number,
@@ -22,8 +22,6 @@ export const createTrace = async (data: CreateTraceForm) => {
     trace: data.trace,
     closingIn: data.closingIn,
   };
-
-  console.log(body);
 
   const { data: trace } = await axios.post(url, body);
 

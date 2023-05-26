@@ -1,6 +1,6 @@
 import { ConfigService } from '@nestjs/config';
 import { Coordinates } from '../../shared/types/coordinates.type';
-import { CreateTraceDto } from '../../shared/dtos/create-trace.dto';
+import { GenerateTracesDto } from '../../shared/dtos/generate-traces.dto';
 import { Injectable } from '@nestjs/common';
 import { TraceDirection } from '../../shared/enums/trace-direction.enum';
 import { createWaypoints } from '../../shared/utils/geojson/waypoints.utils';
@@ -20,13 +20,16 @@ export class MapboxService {
     }
   }
 
-  async getGeoJson(createTraceDto: CreateTraceDto, direction: TraceDirection) {
+  async getGeoJson(
+    generateTracesDto: GenerateTracesDto,
+    direction: TraceDirection,
+  ) {
     const startingPoint: Coordinates = [
-      createTraceDto.longitude,
-      createTraceDto.latitude,
+      generateTracesDto.longitude,
+      generateTracesDto.latitude,
     ];
     const waypoints: Coordinates[] = createWaypoints(
-      createTraceDto.distance,
+      generateTracesDto.distance,
       startingPoint,
       direction,
     );

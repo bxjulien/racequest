@@ -5,10 +5,11 @@ import {
   IsOptional,
   IsPositive,
 } from 'class-validator';
-import { Type } from 'class-transformer';
-import { TraceDirection } from '../enums/trace-direction.enum';
 
-export class CreateTraceDto {
+import { TraceDirection } from '../enums/trace-direction.enum';
+import { Type } from 'class-transformer';
+
+export class GenerateTracesDto {
   @Type(() => Number)
   @IsLongitude()
   longitude: number;
