@@ -15,7 +15,7 @@ export default function FormStepsFooter({
   canGoNext?: boolean;
   goNextTitle?: string;
   goBack: () => void;
-  canGoBack: boolean;
+  canGoBack?: boolean;
   goBackTitle?: string;
 }) {
   return (

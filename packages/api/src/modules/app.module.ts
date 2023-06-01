@@ -4,6 +4,7 @@ import { TraceController } from './trace/trace.controller';
 import { TraceService } from './trace/trace.service';
 import { ConfigModule } from '@nestjs/config';
 import { MapboxService } from './mapbox/mapbox.service';
+import { SupabaseService } from './supabase/supabase.service';
 
 @Module({
   imports: [
@@ -12,6 +13,6 @@ import { MapboxService } from './mapbox/mapbox.service';
     }),
   ],
   controllers: [AppController, TraceController],
-  providers: [TraceService, MapboxService],
+  providers: [TraceService, MapboxService, SupabaseService],
 })
 export class AppModule {}

@@ -27,9 +27,12 @@ export default function NearbyTraces() {
   return (
     <View>
       {traces?.map((trace) => (
-        <Text
-          key={trace.id}
-        >{trace.longitude}</Text>
+        <View key={trace.id}>
+          <Text>Id: {trace.id}</Text>
+          <Text>
+            {trace.longitude} - {trace.latitude}
+          </Text>
+        </View>
       ))}
     </View>
   );
