@@ -14,6 +14,7 @@ import { removeDuplicatePoints } from '../../shared/utils/geojson/duplicates.uti
 import { removeSharpAngles } from '../../shared/utils/geojson/angles.utils';
 import togpx from 'togpx';
 import { TraceDto } from 'src/shared/dtos/trace.dto';
+import { GoogleMapsService } from '../google-maps/google-maps.service';
 
 @Injectable()
 export class TraceService {
@@ -21,6 +22,7 @@ export class TraceService {
 
   constructor(
     private readonly mapboxService: MapboxService,
+    private readonly googleMapsService: GoogleMapsService,
     private readonly supabaseService: SupabaseService,
     private readonly configService: ConfigService,
   ) {
@@ -50,6 +52,8 @@ export class TraceService {
 
       geoJson.geometry.coordinates = coordinates;
 
+      const elevation = await this.googleMapsService.getElevation(coordinates);
+
       const line = turf.lineString(coordinates);
 
       const distance = turf.lineDistance(line, { units: 'kilometers' });
@@ -70,6 +74,7 @@ export class TraceService {
           geoJson,
           distance: +distance.toFixed(2),
           direction,
+          elevation,
         });
 
         if (this.isDevelopment) {

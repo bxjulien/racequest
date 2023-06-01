@@ -1,6 +1,6 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-import React from 'react';
+import React from "react";
 
 type RadioButtonValue = string | number | boolean | Date | undefined;
 
@@ -12,6 +12,7 @@ type RadioButtonProps = {
   description?: string;
   style?: any;
   canUnselect?: boolean;
+  disabled?: boolean;
 };
 
 export const RadioButton = ({
@@ -22,12 +23,19 @@ export const RadioButton = ({
   description,
   style,
   canUnselect,
+  disabled,
 }: RadioButtonProps) => {
   const isChecked = selectedValue === value;
 
   return (
     <TouchableOpacity
-      style={[style, styles.container, isChecked && styles.checked]}
+      style={[
+        style,
+        styles.container,
+        isChecked && styles.checked,
+        disabled && styles.disabled,
+      ]}
+      disabled={disabled}
       onPress={() => onValueChange && onValueChange(value)}
       activeOpacity={0.5}
     >
@@ -57,44 +65,47 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 30,
     borderWidth: 2,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     borderRadius: 20,
   },
   checked: {
-    borderColor: '#6200ee',
-    backgroundColor: '#ebeaf5',
+    borderColor: "#6200ee",
+    backgroundColor: "#ebeaf5",
+  },
+  disabled: {
+    opacity: 0.4,
   },
   main: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   circle: {
     width: 24,
     height: 24,
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: '#ccc',
-    alignItems: 'center',
-    justifyContent: 'center',
+    borderColor: "#ccc",
+    alignItems: "center",
+    justifyContent: "center",
   },
   circleChecked: {
-    borderColor: '#6200ee',
+    borderColor: "#6200ee",
   },
   innerCircle: {
     width: 13,
     height: 13,
     borderRadius: 6,
-    backgroundColor: '#6200ee',
+    backgroundColor: "#6200ee",
   },
   cross: {
     fontSize: 13,
-    color: '#6200ee',
+    color: "#6200ee",
   },
   label: {
     marginLeft: 20,
   },
   bold: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
     fontSize: 18,
   },
   description: {

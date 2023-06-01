@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
 
-import MapTrace from '../../../shared/map-trace/map-trace';
-import { RadioButton } from '../../../shared/radio/radio';
-import SelectTraceSkeleton from './select-trace.skeleton';
-import { Trace } from '../../../../../api/src/shared/models/trace.model';
+import MapTrace from "../../../shared/map-trace/map-trace";
+import { RadioButton } from "../../../shared/radio/radio";
+import SelectTraceSkeleton from "./select-trace.skeleton";
+import { Trace } from "../../../../../api/src/shared/models/trace.model";
 
 type SelectTraceProps = {
   value: Trace | null;
@@ -41,8 +41,8 @@ export default function SelectTrace({
   return (
     <View style={styles.container}>
       <Text style={styles.title}>
-        On vous a généré{' '}
-        {traces.length == 1 ? 'une trace' : traces.length + ' traces'}
+        On vous a généré{" "}
+        {traces.length == 1 ? "une trace" : traces.length + " traces"}
       </Text>
 
       {selectedTrace && (
@@ -55,10 +55,12 @@ export default function SelectTrace({
       )}
 
       <View style={styles.radios}>
-        {traces?.map((trace, i) => (
+        {traces?.map((trace, index) => (
           <RadioButton
+            style={styles.radio}
             key={trace.distance}
-            label={trace?.distance + 'km'}
+            label={trace?.distance + "km"}
+            description={`D+ ${trace.elevation.total}m`}
             value={selectedTrace?.distance}
             selectedValue={trace.distance as never}
             onValueChange={() => {
@@ -79,19 +81,23 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 22,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   subtitle: {
     fontSize: 16,
-    color: 'grey',
+    color: "grey",
   },
   map: {
     borderWidth: 2,
-    borderColor: 'lightgrey',
+    borderColor: "lightgrey",
     borderRadius: 20,
   },
   radios: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    gap: 10,
+    flexWrap: "wrap",
+  },
+  radio: {
+    flex: 1,
   },
 });

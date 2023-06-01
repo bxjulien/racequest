@@ -1,6 +1,7 @@
 import { IsEnum, IsNumber, IsOptional } from 'class-validator';
 
 import { TraceDirection } from '../enums/trace-direction.enum';
+import { Elevation } from '../types/elevation.type';
 
 export class Trace {
   @IsOptional()
@@ -28,4 +29,6 @@ export class Trace {
   direction: TraceDirection;
 
   geohash: string;
+
+  elevation: Elevation;
 }

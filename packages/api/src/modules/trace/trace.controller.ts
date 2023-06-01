@@ -14,7 +14,6 @@ export class TraceController {
   generateTraces(
     @Query() generateTracesDto: GenerateTracesDto,
   ): Promise<TraceDto[]> {
-    console.log('generateTracesDto', generateTracesDto);
     return this.traceService.generateTraces(generateTracesDto);
   }
 
