@@ -24,8 +24,6 @@ export const createTrace = async (data: CreateTraceForm) => {
       closingIn: data.closingIn,
     };
 
-    console.log('envoyé', JSON.stringify(body));
-
     const { data: trace } = await axios.post(url, body);
 
     return trace;

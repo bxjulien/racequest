@@ -19,7 +19,6 @@ export class TraceController {
 
   @Post()
   postTrace(@Body() postTraceDto: PostTraceDto): Promise<Trace> {
-    console.log('postTraceDto', postTraceDto);
     return this.traceService.postTrace(postTraceDto);
   }
 }

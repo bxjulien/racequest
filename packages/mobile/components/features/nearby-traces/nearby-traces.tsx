@@ -1,5 +1,7 @@
-import { Text, View } from 'react-native';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 
+import MapTrace from '../../shared/map-trace/map-trace';
+import TraceOverview from '../../shared/trace-overview/trace-overview';
 import { useLocationContext } from '../../../shared/contexts/location.context';
 import useNearbyTracesQuery from '../../../shared/hooks/queries/useNearbyTracesQuery.hook';
 
@@ -25,15 +27,29 @@ export default function NearbyTraces() {
   if (isError) return <Text>Error</Text>;
 
   return (
-    <View>
-      {traces?.map((trace) => (
-        <View key={trace.id}>
-          <Text>Id: {trace.id}</Text>
-          <Text>
-            {trace.longitude} - {trace.latitude}
-          </Text>
-        </View>
-      ))}
+    <View style={styles.container}>
+      <Text style={styles.title}>Courses à proximité</Text>
+      <FlatList
+        data={traces}
+        renderItem={({ item }) => (
+          <TraceOverview trace={item} isMapInteractive={false} />
+        )}
+        contentContainerStyle={{
+          gap: 20,
+        }}
+      />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginBottom: 20,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+});

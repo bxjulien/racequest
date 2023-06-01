@@ -1,11 +1,16 @@
-import { IsEnum, IsNumber, IsOptional } from 'class-validator';
+import {
+  IsEnum,
+  IsNotEmpty,
+  IsNotEmptyObject,
+  IsNumber,
+} from 'class-validator';
 
-import { TraceDirection } from '../enums/trace-direction.enum';
 import { Elevation } from '../types/elevation.type';
+import { TraceDirection } from '../enums/trace-direction.enum';
 
 export class Trace {
-  @IsOptional()
-  id?: number;
+  @IsNumber()
+  id: number;
 
   @IsNumber()
   longitudeStart: number;
@@ -19,8 +24,9 @@ export class Trace {
   @IsNumber()
   latitudeCenter: number;
 
-  @IsOptional()
-  geoJson?: any;
+  @IsNotEmpty()
+  @IsNotEmptyObject()
+  geoJson: any;
 
   @IsNumber()
   distance: number;
@@ -31,4 +37,7 @@ export class Trace {
   geohash: string;
 
   elevation: Elevation;
+
+  @IsNumber()
+  closingIn: number;
 }
