@@ -13,8 +13,6 @@ export default function CreateTraceSubmit({ value }: CreateTraceSubmitProps) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tout est prêt !</Text>
-      <Text style={styles.subtitle}>Votre course est prête à être lancée.</Text>
       <MapTrace
         style={styles.map}
         height={350}
@@ -29,7 +27,7 @@ export default function CreateTraceSubmit({ value }: CreateTraceSubmitProps) {
 
         <View>
           <Text style={styles.infoTitle}>Dénivelé</Text>
-          <Text style={styles.infoValue}>120 m</Text>
+          <Text style={styles.infoValue}>{value.trace.elevation.total}m</Text>
         </View>
 
         <View>
@@ -53,8 +51,7 @@ const Retry = () => (
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 40,
-    gap: 20,
+    gap: 10,
   },
   title: {
     fontSize: 22,
@@ -67,7 +64,7 @@ const styles = StyleSheet.create({
   map: {
     borderWidth: 2,
     borderColor: 'lightgrey',
-    borderRadius: 20,
+    borderRadius: 10,
   },
   infos: {
     flexDirection: 'row',

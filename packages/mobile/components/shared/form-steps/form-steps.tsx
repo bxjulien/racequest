@@ -1,16 +1,16 @@
-import { StyleSheet, Text, View, ViewStyle } from "react-native";
+import { StyleSheet, Text, View, ViewStyle } from 'react-native';
 
-import { CreateTraceStep } from "../../../shared/types/create-trace-step";
-import ProgressBar from "../progress-bar/progress-bar";
-import React from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { ScrollView } from "react-native-gesture-handler";
+import { CreateTraceStep } from '../../../shared/types/create-trace-step';
+import ProgressBar from '../progress-bar/progress-bar';
+import React from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScrollView } from 'react-native-gesture-handler';
 
 type FormStepsProps = {
   title: string;
   withProgressBar?: boolean;
   steps: CreateTraceStep[];
-  activeStep: number;
+  activeStepIndex: number;
   style?: ViewStyle;
 };
 
@@ -18,10 +18,10 @@ export default function FormSteps({
   title,
   withProgressBar = true,
   steps,
-  activeStep,
+  activeStepIndex,
   style,
 }: FormStepsProps) {
-  const progress = (activeStep / steps.length) * 100;
+  const progress = (activeStepIndex / steps.length) * 100;
 
   return (
     <SafeAreaView style={[style, styles.container]}>
@@ -29,18 +29,24 @@ export default function FormSteps({
         <View>
           <Text style={styles.title}>{title}</Text>
           {withProgressBar && (
-            <ProgressBar progress={progress} color="#6200ee" height={2} />
+            <ProgressBar progress={progress} color='#6200ee' height={2} />
           )}
         </View>
 
-        <Text style={styles.stepTitle}>On pars sur quel format ?</Text>
+        <Text style={styles.stepTitle}>{steps[activeStepIndex].title}</Text>
+
+        {steps[activeStepIndex].subtitle && (
+          <Text style={styles.stepSubtitle}>
+            {steps[activeStepIndex].subtitle}
+          </Text>
+        )}
 
         <ScrollView showsVerticalScrollIndicator={false}>
-          {steps[activeStep].component && steps[activeStep].component}
+          {steps[activeStepIndex].component && steps[activeStepIndex].component}
         </ScrollView>
       </View>
 
-      {steps[activeStep].footer && steps[activeStep].footer}
+      {steps[activeStepIndex].footer && steps[activeStepIndex].footer}
     </SafeAreaView>
   );
 }
@@ -48,20 +54,25 @@ export default function FormSteps({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
   },
   content: {
     flex: 1,
   },
   title: {
     fontSize: 24,
-    fontWeight: "bold",
-    textAlign: "center",
+    fontWeight: 'bold',
+    textAlign: 'center',
     paddingBottom: 20,
   },
   stepTitle: {
     fontSize: 22,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginVertical: 20,
+  },
+  stepSubtitle: {
+    fontSize: 18,
+    color: 'grey',
+    marginBottom: 20,
   },
 });

@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 
-import MapTrace from "../../../shared/map-trace/map-trace";
-import { RadioButton } from "../../../shared/radio/radio";
-import SelectTraceSkeleton from "./select-trace.skeleton";
-import { Trace } from "../../../../../api/src/shared/models/trace.model";
+import MapTrace from '../../../shared/map-trace/map-trace';
+import { RadioButton } from '../../../shared/radio/radio';
+import SelectTraceSkeleton from './select-trace.skeleton';
+import { Trace } from '../../../../../api/src/shared/models/trace.model';
 
 type SelectTraceProps = {
   value: Trace | null;
@@ -40,11 +40,6 @@ export default function SelectTrace({
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>
-        On vous a généré{" "}
-        {traces.length == 1 ? "une trace" : traces.length + " traces"}
-      </Text>
-
       {selectedTrace && (
         <MapTrace
           style={styles.map}
@@ -59,7 +54,7 @@ export default function SelectTrace({
           <RadioButton
             style={styles.radio}
             key={trace.distance}
-            label={trace?.distance + "km"}
+            label={trace?.distance + 'km'}
             description={`D+ ${trace.elevation.total}m`}
             value={selectedTrace?.distance}
             selectedValue={trace.distance as never}
@@ -76,26 +71,17 @@ export default function SelectTrace({
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 40,
-    gap: 20,
-  },
-  title: {
-    fontSize: 22,
-    fontWeight: "bold",
-  },
-  subtitle: {
-    fontSize: 16,
-    color: "grey",
+    gap: 10,
   },
   map: {
     borderWidth: 2,
-    borderColor: "lightgrey",
-    borderRadius: 20,
+    borderColor: 'lightgrey',
+    borderRadius: 10,
   },
   radios: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 10,
-    flexWrap: "wrap",
+    flexWrap: 'wrap',
   },
   radio: {
     flex: 1,

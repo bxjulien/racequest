@@ -19,13 +19,9 @@ export default function CreateTraceStartingPoint({
   setValue: (value: StartingPoint) => void;
 }) {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>On démarre d'où ?</Text>
-
-      <View style={styles.choices}>
-        <UseMyCurrentLocation setValue={setValue} value={value} />
-        <ChooseOnMap />
-      </View>
+    <View style={styles.choices}>
+      <UseMyCurrentLocation setValue={setValue} value={value} />
+      <ChooseOnMap />
     </View>
   );
 }
@@ -126,16 +122,8 @@ const SearchPlace = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    marginTop: 40,
-  },
-  title: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
   choices: {
-    gap: 20,
+    gap: 10,
   },
   place: {
     marginVertical: 5,
