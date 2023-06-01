@@ -12,11 +12,11 @@ import { Type } from 'class-transformer';
 export class GenerateTracesDto {
   @Type(() => Number)
   @IsLongitude()
-  longitude: number;
+  longitudeStart: number;
 
   @Type(() => Number)
   @IsLatitude()
-  latitude: number;
+  latitudeStart: number;
 
   @Type(() => Number)
   @IsPositive()

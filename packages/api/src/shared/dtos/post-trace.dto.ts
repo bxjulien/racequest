@@ -1,9 +1,10 @@
-import { IsNumber, IsPositive, ValidateNested } from 'class-validator';
+import { IsNumber, IsPositive } from 'class-validator';
+import { TraceDto } from './trace.dto';
 import { Type } from 'class-transformer';
-import { Trace } from '../models/trace.model';
 
 export class PostTraceDto {
-  trace: Trace;
+  @Type(() => TraceDto)
+  trace: TraceDto;
 
   @IsNumber()
   @IsPositive({ message: 'closingIn doit être un nombre positif.' })

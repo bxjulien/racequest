@@ -1,11 +1,8 @@
-import { IsEnum, IsNumber, IsOptional } from 'class-validator';
+import { IsEnum, IsNumber } from 'class-validator';
 
 import { TraceDirection } from '../enums/trace-direction.enum';
 
-export class Trace {
-  @IsOptional()
-  id?: number;
-
+export class TraceDto {
   @IsNumber()
   longitudeStart: number;
 
@@ -18,14 +15,11 @@ export class Trace {
   @IsNumber()
   latitudeCenter: number;
 
-  @IsOptional()
-  geoJson?: any;
-
   @IsNumber()
   distance: number;
 
   @IsEnum(TraceDirection)
   direction: TraceDirection;
 
-  geohash: string;
+  geoJson: any;
 }

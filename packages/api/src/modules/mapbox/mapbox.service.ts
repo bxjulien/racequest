@@ -25,8 +25,8 @@ export class MapboxService {
     direction: TraceDirection,
   ) {
     const startingPoint: Coordinates = [
-      generateTracesDto.longitude,
-      generateTracesDto.latitude,
+      generateTracesDto.longitudeStart,
+      generateTracesDto.latitudeStart,
     ];
     const waypoints: Coordinates[] = createWaypoints(
       generateTracesDto.distance,

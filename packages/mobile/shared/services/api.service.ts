@@ -1,14 +1,14 @@
 import { CreateTraceForm } from '../types/create-trace-form';
 import axios from 'axios';
 
-const baseUrl = 'http://192.168.1.84:3000/api';
+const baseUrl = 'http://10.15.191.117:3000/api';
 
 export const getCreationTraces = async (
   longitude: number,
   latitude: number,
   distance: number
 ) => {
-  const url = `${baseUrl}/trace?longitude=${longitude}&latitude=${latitude}&distance=${distance}`;
+  const url = `${baseUrl}/trace?longitudeStart=${longitude}&latitudeStart=${latitude}&distance=${distance}`;
 
   const { data } = await axios.get(encodeURI(url));
 

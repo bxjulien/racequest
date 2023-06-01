@@ -1,5 +1,5 @@
 import MapView from "react-native-maps";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { StyleSheet, View } from "react-native";
 import { Trace } from "../../../../api/src/shared/models/trace.model";
 import { Polyline } from "react-native-maps";
@@ -17,14 +17,31 @@ export default function MapTrace({
   width?: number | string;
   style?: any;
 }) {
-  const delta = Math.max(0.01, 0.1 / trace.distance);
-
+  const mapRef = useRef<MapView>(null);
   const points = trace.geoJson.geometry.coordinates.map(
     ([longitude, latitude]: [longitude: number, latitude: number]) => ({
       latitude,
       longitude,
     })
   );
+
+  const fitMapToCoordinates = () => {
+    if (mapRef.current) {
+      mapRef.current.fitToCoordinates(points, {
+        animated: true,
+        edgePadding: {
+          top: 10,
+          right: 10,
+          bottom: 10,
+          left: 10,
+        },
+      });
+    }
+  };
+
+  useEffect(() => {
+    fitMapToCoordinates();
+  }, [trace]);
 
   return (
     <View
@@ -40,24 +57,22 @@ export default function MapTrace({
       ]}
     >
       <MapView
+        ref={mapRef}
         style={{
           height: "100%",
           width: "100%",
         }}
+        onMapReady={fitMapToCoordinates}
         initialRegion={{
-          longitude: trace.longitude,
-          latitude: trace.latitude,
-          latitudeDelta: delta,
-          longitudeDelta: delta,
+          latitude: trace.latitudeCenter,
+          longitude: trace.longitudeCenter,
+          latitudeDelta: 0.04,
+          longitudeDelta: 0.04,
         }}
       >
         <Polyline
           coordinates={points}
           strokeColor="red"
-          strokeColors={[
-            "#7F0000",
-            "#00000000", // no color, creates a "long" gradient between the previous and next coordinate
-          ]}
           strokeWidth={strokeWidth}
         />
       </MapView>

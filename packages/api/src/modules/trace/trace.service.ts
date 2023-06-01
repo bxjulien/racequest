@@ -10,10 +10,10 @@ import { PostTraceDto } from './../../shared/dtos/post-trace.dto';
 import { SupabaseService } from './../supabase/supabase.service';
 import { Trace } from '../../shared/models/trace.model';
 import { TraceDirection } from '../../shared/enums/trace-direction.enum';
-import geohash from 'ngeohash';
 import { removeDuplicatePoints } from '../../shared/utils/geojson/duplicates.utils';
 import { removeSharpAngles } from '../../shared/utils/geojson/angles.utils';
 import togpx from 'togpx';
+import { TraceDto } from 'src/shared/dtos/trace.dto';
 
 @Injectable()
 export class TraceService {
@@ -28,8 +28,10 @@ export class TraceService {
       this.configService.get<string>('NODE_ENV') === 'development';
   }
 
-  async generateTraces(generateTracesDto: GenerateTracesDto): Promise<Trace[]> {
-    const traces: Trace[] = [];
+  async generateTraces(
+    generateTracesDto: GenerateTracesDto,
+  ): Promise<TraceDto[]> {
+    const traces: TraceDto[] = [];
 
     const directions: TraceDirection[] = generateTracesDto.direction
       ? [generateTracesDto.direction]
@@ -49,14 +51,22 @@ export class TraceService {
       geoJson.geometry.coordinates = coordinates;
 
       const line = turf.lineString(coordinates);
+
       const distance = turf.lineDistance(line, { units: 'kilometers' });
 
-      const minDistance = generateTracesDto.distance * 0.5;
-      const maxDistance = generateTracesDto.distance * 1.5;
+      const center = turf.center(line);
+      const longitudeCenter = center.geometry.coordinates[0];
+      const latitudeCenter = center.geometry.coordinates[1];
 
-      if (distance >= minDistance && distance <= maxDistance) {
+      const _minDistance = generateTracesDto.distance * 0.5;
+      const _maxDistance = generateTracesDto.distance * 1.5;
+
+      if (distance >= _minDistance && distance <= _maxDistance) {
         traces.push({
-          ...generateTracesDto,
+          longitudeStart: generateTracesDto.longitudeStart,
+          latitudeStart: generateTracesDto.latitudeStart,
+          longitudeCenter: longitudeCenter,
+          latitudeCenter: latitudeCenter,
           geoJson,
           distance: +distance.toFixed(2),
           direction,
@@ -81,8 +91,10 @@ export class TraceService {
     const supabase = this.supabaseService.getSupabase();
 
     const { data, error } = await supabase.rpc('insert_trace', {
-      _longitude: postTraceDto.trace.longitude,
-      _latitude: postTraceDto.trace.latitude,
+      _longitudeStart: postTraceDto.trace.longitudeStart,
+      _latitudeStart: postTraceDto.trace.latitudeStart,
+      _longitudeCenter: postTraceDto.trace.latitudeCenter,
+      _latitudeCenter: postTraceDto.trace.latitudeCenter,
       _distance: postTraceDto.trace.distance,
       _geojson: postTraceDto.trace.geoJson,
       _direction: postTraceDto.trace.direction,
