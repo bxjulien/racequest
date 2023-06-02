@@ -12,6 +12,7 @@ type RadioButtonProps = {
   description?: string;
   style?: any;
   canUnselect?: boolean;
+  disabled?: boolean;
 };
 
 export const RadioButton = ({
@@ -22,12 +23,19 @@ export const RadioButton = ({
   description,
   style,
   canUnselect,
+  disabled,
 }: RadioButtonProps) => {
   const isChecked = selectedValue === value;
 
   return (
     <TouchableOpacity
-      style={[style, styles.container, isChecked && styles.checked]}
+      style={[
+        style,
+        styles.container,
+        isChecked && styles.checked,
+        disabled && styles.disabled,
+      ]}
+      disabled={disabled}
       onPress={() => onValueChange && onValueChange(value)}
       activeOpacity={0.5}
     >
@@ -63,6 +71,9 @@ const styles = StyleSheet.create({
   checked: {
     borderColor: '#6200ee',
     backgroundColor: '#ebeaf5',
+  },
+  disabled: {
+    opacity: 0.4,
   },
   main: {
     flexDirection: 'row',

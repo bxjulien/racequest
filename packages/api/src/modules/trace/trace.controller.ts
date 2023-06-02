@@ -14,13 +14,11 @@ export class TraceController {
   generateTraces(
     @Query() generateTracesDto: GenerateTracesDto,
   ): Promise<TraceDto[]> {
-    console.log('generateTracesDto', generateTracesDto);
     return this.traceService.generateTraces(generateTracesDto);
   }
 
   @Post()
   postTrace(@Body() postTraceDto: PostTraceDto): Promise<Trace> {
-    console.log('postTraceDto', postTraceDto);
     return this.traceService.postTrace(postTraceDto);
   }
 }

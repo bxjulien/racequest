@@ -4,12 +4,13 @@ import { CreateTraceStep } from '../../../shared/types/create-trace-step';
 import ProgressBar from '../progress-bar/progress-bar';
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScrollView } from 'react-native-gesture-handler';
 
 type FormStepsProps = {
   title: string;
   withProgressBar?: boolean;
   steps: CreateTraceStep[];
-  activeStep: number;
+  activeStepIndex: number;
   style?: ViewStyle;
 };
 
@@ -17,14 +18,14 @@ export default function FormSteps({
   title,
   withProgressBar = true,
   steps,
-  activeStep,
+  activeStepIndex,
   style,
 }: FormStepsProps) {
-  const progress = (activeStep / steps.length) * 100;
+  const progress = (activeStepIndex / steps.length) * 100;
 
   return (
-    <View style={[style, styles.container]}>
-      <SafeAreaView style={styles.content}>
+    <SafeAreaView style={[style, styles.container]}>
+      <View style={styles.content}>
         <View>
           <Text style={styles.title}>{title}</Text>
           {withProgressBar && (
@@ -32,11 +33,21 @@ export default function FormSteps({
           )}
         </View>
 
-        {steps[activeStep].component && steps[activeStep].component}
-      </SafeAreaView>
+        <Text style={styles.stepTitle}>{steps[activeStepIndex].title}</Text>
 
-      {steps[activeStep].footer && steps[activeStep].footer}
-    </View>
+        {steps[activeStepIndex].subtitle && (
+          <Text style={styles.stepSubtitle}>
+            {steps[activeStepIndex].subtitle}
+          </Text>
+        )}
+
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {steps[activeStepIndex].component && steps[activeStepIndex].component}
+        </ScrollView>
+      </View>
+
+      {steps[activeStepIndex].footer && steps[activeStepIndex].footer}
+    </SafeAreaView>
   );
 }
 
@@ -53,5 +64,15 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     paddingBottom: 20,
+  },
+  stepTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginVertical: 20,
+  },
+  stepSubtitle: {
+    fontSize: 18,
+    color: 'grey',
+    marginBottom: 20,
   },
 });

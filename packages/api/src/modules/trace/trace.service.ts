@@ -5,15 +5,16 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 
 import { ConfigService } from '@nestjs/config';
 import { GenerateTracesDto } from '../../shared/dtos/generate-traces.dto';
+import { GoogleMapsService } from '../google-maps/google-maps.service';
 import { MapboxService } from '../mapbox/mapbox.service';
 import { PostTraceDto } from './../../shared/dtos/post-trace.dto';
 import { SupabaseService } from './../supabase/supabase.service';
 import { Trace } from '../../shared/models/trace.model';
 import { TraceDirection } from '../../shared/enums/trace-direction.enum';
+import { TraceDto } from 'src/shared/dtos/trace.dto';
 import { removeDuplicatePoints } from '../../shared/utils/geojson/duplicates.utils';
 import { removeSharpAngles } from '../../shared/utils/geojson/angles.utils';
 import togpx from 'togpx';
-import { TraceDto } from 'src/shared/dtos/trace.dto';
 
 @Injectable()
 export class TraceService {
@@ -21,6 +22,7 @@ export class TraceService {
 
   constructor(
     private readonly mapboxService: MapboxService,
+    private readonly googleMapsService: GoogleMapsService,
     private readonly supabaseService: SupabaseService,
     private readonly configService: ConfigService,
   ) {
@@ -50,6 +52,8 @@ export class TraceService {
 
       geoJson.geometry.coordinates = coordinates;
 
+      const elevation = await this.googleMapsService.getElevation(coordinates);
+
       const line = turf.lineString(coordinates);
 
       const distance = turf.lineDistance(line, { units: 'kilometers' });
@@ -70,6 +74,7 @@ export class TraceService {
           geoJson,
           distance: +distance.toFixed(2),
           direction,
+          elevation,
         });
 
         if (this.isDevelopment) {
@@ -91,13 +96,15 @@ export class TraceService {
     const supabase = this.supabaseService.getSupabase();
 
     const { data, error } = await supabase.rpc('insert_trace', {
-      _longitudeStart: postTraceDto.trace.longitudeStart,
-      _latitudeStart: postTraceDto.trace.latitudeStart,
-      _longitudeCenter: postTraceDto.trace.latitudeCenter,
-      _latitudeCenter: postTraceDto.trace.latitudeCenter,
+      _longitude_start: postTraceDto.trace.longitudeStart,
+      _latitude_start: postTraceDto.trace.latitudeStart,
+      _longitude_center: postTraceDto.trace.latitudeCenter,
+      _latitude_center: postTraceDto.trace.latitudeCenter,
       _distance: postTraceDto.trace.distance,
       _geojson: postTraceDto.trace.geoJson,
       _direction: postTraceDto.trace.direction,
+      _elevation: postTraceDto.trace.elevation,
+      _closing_in: postTraceDto.closingIn,
     });
 
     if (error) {

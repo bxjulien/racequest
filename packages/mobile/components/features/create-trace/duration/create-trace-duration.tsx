@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { RadioButton } from '../../../shared/radio/radio';
 import React from 'react';
@@ -26,40 +26,23 @@ export default function CreateTraceDuration({
   ];
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.stepTitle}>
-        On fige le classement dans combien de jours ?
-      </Text>
-
-      <FlatList
-        data={inputs}
-        renderItem={({ item }) => (
-          <RadioButton
-            label={item.label}
-            value={item.value}
-            selectedValue={value}
-            onValueChange={(v) => setValue(v as number)}
-            description={item.description}
-            style={styles.input}
-          />
-        )}
-        keyExtractor={(item) => item.id.toString()}
-        keyboardShouldPersistTaps='handled'
-      />
+    <View style={styles.inputs}>
+      {inputs.map((input) => (
+        <RadioButton
+          key={input.id}
+          label={input.label}
+          value={input.value}
+          selectedValue={value}
+          onValueChange={(v) => setValue(v as number)}
+          description={input.description}
+        />
+      ))}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    marginTop: 40,
-  },
-  stepTitle: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  input: {
-    marginBottom: 20,
+  inputs: {
+    gap: 10,
   },
 });

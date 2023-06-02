@@ -1,7 +1,7 @@
 import { CreateTraceForm } from '../types/create-trace-form';
 import axios from 'axios';
 
-const baseUrl = 'http://10.15.191.117:3000/api';
+const baseUrl = `http://10.15.191.117:3000/api`;
 
 export const getCreationTraces = async (
   longitude: number,
@@ -16,14 +16,18 @@ export const getCreationTraces = async (
 };
 
 export const createTrace = async (data: CreateTraceForm) => {
-  const url = `${baseUrl}/trace`;
+  try {
+    const url = `${baseUrl}/trace`;
 
-  const body = {
-    trace: data.trace,
-    closingIn: data.closingIn,
-  };
+    const body = {
+      trace: data.trace,
+      closingIn: data.closingIn,
+    };
 
-  const { data: trace } = await axios.post(url, body);
+    const { data: trace } = await axios.post(url, body);
 
-  return trace;
+    return trace;
+  } catch (error) {
+    console.error(error);
+  }
 };

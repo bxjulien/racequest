@@ -1,15 +1,15 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from "react-native";
 
-import Button from '../button/button';
-import React from 'react';
+import Button from "../button/button";
+import React from "react";
 
 export default function FormStepsFooter({
   goNext,
   canGoNext = true,
-  goNextTitle = 'Continuer',
+  goNextTitle = "Continuer",
   goBack,
   canGoBack = true,
-  goBackTitle = 'Retour',
+  goBackTitle = "Retour",
 }: {
   goNext: () => void;
   canGoNext?: boolean;
@@ -25,11 +25,11 @@ export default function FormStepsFooter({
         style={styles.backButton}
         onPress={goBack}
         disabled={!canGoBack}
-        color='orange'
+        color="orange"
       />
       <Button
         style={styles.nextButton}
-        color='#6200ee'
+        color="#6200ee"
         title={goNextTitle}
         onPress={goNext}
         disabled={!canGoNext}
@@ -41,12 +41,12 @@ export default function FormStepsFooter({
 const styles = StyleSheet.create({
   footer: {
     paddingVertical: 10,
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 10,
   },
   backButton: {
     flex: 0.25,
-    color: 'red',
+    color: "red",
   },
   nextButton: {
     flex: 1,

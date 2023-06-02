@@ -1,20 +1,23 @@
-import MapView from "react-native-maps";
-import React, { useEffect, useRef } from "react";
-import { StyleSheet, View } from "react-native";
-import { Trace } from "../../../../api/src/shared/models/trace.model";
-import { Polyline } from "react-native-maps";
+import React, { useEffect, useRef } from 'react';
+import { StyleSheet, View } from 'react-native';
+
+import MapView from 'react-native-maps';
+import { Polyline } from 'react-native-maps';
+import { Trace } from '../../../../api/src/shared/models/trace.model';
 
 export default function MapTrace({
   trace,
-  strokeWidth,
+  strokeWidth = 2,
   height = 300,
-  width = "100%",
+  width = '100%',
+  isInteractive = true,
   style,
 }: {
   trace: Trace;
-  strokeWidth: number;
+  strokeWidth?: number;
   height?: number;
   width?: number | string;
+  isInteractive?: boolean;
   style?: any;
 }) {
   const mapRef = useRef<MapView>(null);
@@ -59,8 +62,8 @@ export default function MapTrace({
       <MapView
         ref={mapRef}
         style={{
-          height: "100%",
-          width: "100%",
+          height: '100%',
+          width: '100%',
         }}
         onMapReady={fitMapToCoordinates}
         initialRegion={{
@@ -69,10 +72,14 @@ export default function MapTrace({
           latitudeDelta: 0.04,
           longitudeDelta: 0.04,
         }}
+        scrollEnabled={isInteractive}
+        zoomEnabled={isInteractive}
+        rotateEnabled={isInteractive}
+        pitchEnabled={isInteractive}
       >
         <Polyline
           coordinates={points}
-          strokeColor="red"
+          strokeColor='red'
           strokeWidth={strokeWidth}
         />
       </MapView>
@@ -82,6 +89,6 @@ export default function MapTrace({
 
 const styles = StyleSheet.create({
   container: {
-    overflow: "hidden",
+    overflow: 'hidden',
   },
 });
