@@ -10,15 +10,16 @@ import FormSteps from '../../shared/form-steps/form-steps';
 import FormStepsFooter from '../../shared/form-steps/form-steps-footer';
 import { FormatType } from '../../../shared/enums/FormatType.enum';
 import SelectTrace from './select-trace/select-trace';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 import useCreateTraceMutation from '../../../shared/hooks/queries/useCreateTraceMutation.hook';
 import useCreationTracesMutation from '../../../shared/hooks/queries/useCreationTracesMutation.hook';
 import { useLocationContext } from '../../../shared/contexts/location.context';
 import { useRouter } from 'expo-router';
+import { SearchPlace } from './starting-point/search-place/search-place';
 
 export default function CreateTrace() {
   const router = useRouter();
-  const { location } = useLocationContext();
+  const { location, address } = useLocationContext();
 
   const creationTracesMutation = useCreationTracesMutation();
   const createTraceMutation = useCreateTraceMutation();
@@ -26,7 +27,7 @@ export default function CreateTrace() {
   const [formData, setFormData] = useState<CreateTraceForm>({
     format: FormatType.Short,
     startingPoint: {
-      name: 'Ma position actuelle',
+      address: address,
       longitude: location?.coords.longitude || 0,
       latitude: location?.coords.latitude || 0,
     },
@@ -40,8 +41,26 @@ export default function CreateTrace() {
   };
 
   const goBack = () => {
-    if (currentStepIndex === 0) return router.back();
+    if (currentStepIndex === 0) return router.push('/home');
     setCurrentStepIndex(currentStepIndex - 1);
+  };
+
+  const getGeneratedTraces = () => {
+    const longitude = formData.startingPoint?.longitude;
+    const latitude = formData.startingPoint?.latitude;
+
+    if (!longitude || !latitude) return;
+
+    // todo refacto
+    const format =
+      formData.format === FormatType.Short
+        ? 4
+        : formData.format === FormatType.Medium
+        ? 8
+        : 14;
+
+    creationTracesMutation.mutate([longitude, latitude, format]);
+    goNext();
   };
 
   const steps: CreateTraceStep[] = [
@@ -59,28 +78,32 @@ export default function CreateTrace() {
     {
       id: 2,
       title: "On démarre d'où ?",
-      component: (
-        <CreateTraceStartingPoint
-          value={formData.startingPoint}
+      subtitle:
+        'Ou appuyez longuement sur la carte pour choisir un point de départ',
+      headerComponent: (
+        <SearchPlace
+        value={formData.startingPoint}
           setValue={(value) =>
             setFormData({ ...formData, startingPoint: value })
           }
         />
       ),
+      component: (
+        <CreateTraceStartingPoint
+          value={formData.startingPoint}
+          setValue={(value) => {
+            setFormData({ ...formData, startingPoint: value });
+          }}
+        />
+      ),
       footer: (
         <FormStepsFooter
-          goNext={() => {
-            creationTracesMutation.mutate([
-              formData.startingPoint?.longitude || 0,
-              formData.startingPoint?.latitude || 0,
-              formData.format === FormatType.Short
-                ? 4
-                : formData.format === FormatType.Medium
-                ? 8
-                : 14,
-            ]);
-            goNext();
-          }}
+          canGoNext={Boolean(
+            formData.startingPoint?.longitude &&
+              formData.startingPoint?.latitude &&
+              formData.format
+          )}
+          goNext={getGeneratedTraces}
           goBack={goBack}
         />
       ),
@@ -134,7 +157,6 @@ export default function CreateTrace() {
         <FormStepsFooter
           goNext={async () => {
             await createTraceMutation.mutateAsync(formData);
-            goNext();
           }}
           goBack={goBack}
           goNextTitle={
@@ -142,6 +164,8 @@ export default function CreateTrace() {
               ? 'Création en cours...'
               : 'Créer la course'
           }
+          canGoNext={!createTraceMutation.isLoading}
+          canGoBack={!createTraceMutation.isLoading}
         />
       ),
     },

@@ -26,7 +26,7 @@ export default function SelectTrace({
   );
 
   useEffect(() => {
-    if (!value && !selectedTrace && traces && traces.length > 0) {
+    if (traces && traces.length > 0) {
       setSelectedTrace(traces[0]);
       setValue(traces[0]);
     }
@@ -41,12 +41,7 @@ export default function SelectTrace({
   return (
     <View style={styles.container}>
       {selectedTrace && (
-        <MapTrace
-          style={styles.map}
-          height={350}
-          trace={selectedTrace as Trace}
-          strokeWidth={4}
-        />
+        <MapTrace height={350} trace={selectedTrace as Trace} strokeWidth={4} />
       )}
 
       <View style={styles.radios}>
@@ -72,11 +67,6 @@ export default function SelectTrace({
 const styles = StyleSheet.create({
   container: {
     gap: 10,
-  },
-  map: {
-    borderWidth: 2,
-    borderColor: 'lightgrey',
-    borderRadius: 10,
   },
   radios: {
     flexDirection: 'row',
