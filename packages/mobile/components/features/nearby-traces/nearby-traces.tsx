@@ -1,6 +1,5 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 
-import MapTrace from '../../shared/map-trace/map-trace';
 import TraceOverview from '../../shared/trace-overview/trace-overview';
 import { useLocationContext } from '../../../shared/contexts/location.context';
 import useNearbyTracesQuery from '../../../shared/hooks/queries/useNearbyTracesQuery.hook';
@@ -32,11 +31,20 @@ export default function NearbyTraces() {
       <FlatList
         data={traces}
         renderItem={({ item }) => (
-          <TraceOverview trace={item} isMapInteractive={false} />
+          <View style={{ width: 280 }}>
+            <TraceOverview
+              trace={item}
+              isMapInteractive={false}
+              withoutEndDate
+            />
+          </View>
         )}
         contentContainerStyle={{
           gap: 20,
         }}
+        snapToInterval={280}
+        horizontal
+        showsHorizontalScrollIndicator={false}
       />
     </View>
   );
@@ -44,7 +52,6 @@ export default function NearbyTraces() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     marginBottom: 20,
   },
   title: {

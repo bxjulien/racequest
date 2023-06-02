@@ -6,9 +6,11 @@ import { Trace } from '../../../../api/src/shared/models/trace.model';
 export default function TraceOverview({
   trace,
   isMapInteractive = true,
+  withoutEndDate = false,
 }: {
   trace: Trace;
   isMapInteractive?: boolean;
+  withoutEndDate?: boolean;
 }) {
   return (
     <View>
@@ -28,10 +30,12 @@ export default function TraceOverview({
           <Text style={styles.infoValue}>{trace.elevation.total}m</Text>
         </View>
 
-        <View>
-          <Text style={styles.infoTitle}>Se termine dans</Text>
-          <Text style={styles.infoValue}>{trace.closingIn} jours</Text>
-        </View>
+        {!withoutEndDate && (
+          <View>
+            <Text style={styles.infoTitle}>Se termine dans</Text>
+            <Text style={styles.infoValue}>{trace.closingIn} jours</Text>
+          </View>
+        )}
       </View>
     </View>
   );
