@@ -1,54 +1,24 @@
-import React, { useState, useEffect } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { StyleSheet } from "react-native";
-import MapView, { Marker } from "react-native-maps";
-import * as Location from "expo-location";
-import { LocationObject } from "expo-location";
+import React from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { StyleSheet } from 'react-native';
+import MapView from 'react-native-maps';
+import { useLocationContext } from '../shared/contexts/location.context';
 
 export default function MapScreen() {
-  const [location, setLocation] = useState<LocationObject | null>(null);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const { status } = await Location.requestForegroundPermissionsAsync();
-        if (status !== "granted") {
-          setErrorMsg("Permission to access location was denied");
-          return;
-        }
-
-        const currentLocation = await Location.getCurrentPositionAsync({});
-        setLocation(currentLocation);
-      } catch (error) {
-        setErrorMsg("Error getting location");
-      }
-    })();
-  }, []);
-
-  if (!location) {
-    return <SafeAreaView style={styles.container} />;
-  }
+  const { location } = useLocationContext();
 
   return (
     <SafeAreaView style={styles.container}>
       <MapView
         style={styles.map}
         initialRegion={{
-          latitude: location.coords.latitude,
-          longitude: location.coords.longitude,
-          latitudeDelta: 0.1,
+          latitude: location?.coords.latitude || 0,
+          longitude: location?.coords.longitude || 0,
+          latitudeDelta: 0.05,
           longitudeDelta: 0.05,
         }}
-      >
-        <Marker
-          coordinate={{
-            latitude: location.coords.latitude,
-            longitude: location.coords.longitude,
-          }}
-          title="Your Location"
-        />
-      </MapView>
+        showsUserLocation
+      />
     </SafeAreaView>
   );
 }

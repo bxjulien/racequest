@@ -3,14 +3,17 @@
 import * as Location from 'expo-location';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { getAddressFromCoordinates } from '../services/mapbox.service';
 
 interface LocationContextValue {
   location: Location.LocationObject | null;
+  address: string | null;
   retryGetLocation: () => void;
 }
 
 const LocationContext = createContext<LocationContextValue>({
   location: null,
+  address: null,
   retryGetLocation: () => {},
 });
 
@@ -24,6 +27,7 @@ export default function LocationProvider({
   const [location, setLocation] = useState<Location.LocationObject | null>(
     null
   );
+  const [address, setAddress] = useState<string | null>(null);
 
   const getLocation = async () => {
     let { status } = await Location.requestForegroundPermissionsAsync();
@@ -39,12 +43,25 @@ export default function LocationProvider({
     getLocation();
   }, []);
 
+  useEffect(() => {
+    if (!location) return;
+
+    (async () => {
+      const address = await getAddressFromCoordinates(
+        location.coords.longitude,
+        location.coords.latitude
+      );
+
+      setAddress(address);
+    })();
+  }, [location]);
+
   const retryGetLocation = () => {
     getLocation();
   };
 
   return (
-    <LocationContext.Provider value={{ location, retryGetLocation }}>
+    <LocationContext.Provider value={{ location, address, retryGetLocation }}>
       {children}
     </LocationContext.Provider>
   );

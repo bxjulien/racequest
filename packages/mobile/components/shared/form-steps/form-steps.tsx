@@ -25,28 +25,37 @@ export default function FormSteps({
 
   return (
     <SafeAreaView style={[style, styles.container]}>
-      <View style={styles.content}>
-        <View>
-          <Text style={styles.title}>{title}</Text>
-          {withProgressBar && (
-            <ProgressBar progress={progress} color='#6200ee' height={2} />
-          )}
-        </View>
-
-        <Text style={styles.stepTitle}>{steps[activeStepIndex].title}</Text>
-
-        {steps[activeStepIndex].subtitle && (
-          <Text style={styles.stepSubtitle}>
-            {steps[activeStepIndex].subtitle}
-          </Text>
+      <View>
+        <Text style={styles.title}>{title}</Text>
+        {withProgressBar && (
+          <ProgressBar progress={progress} color='#6200ee' height={2} />
         )}
-
-        <ScrollView showsVerticalScrollIndicator={false}>
-          {steps[activeStepIndex].component && steps[activeStepIndex].component}
-        </ScrollView>
       </View>
 
-      {steps[activeStepIndex].footer && steps[activeStepIndex].footer}
+      <Text style={styles.stepTitle}>{steps[activeStepIndex].title}</Text>
+
+      <ScrollView
+        contentContainerStyle={{
+          flexGrow: 1,
+          justifyContent: 'space-between',
+        }}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.content}>
+          {steps[activeStepIndex].headerComponent &&
+            steps[activeStepIndex].headerComponent}
+
+          {steps[activeStepIndex].subtitle && (
+            <Text style={styles.stepSubtitle}>
+              {steps[activeStepIndex].subtitle}
+            </Text>
+          )}
+
+          {steps[activeStepIndex].component && steps[activeStepIndex].component}
+        </View>
+
+        {steps[activeStepIndex].footer && steps[activeStepIndex].footer}
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -55,9 +64,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'space-between',
-  },
-  content: {
-    flex: 1,
   },
   title: {
     fontSize: 24,
@@ -69,6 +75,9 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: 'bold',
     marginVertical: 20,
+  },
+  content: {
+    flex: 1,
   },
   stepSubtitle: {
     fontSize: 18,

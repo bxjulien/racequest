@@ -90,5 +90,8 @@ export default function MapTrace({
 const styles = StyleSheet.create({
   container: {
     overflow: 'hidden',
+    borderWidth: 2,
+    borderColor: 'lightgrey',
+    borderRadius: 10,
   },
 });
