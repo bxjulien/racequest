@@ -6,6 +6,7 @@ import React, { useEffect } from 'react';
 import { StartingPoint } from '../../../../shared/types/starting-point.type';
 
 import { useLocationContext } from '../../../../shared/contexts/location.context';
+import { getAddressFromCoordinates } from '../../../../shared/services/mapbox.service';
 
 export default function CreateTraceStartingPoint({
   value,
@@ -30,6 +31,12 @@ export default function CreateTraceStartingPoint({
     }
   }, [value]);
 
+  const onLongPress = async (e: any) => {
+    const { longitude, latitude } = e.nativeEvent.coordinate;
+    const address = await getAddressFromCoordinates(longitude, latitude);
+    setValue({ address, longitude, latitude });
+  };
+
   return (
     <View style={styles.container}>
       <MapView
@@ -42,11 +49,7 @@ export default function CreateTraceStartingPoint({
           longitudeDelta: 0.002,
         }}
         showsUserLocation
-        onLongPress={(e) => {
-          const { latitude, longitude } = e.nativeEvent.coordinate;
-          const address = 'TODO: get address from coordinates';
-          setValue({ address, longitude, latitude });
-        }}
+        onLongPress={onLongPress}
       >
         {value?.longitude && value?.latitude && (
           <Marker

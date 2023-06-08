@@ -1,8 +1,6 @@
 import { StyleSheet, Text, View, ViewStyle } from 'react-native';
-
 import { CreateTraceStep } from '../../../shared/types/create-trace-step';
 import ProgressBar from '../progress-bar/progress-bar';
-import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 
@@ -21,14 +19,18 @@ export default function FormSteps({
   activeStepIndex,
   style,
 }: FormStepsProps) {
-  const progress = (activeStepIndex / steps.length) * 100;
+  const progressPercentage = (100 / steps.length) * (activeStepIndex + 1);
 
   return (
     <SafeAreaView style={[style, styles.container]}>
       <View>
         <Text style={styles.title}>{title}</Text>
         {withProgressBar && (
-          <ProgressBar progress={progress} color='#6200ee' height={2} />
+          <ProgressBar
+            progress={progressPercentage}
+            color='#6200ee'
+            height={2}
+          />
         )}
       </View>
 

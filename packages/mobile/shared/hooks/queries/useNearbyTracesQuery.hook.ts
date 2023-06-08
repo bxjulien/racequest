@@ -19,7 +19,10 @@ const useNearbyTracesQuery = (
         (result) => result.data
       );
     },
-    options
+    {
+      ...options,
+      staleTime: 30000, // Fetch new data if the last fetch was more than 30 seconds ago
+    }
   );
 };
 

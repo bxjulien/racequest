@@ -16,6 +16,7 @@ import useCreationTracesMutation from '../../../shared/hooks/queries/useCreation
 import { useLocationContext } from '../../../shared/contexts/location.context';
 import { useRouter } from 'expo-router';
 import { SearchPlace } from './starting-point/search-place/search-place';
+import CreateTraceSubmitSuccess from './submit/success/create-trace-success';
 
 export default function CreateTrace() {
   const router = useRouter();
@@ -82,7 +83,7 @@ export default function CreateTrace() {
         'Ou appuyez longuement sur la carte pour choisir un point de départ',
       headerComponent: (
         <SearchPlace
-        value={formData.startingPoint}
+          value={formData.startingPoint}
           setValue={(value) =>
             setFormData({ ...formData, startingPoint: value })
           }
@@ -157,6 +158,7 @@ export default function CreateTrace() {
         <FormStepsFooter
           goNext={async () => {
             await createTraceMutation.mutateAsync(formData);
+            goNext();
           }}
           goBack={goBack}
           goNextTitle={
@@ -166,6 +168,23 @@ export default function CreateTrace() {
           }
           canGoNext={!createTraceMutation.isLoading}
           canGoBack={!createTraceMutation.isLoading}
+        />
+      ),
+    },
+    {
+      id: 6,
+      title: 'Course créée !',
+      subtitle:
+        'Tous les utilisateurs Race Quest peuvent maintenant participer à votre course.',
+      component: <CreateTraceSubmitSuccess />,
+      footer: (
+        <FormStepsFooter
+          goNext={() => {
+            router.push('/home');
+          }}
+          showGoBack={false}
+          goNextTitle={'Consulter la course'}
+          canGoBack={false}
         />
       ),
     },

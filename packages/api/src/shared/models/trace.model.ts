@@ -1,4 +1,5 @@
 import {
+  IsDate,
   IsEnum,
   IsNotEmpty,
   IsNotEmptyObject,
@@ -40,4 +41,7 @@ export class Trace {
 
   @IsNumber()
   closingIn: number;
+
+  @IsDate()
+  closingAt: Date;
 }
