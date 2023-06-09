@@ -15,14 +15,12 @@ const useNearbyTracesQuery = (
   return useQuery(
     key,
     async () => {
-      console.log("useNearbyTracesQuery", radius);
       return getNearbyTraces(longitude, latitude, radius).then(
         (result) => result.data
       );
     },
     {
       ...options,
-      staleTime: 30000, // Fetch new data if the last fetch was more than 30 seconds ago
     }
   );
 };
