@@ -1,8 +1,8 @@
-import { UseQueryResult, useQuery } from 'react-query';
+import { UseQueryResult, useQuery } from "react-query";
 
-import { Trace } from '../../../../api/src/shared/models/trace.model';
-import { UseQueryOptions } from '../../types/use-query-options.type';
-import { getNearbyTraces } from '../../services/supabase.service';
+import { Trace } from "../../../../api/src/shared/models/trace.model";
+import { UseQueryOptions } from "../../types/use-query-options.type";
+import { getNearbyTraces } from "../../services/supabase.service";
 
 const useNearbyTracesQuery = (
   longitude: number,
@@ -10,11 +10,12 @@ const useNearbyTracesQuery = (
   radius: number,
   options: UseQueryOptions = {}
 ): UseQueryResult<Trace[], Error> => {
-  const key = ['nearby_traces'];
+  const key = ["nearby_traces"];
 
   return useQuery(
     key,
     async () => {
+      console.log("useNearbyTracesQuery", radius);
       return getNearbyTraces(longitude, latitude, radius).then(
         (result) => result.data
       );
