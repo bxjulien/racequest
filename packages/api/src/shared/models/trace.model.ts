@@ -4,6 +4,7 @@ import {
   IsNotEmpty,
   IsNotEmptyObject,
   IsNumber,
+  IsString,
 } from 'class-validator';
 
 import { Elevation } from '../types/elevation.type';
@@ -44,4 +45,7 @@ export class Trace {
 
   @IsDate()
   closingAt: Date;
+
+  @IsString()
+  name: string;
 }

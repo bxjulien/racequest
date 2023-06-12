@@ -3,7 +3,7 @@ import { StyleSheet, TextInput } from 'react-native';
 import React from 'react';
 
 type InputTextProps = {
-  query: string;
+  value: string;
   onChange: (value: string) => void;
   style?: any;
   placeholder?: string;
@@ -11,7 +11,7 @@ type InputTextProps = {
 };
 
 export default function InputText({
-  query,
+  value,
   onChange,
   style,
   placeholder,
@@ -20,7 +20,7 @@ export default function InputText({
   return (
     <TextInput
       style={styles.input}
-      value={query}
+      value={value}
       onChangeText={onChange}
       placeholder={placeholder}
       editable={editable}

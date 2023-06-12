@@ -1,10 +1,10 @@
 import { FlatList, StyleSheet, Text, View, ViewStyle } from 'react-native';
 
+import NearbyTracesSkeleton from './nearby-traces.skeleton';
+import { Trace } from '../../../../api/src/shared/models/trace.model';
 import TraceOverview from '../../shared/trace-overview/trace-overview';
 import { useLocationContext } from '../../../shared/contexts/location.context';
 import useNearbyTracesQuery from '../../../shared/hooks/queries/useNearbyTracesQuery.hook';
-import { Trace } from '../../../../api/src/shared/models/trace.model';
-import NearbyTracesSkeleton from './nearby-traces.skeleton';
 
 const LEFT_MARGIN = 20;
 const GAP = 20;

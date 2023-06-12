@@ -9,7 +9,7 @@ export const getNearbyTraces = (
   latitude: number,
   radius: number
 ) => {
-  return supabase.rpc('nearby_traces', {
+  return supabase.rpc('get_nearby_traces', {
     longitude,
     latitude,
     radius,

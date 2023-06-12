@@ -1,22 +1,23 @@
 import React, { useState } from 'react';
+import { StyleSheet, Text } from 'react-native';
 
 import CreateTraceDistance from './distance/create-trace-distance';
 import CreateTraceDuration from './duration/create-trace-duration';
 import { CreateTraceForm } from '../../../shared/types/create-trace-form';
+import CreateTraceName from './name/create-trace-name';
 import CreateTraceStartingPoint from './starting-point/starting-point';
 import { CreateTraceStep } from '../../../shared/types/create-trace-step';
 import CreateTraceSubmit from './submit/create-trace-submit';
+import CreateTraceSubmitSuccess from './submit/success/create-trace-success';
 import FormSteps from '../../shared/form-steps/form-steps';
 import FormStepsFooter from '../../shared/form-steps/form-steps-footer';
 import { FormatType } from '../../../shared/enums/FormatType.enum';
+import { SearchPlace } from './starting-point/search-place/search-place';
 import SelectTrace from './select-trace/select-trace';
-import { StyleSheet, Text } from 'react-native';
 import useCreateTraceMutation from '../../../shared/hooks/queries/useCreateTraceMutation.hook';
 import useCreationTracesMutation from '../../../shared/hooks/queries/useCreationTracesMutation.hook';
 import { useLocationContext } from '../../../shared/contexts/location.context';
 import { useRouter } from 'expo-router';
-import { SearchPlace } from './starting-point/search-place/search-place';
-import CreateTraceSubmitSuccess from './submit/success/create-trace-success';
 
 export default function CreateTrace() {
   const router = useRouter();
@@ -34,6 +35,7 @@ export default function CreateTrace() {
     },
     trace: null,
     closingIn: 30,
+    name: 'Course de Julien',
   });
 
   const goNext = () => {
@@ -150,6 +152,24 @@ export default function CreateTrace() {
     },
     {
       id: 5,
+      title: 'On lui donne un petit nom ?',
+      subtitle: "Cela permettra aux autres utilisateurs de l'identifier !",
+      component: (
+        <CreateTraceName
+          value={formData.name}
+          setValue={(value) => setFormData({ ...formData, name: value })}
+        />
+      ),
+      footer: (
+        <FormStepsFooter
+          goNext={goNext}
+          canGoNext={Boolean(formData.name && formData.name !== '')}
+          goBack={goBack}
+        />
+      ),
+    },
+    {
+      id: 6,
       title: 'Tout est prêt !',
       subtitle:
         "Il ne reste plus qu'à créer la course et partir à l'aventure !",

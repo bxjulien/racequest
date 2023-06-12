@@ -9,7 +9,8 @@ CREATE OR REPLACE TABLE traces (
     latitude_center NUMERIC not null,
     latitude_start NUMERIC not null,
     longitude_center NUMERIC not null,
-    longitude_start NUMERIC not null
+    longitude_start NUMERIC not null,
+    name TEXT not null,
 );
 
 CREATE INDEX traces_geohash_index

@@ -12,7 +12,8 @@ AS $$
     distance, 
     geojson AS "geoJson",
     elevation,
-    closing_at AS "closingAt"
+    closing_at AS "closingAt",
+    name
   FROM traces
   WHERE ST_DWithin(geohash::geography, ST_Point(longitude, latitude)::geography, radius)
   ORDER BY geohash <-> ST_Point(longitude, latitude)::geography;

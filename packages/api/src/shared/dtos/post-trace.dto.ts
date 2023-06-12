@@ -3,6 +3,7 @@ import {
   IsNotEmptyObject,
   IsNumber,
   IsPositive,
+  IsString,
 } from 'class-validator';
 
 import { TraceDto } from './trace.dto';
@@ -15,6 +16,10 @@ export class PostTraceDto {
   trace: TraceDto;
 
   @IsNumber()
-  @IsPositive({ message: 'closingIn doit être un nombre positif.' })
+  @IsPositive({ message: 'closingIn should be positive.' })
   closingIn: number;
+
+  @IsString()
+  @IsNotEmpty({ message: 'name should not be empty.' })
+  name: string;
 }

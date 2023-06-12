@@ -1,11 +1,12 @@
+import { StyleSheet, View } from 'react-native';
 import { useEffect, useState } from 'react';
+
+import InputText from '../../../../shared/input/input-text';
 import { Place } from '../../../../../shared/types/place.type';
+import { RadioButton } from '../../../../shared/radio/radio';
+import { StartingPoint } from '../../../../../shared/types/starting-point.type';
 import useDebounce from '../../../../../shared/hooks/useDebounce';
 import usePlacesGeocodingQuery from '../../../../../shared/hooks/queries/usePlacesGeocodingQuery.hook';
-import { RadioButton } from '../../../../shared/radio/radio';
-import InputText from '../../../../shared/input/input-text';
-import { StyleSheet, View } from 'react-native';
-import { StartingPoint } from '../../../../../shared/types/starting-point.type';
 
 export const SearchPlace = ({
   value,
@@ -35,7 +36,7 @@ export const SearchPlace = ({
   return (
     <View style={styles.container}>
       <InputText
-        query={query as string}
+        value={query as string}
         onChange={(value) => {
           setQuery(value);
           setSelectedPlace(null);

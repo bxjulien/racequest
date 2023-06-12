@@ -7,11 +7,12 @@ CREATE OR REPLACE FUNCTION insert_trace(
   _geojson json,
   _direction TEXT,
   _elevation jsonb,
-  _closing_in NUMERIC
+  _closing_in NUMERIC,
+  _name TEXT
 ) RETURNS SETOF traces AS $$
 BEGIN
   RETURN QUERY
-  INSERT INTO traces (longitude_start, latitude_start, longitude_center, latitude_center, distance, geojson, direction, geohash, elevation, closing_at)
+  INSERT INTO traces (longitude_start, latitude_start, longitude_center, latitude_center, distance, geojson, direction, geohash, elevation, closing_at, name)
   VALUES (
     _longitude_start,
     _latitude_start,
@@ -22,7 +23,8 @@ BEGIN
     _direction,
     ST_SetSRID(ST_Point(_longitude_start, _latitude_start), 4326)::geometry,
     _elevation,
-    CURRENT_DATE + (_closing_in || ' days')::interval
+    CURRENT_DATE + (_closing_in || ' days')::interval,
+    _name
   )
   RETURNING *;
 END;

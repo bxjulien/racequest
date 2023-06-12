@@ -105,6 +105,7 @@ export class TraceService {
       _direction: postTraceDto.trace.direction,
       _elevation: postTraceDto.trace.elevation,
       _closing_in: postTraceDto.closingIn,
+      _name: postTraceDto.name,
     });
 
     if (error) {

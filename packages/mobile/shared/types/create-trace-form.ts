@@ -7,4 +7,5 @@ export type CreateTraceForm = {
   startingPoint: StartingPoint | null;
   trace: Trace | null;
   closingIn: number;
+  name: string;
 };

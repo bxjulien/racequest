@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, ViewStyle } from 'react-native';
-
-import MapTrace from '../map-trace/map-trace';
-import { Trace } from '../../../../api/src/shared/models/trace.model';
 import {
   getDateUntilNumberOfDays,
   getDaysFromNowToDate,
 } from '../../../shared/utils/date.utils';
+
+import MapTrace from '../map-trace/map-trace';
+import { Trace } from '../../../../api/src/shared/models/trace.model';
 
 export default function TraceOverview({
   trace,
