@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { StyleSheet } from "react-native";
-import MapView, { Marker, Geojson, Polyline } from "react-native-maps";
-import { useLocationContext } from "../shared/contexts/location.context";
-import useNearbyTracesQuery from "../shared/hooks/queries/useNearbyTracesQuery.hook";
-import { MapViewRegion } from "../shared/types/mapview-region.type";
-import { calculateRadius } from "../shared/utils/geo.utils";
-import { Trace } from "../../api/src/shared/models/trace.model";
+import React, { useEffect, useState } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { StyleSheet } from 'react-native';
+import MapView, { Marker, Polyline } from 'react-native-maps';
+import { useLocationContext } from '../../shared/contexts/location.context';
+import { MapViewRegion } from '../../shared/types/mapview-region.type';
+import { calculateRadius } from '../../shared/utils/geo.utils';
+import { Trace } from '../../../api/src/shared/models/trace.model';
+import { useQuery } from 'react-query';
+import { getNearbyTraces } from '../../shared/services/supabase.service';
 
-export default function MapScreen() {
+export default function MapScreen(): JSX.Element {
   const { location } = useLocationContext();
   const hasLocation = !!location && !!location.coords;
 
@@ -49,13 +50,20 @@ const NearbyTracesMap = ({
   const {
     data: traces,
     isError,
-    isLoading,
     refetch,
-  } = useNearbyTracesQuery(
-    region.longitude,
-    region.latitude,
-    calculateRadius(region),
-    { enabled: hasLocation }
+  } = useQuery<Trace[]>(
+    `nearby-traces-map-${region.latitude}-${region.longitude}`,
+    () =>
+      getNearbyTraces(
+        region.longitude,
+        region.latitude,
+        calculateRadius(region)
+      ),
+    {
+      enabled: hasLocation,
+      staleTime: 1000 * 60, // 1 minute
+      keepPreviousData: true,
+    }
   );
 
   useEffect(() => {
@@ -82,7 +90,7 @@ const NearbyTracesMap = ({
     });
   };
 
-  if (isError) console.log("Error loading nearby traces");
+  if (isError) console.log('Error loading nearby traces');
 
   return (
     <MapView
@@ -91,6 +99,7 @@ const NearbyTracesMap = ({
       initialRegion={region}
       showsUserLocation
       onRegionChangeComplete={handleRegionChange}
+      onPress={() => setActiveTrace(null)}
     >
       {traces?.map((trace) => (
         <Marker
@@ -99,8 +108,8 @@ const NearbyTracesMap = ({
             latitude: trace.latitudeStart,
             longitude: trace.longitudeStart,
           }}
-          title={"test"}
-          description={"test desscription"}
+          title={'test'}
+          description={'test desscription'}
           onPress={() => handleTracePress(trace)}
         />
       ))}
@@ -113,7 +122,7 @@ const NearbyTracesMap = ({
               longitude: coordinate[0],
             })
           )}
-          strokeColor={"#000"}
+          strokeColor={'#000'}
           strokeWidth={6}
         />
       )}

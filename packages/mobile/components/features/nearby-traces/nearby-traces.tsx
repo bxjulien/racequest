@@ -4,7 +4,8 @@ import NearbyTracesSkeleton from './nearby-traces.skeleton';
 import { Trace } from '../../../../api/src/shared/models/trace.model';
 import TraceOverview from '../../shared/trace-overview/trace-overview';
 import { useLocationContext } from '../../../shared/contexts/location.context';
-import useNearbyTracesQuery from '../../../shared/hooks/queries/useNearbyTracesQuery.hook';
+import { useQuery } from 'react-query';
+import { getNearbyTraces } from '../../../shared/services/supabase.service';
 
 const LEFT_MARGIN = 20;
 const GAP = 20;
@@ -17,11 +18,18 @@ export default function NearbyTraces() {
     data: traces,
     isError,
     isLoading,
-  } = useNearbyTracesQuery(
-    location?.coords.longitude || 0,
-    location?.coords.latitude || 0,
-    1500000, // 150km
-    { enabled: hasLocation }
+  } = useQuery<Trace[]>(
+    'nearby-traces',
+    () =>
+      getNearbyTraces(
+        location?.coords.longitude || 0,
+        location?.coords.latitude || 0,
+        1500000
+      ),
+    {
+      enabled: hasLocation,
+      staleTime: 1000 * 60, // 1 minute
+    }
   );
 
   if (!hasLocation || isLoading) return <NearbyTracesSkeleton />;

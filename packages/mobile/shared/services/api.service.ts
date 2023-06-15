@@ -1,21 +1,27 @@
+import { Trace } from '../../../api/src/shared/models/trace.model';
 import { CreateTraceForm } from '../types/create-trace-form';
 import axios from 'axios';
 
-const baseUrl = `http://192.168.1.84:3000/api`;
+const baseUrl = `http://10.15.191.233:3000/api`;
 
 export const getCreationTraces = async (
   longitude: number,
   latitude: number,
   distance: number
 ) => {
-  const url = `${baseUrl}/trace?longitudeStart=${longitude}&latitudeStart=${latitude}&distance=${distance}`;
+  try {
+    const url = `${baseUrl}/trace?longitudeStart=${longitude}&latitudeStart=${latitude}&distance=${distance}`;
 
-  const { data } = await axios.get(encodeURI(url));
+    const { data } = await axios.get(encodeURI(url));
 
-  return data;
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 };
 
-export const createTrace = async (data: CreateTraceForm) => {
+export const createTrace = async (data: CreateTraceForm): Promise<Trace> => {
   try {
     const url = `${baseUrl}/trace`;
 
@@ -30,5 +36,6 @@ export const createTrace = async (data: CreateTraceForm) => {
     return trace;
   } catch (error) {
     console.error(error);
+    throw error;
   }
 };

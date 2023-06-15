@@ -10,45 +10,12 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import React, { useEffect, useState } from 'react';
 
 import { Asset } from 'expo-asset';
-import CreateTraceScreen from './create-trace';
-import HomeScreen from './home';
-import Icon from '../components/shared/icon/icon';
 import { Image } from 'react-native';
 import LocationProvider from '../shared/contexts/location.context';
-import MapScreen from './map';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
-
-const Stack = createStackNavigator();
-const Tab = createBottomTabNavigator();
+import { Slot } from 'expo-router';
 
 const queryClient = new QueryClient();
-
-const HomeTabs = () => (
-  <Tab.Navigator>
-    <Tab.Screen
-      name='homeTab'
-      component={HomeScreen}
-      options={{
-        headerShown: false,
-        tabBarIcon: ({ focused, color, size }) => (
-          <Icon name='home' size={size} color={color} />
-        ),
-      }}
-    />
-    <Tab.Screen
-      name='map'
-      component={MapScreen}
-      options={{
-        headerShown: false,
-        tabBarIcon: ({ color, size }) => (
-          <Icon name='map' size={size} color={color} />
-        ),
-      }}
-    />
-  </Tab.Navigator>
-);
 
 function cacheImages(images: any[]) {
   return images.map((image) => {
@@ -100,22 +67,7 @@ export default function RootLayout() {
     <QueryClientProvider client={queryClient}>
       <LocationProvider>
         <SafeAreaProvider>
-          <Stack.Navigator>
-            <Stack.Screen
-              name='home'
-              component={HomeTabs}
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen
-              name='create-trace'
-              component={CreateTraceScreen}
-              options={{
-                headerShown: false,
-              }}
-            />
-          </Stack.Navigator>
+          <Slot />
         </SafeAreaProvider>
       </LocationProvider>
     </QueryClientProvider>

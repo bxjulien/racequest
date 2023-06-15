@@ -14,17 +14,35 @@ import FormStepsFooter from '../../shared/form-steps/form-steps-footer';
 import { FormatType } from '../../../shared/enums/FormatType.enum';
 import { SearchPlace } from './starting-point/search-place/search-place';
 import SelectTrace from './select-trace/select-trace';
-import useCreateTraceMutation from '../../../shared/hooks/queries/useCreateTraceMutation.hook';
-import useCreationTracesMutation from '../../../shared/hooks/queries/useCreationTracesMutation.hook';
 import { useLocationContext } from '../../../shared/contexts/location.context';
 import { useRouter } from 'expo-router';
+import { useMutation } from 'react-query';
+import {
+  createTrace,
+  getCreationTraces,
+} from '../../../shared/services/api.service';
 
 export default function CreateTrace() {
   const router = useRouter();
   const { location, address } = useLocationContext();
 
-  const creationTracesMutation = useCreationTracesMutation();
-  const createTraceMutation = useCreateTraceMutation();
+  const creationTracesMutation = useMutation(
+    ({
+      longitude,
+      latitude,
+      distance,
+    }: {
+      longitude: number;
+      latitude: number;
+      distance: number;
+    }) => getCreationTraces(longitude, latitude, distance)
+  );
+
+  const createTraceMutation = useMutation(createTrace, {
+    onSuccess: () => {
+      goNext();
+    },
+  });
 
   const [formData, setFormData] = useState<CreateTraceForm>({
     format: FormatType.Short,
@@ -44,7 +62,7 @@ export default function CreateTrace() {
   };
 
   const goBack = () => {
-    if (currentStepIndex === 0) return router.push('/home');
+    if (currentStepIndex === 0) return router.push('/(tabs)/home');
     setCurrentStepIndex(currentStepIndex - 1);
   };
 
@@ -55,14 +73,18 @@ export default function CreateTrace() {
     if (!longitude || !latitude) return;
 
     // todo refacto
-    const format =
+    const distance =
       formData.format === FormatType.Short
         ? 4
         : formData.format === FormatType.Medium
         ? 8
         : 14;
 
-    creationTracesMutation.mutate([longitude, latitude, format]);
+    creationTracesMutation.mutate({
+      longitude,
+      latitude,
+      distance,
+    });
     goNext();
   };
 
@@ -72,8 +94,8 @@ export default function CreateTrace() {
       title: 'On pars sur quel format ?',
       component: (
         <CreateTraceDistance
-          value={formData.format}
-          setValue={(value) => setFormData({ ...formData, format: value })}
+          format={formData.format}
+          setFormat={(format) => setFormData({ ...formData, format: format })}
         />
       ),
       footer: <FormStepsFooter goNext={goNext} goBack={goBack} />,
@@ -86,16 +108,16 @@ export default function CreateTrace() {
       headerComponent: (
         <SearchPlace
           value={formData.startingPoint}
-          setValue={(value) =>
-            setFormData({ ...formData, startingPoint: value })
+          setValue={(startingPoint) =>
+            setFormData({ ...formData, startingPoint })
           }
         />
       ),
       component: (
         <CreateTraceStartingPoint
           value={formData.startingPoint}
-          setValue={(value) => {
-            setFormData({ ...formData, startingPoint: value });
+          setValue={(startingPoint) => {
+            setFormData({ ...formData, startingPoint });
           }}
         />
       ),
@@ -117,7 +139,7 @@ export default function CreateTrace() {
       component: (
         <SelectTrace
           value={formData.trace}
-          setValue={(value) => setFormData({ ...formData, trace: value })}
+          setValue={(trace) => setFormData({ ...formData, trace })}
           loading={creationTracesMutation.isLoading}
           error={creationTracesMutation.isError}
           traces={creationTracesMutation.data}
@@ -139,7 +161,7 @@ export default function CreateTrace() {
       component: (
         <CreateTraceDuration
           value={formData.closingIn}
-          setValue={(value) => setFormData({ ...formData, closingIn: value })}
+          setValue={(closingIn) => setFormData({ ...formData, closingIn })}
         />
       ),
       footer: (
@@ -152,33 +174,20 @@ export default function CreateTrace() {
     },
     {
       id: 5,
-      title: 'On lui donne un petit nom ?',
-      subtitle: "Cela permettra aux autres utilisateurs de l'identifier !",
-      component: (
-        <CreateTraceName
-          value={formData.name}
-          setValue={(value) => setFormData({ ...formData, name: value })}
-        />
-      ),
-      footer: (
-        <FormStepsFooter
-          goNext={goNext}
-          canGoNext={Boolean(formData.name && formData.name !== '')}
-          goBack={goBack}
-        />
-      ),
-    },
-    {
-      id: 6,
       title: 'Tout est prêt !',
       subtitle:
         "Il ne reste plus qu'à créer la course et partir à l'aventure !",
-      component: <CreateTraceSubmit value={formData} />,
+      component: (
+        <CreateTraceSubmit
+          trace={formData.trace}
+          name={formData.name}
+          setName={(name) => setFormData({ ...formData, name })}
+        />
+      ),
       footer: (
         <FormStepsFooter
-          goNext={async () => {
-            await createTraceMutation.mutateAsync(formData);
-            goNext();
+          goNext={() => {
+            createTraceMutation.mutate(formData);
           }}
           goBack={goBack}
           goNextTitle={

@@ -1,7 +1,6 @@
 import { StyleSheet, View, FlatList } from 'react-native';
 
 import React from 'react';
-import SkeletonLoader from '../../shared/skeleton-loader/skeleton-loader';
 import TraceOverviewSkeleton from '../../shared/trace-overview/trace-overview.skeleton';
 
 export default function NearbyTracesSkeleton(): JSX.Element {
