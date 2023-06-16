@@ -1,4 +1,11 @@
-import { FlatList, StyleSheet, Text, View, ViewStyle } from 'react-native';
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+  ViewStyle,
+  Pressable,
+} from 'react-native';
 
 import NearbyTracesSkeleton from './nearby-traces.skeleton';
 import { Trace } from '../../../../api/src/shared/models/trace.model';
@@ -6,6 +13,7 @@ import TraceOverview from '../../shared/trace-overview/trace-overview';
 import { useLocationContext } from '../../../shared/contexts/location.context';
 import { useQuery } from 'react-query';
 import { getNearbyTraces } from '../../../shared/services/supabase.service';
+import { useRouter } from 'expo-router';
 
 const LEFT_MARGIN = 20;
 const GAP = 20;
@@ -60,12 +68,16 @@ export default function NearbyTraces() {
 }
 
 const TraceItem = ({ trace, style }: { trace: Trace; style: ViewStyle }) => {
+  const router = useRouter();
+
   return (
-    <TraceOverview
-      trace={trace}
-      isMapInteractive={false}
-      containerStyle={{ width: 280, ...style }}
-    />
+    <Pressable onPress={() => router.push(`/(races)/${trace.id}`)}>
+      <TraceOverview
+        trace={trace}
+        isMapInteractive={false}
+        containerStyle={{ width: 280, ...style }}
+      />
+    </Pressable>
   );
 };
 
