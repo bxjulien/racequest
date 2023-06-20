@@ -1,7 +1,6 @@
 import { StyleSheet, Text } from 'react-native';
 
 import Button from '../components/shared/button/button';
-import MapTrace from '../components/shared/map-trace/map-trace';
 import NearbyTraces from '../components/features/nearby-traces/nearby-traces';
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';

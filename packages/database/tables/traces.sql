@@ -16,3 +16,8 @@ CREATE OR REPLACE TABLE traces (
 CREATE INDEX traces_geohash_index
   ON public.traces
   USING GIST (geohash);
+
+CREATE POLICY "traces read"
+  ON public.traces
+  FOR SELECT
+  USING (true);
