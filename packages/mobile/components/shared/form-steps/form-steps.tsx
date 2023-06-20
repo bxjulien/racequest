@@ -19,6 +19,7 @@ export default function FormSteps({
   activeStepIndex,
   style,
 }: FormStepsProps) {
+  const { title: stepTitle, headerComponent, subtitle, component, footer } = steps[activeStepIndex];
   const progressPercentage = (100 / steps.length) * (activeStepIndex + 1);
 
   return (
@@ -28,35 +29,29 @@ export default function FormSteps({
         {withProgressBar && (
           <ProgressBar
             progress={progressPercentage}
-            color='#6200ee'
+            color={'#6200ee'} // todo replace hardcoded color theme
             height={2}
           />
         )}
       </View>
 
-      <Text style={styles.stepTitle}>{steps[activeStepIndex].title}</Text>
+      <Text style={styles.stepTitle}>{stepTitle}</Text>
 
       <ScrollView
-        contentContainerStyle={{
-          flexGrow: 1,
-          justifyContent: 'space-between',
-        }}
+        contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.content}>
-          {steps[activeStepIndex].headerComponent &&
-            steps[activeStepIndex].headerComponent}
+          {headerComponent && headerComponent}
 
-          {steps[activeStepIndex].subtitle && (
-            <Text style={styles.stepSubtitle}>
-              {steps[activeStepIndex].subtitle}
-            </Text>
+          {subtitle && (
+            <Text style={styles.stepSubtitle}>{subtitle}</Text>
           )}
 
-          {steps[activeStepIndex].component && steps[activeStepIndex].component}
+          {component && component}
         </View>
 
-        {steps[activeStepIndex].footer && steps[activeStepIndex].footer}
+        {footer && footer}
       </ScrollView>
     </SafeAreaView>
   );
@@ -85,5 +80,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'grey',
     marginBottom: 20,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    justifyContent: 'space-between',
   },
 });

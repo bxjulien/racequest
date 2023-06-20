@@ -16,7 +16,10 @@ import { getNearbyTraces } from '../../../shared/services/supabase.service';
 import { useRouter } from 'expo-router';
 
 const LEFT_MARGIN = 20;
-const GAP = 20;
+const RACES_GAP = 20;
+const RACE_WIDTH = 280;
+const RADIUS = 1500000; // 1500km
+const STALE_TIME = 60000; // 1 minute
 
 export default function NearbyTraces() {
   const { location } = useLocationContext();
@@ -32,11 +35,11 @@ export default function NearbyTraces() {
       getNearbyTraces(
         location?.coords.longitude || 0,
         location?.coords.latitude || 0,
-        1500000
+        RADIUS
       ),
     {
       enabled: hasLocation,
-      staleTime: 1000 * 60, // 1 minute
+      staleTime: STALE_TIME,
     }
   );
 
@@ -45,7 +48,7 @@ export default function NearbyTraces() {
   if (isError) return <Text>Error</Text>;
 
   return (
-    <View style={styles.container}>
+    <View>
       <Text style={styles.title}>Les dernières courses à proximité</Text>
       <FlatList
         data={traces}
@@ -55,11 +58,8 @@ export default function NearbyTraces() {
             style={{ marginLeft: index === 0 ? LEFT_MARGIN : 0 }}
           />
         )}
-        contentContainerStyle={{
-          gap: GAP,
-          paddingRight: LEFT_MARGIN,
-        }}
-        snapToInterval={280 + GAP}
+        contentContainerStyle={styles.contentContainerStyle}
+        snapToInterval={RACE_WIDTH + RACES_GAP}
         horizontal
         showsHorizontalScrollIndicator={false}
       />
@@ -75,14 +75,17 @@ const TraceItem = ({ trace, style }: { trace: Trace; style: ViewStyle }) => {
       <TraceOverview
         trace={trace}
         isMapInteractive={false}
-        containerStyle={{ width: 280, ...style }}
+        containerStyle={{ width: RACE_WIDTH, ...style }}
       />
     </Pressable>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {},
+  contentContainerStyle: {
+    gap: RACES_GAP,
+    paddingRight: LEFT_MARGIN,
+  },
   title: {
     marginLeft: LEFT_MARGIN,
     fontSize: 20,
