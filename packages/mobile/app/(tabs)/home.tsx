@@ -14,7 +14,7 @@ export default function HomeScreen() {
       <NearbyTraces />
       <Button
         title={'Créer une course'}
-        onPress={() => router.push('(races)/create')}
+        onPress={() => router.push('/(races)/create')}
       />
       <Button title={'Races'} onPress={() => router.push('(races)/races')} />
       <Button title={'Race'} onPress={() => router.push('(races)/' + 1)} />

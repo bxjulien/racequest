@@ -72,7 +72,7 @@ const NearbyTracesMap = ({
 
   const handleTracePress = (trace: Trace) => {
     setActiveTrace(trace);
-    const points = trace.geoJson.geometry.coordinates.map(
+    const points = trace.geojson.geometry.coordinates.map(
       ([longitude, latitude]: [longitude: number, latitude: number]) => ({
         latitude,
         longitude,
@@ -105,8 +105,8 @@ const NearbyTracesMap = ({
         <Marker
           key={trace.id}
           coordinate={{
-            latitude: trace.latitudeStart,
-            longitude: trace.longitudeStart,
+            latitude: trace.latitude_start,
+            longitude: trace.longitude_start,
           }}
           title={'test'}
           description={'test desscription'}
@@ -114,9 +114,9 @@ const NearbyTracesMap = ({
         />
       ))}
 
-      {activeTrace && activeTrace.geoJson && (
+      {activeTrace && activeTrace.geojson && (
         <Polyline
-          coordinates={activeTrace.geoJson.geometry.coordinates.map(
+          coordinates={activeTrace.geojson.geometry.coordinates.map(
             (coordinate: any) => ({
               latitude: coordinate[1],
               longitude: coordinate[0],

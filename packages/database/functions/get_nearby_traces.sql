@@ -4,15 +4,15 @@ LANGUAGE SQL
 AS $$
   SELECT 
     id, 
-    longitude_start AS "longitudeStart", 
-    latitude_start AS "latitudeStart", 
-    longitude_center AS "longitudeCenter", 
-    latitude_center AS "latitudeCenter", 
-    ST_Distance(geohash, ST_Point(longitude_start, latitude_start)::geography) AS "distanceFrom",
+    longitude_start,
+    latitude_start,
+    longitude_center, 
+    latitude_center, 
+    ST_Distance(geohash, ST_Point(longitude_start, latitude_start)::geography) AS "distance_from",
     distance, 
-    geojson AS "geoJson",
+    geojson,
     elevation,
-    closing_at AS "closingAt",
+    closing_at,
     name
   FROM traces
   WHERE ST_DWithin(geohash::geography, ST_Point(longitude, latitude)::geography, radius)

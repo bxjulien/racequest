@@ -21,7 +21,7 @@ export default function MapTrace({
   style?: any;
 }) {
   const mapRef = useRef<MapView>(null);
-  const points = trace.geoJson.geometry.coordinates.map(
+  const points = trace.geojson.geometry.coordinates.map(
     ([longitude, latitude]: [longitude: number, latitude: number]) => ({
       latitude,
       longitude,
@@ -49,7 +49,6 @@ export default function MapTrace({
   return (
     <View
       style={[
-        style,
         styles.container,
         {
           height,
@@ -57,6 +56,7 @@ export default function MapTrace({
           minHeight: height,
           minWidth: width,
         },
+        style,
       ]}
     >
       <MapView
@@ -67,8 +67,8 @@ export default function MapTrace({
         }}
         onMapReady={fitMapToCoordinates}
         initialRegion={{
-          latitude: trace.latitudeCenter,
-          longitude: trace.longitudeCenter,
+          latitude: trace.latitude_center,
+          longitude: trace.longitude_center,
           latitudeDelta: 0.04,
           longitudeDelta: 0.04,
         }}

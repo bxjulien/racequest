@@ -2,7 +2,7 @@ import { Trace } from '../../../api/src/shared/models/trace.model';
 import { CreateTraceForm } from '../types/create-trace-form';
 import axios from 'axios';
 
-const baseUrl = `http://10.15.191.233:3000/api`;
+const baseUrl = `http://10.15.193.232:3000/api`;
 
 export const getCreationTraces = async (
   longitude: number,

@@ -15,20 +15,20 @@ export class Trace {
   id: number;
 
   @IsNumber()
-  longitudeStart: number;
+  longitude_start: number;
 
   @IsNumber()
-  latitudeStart: number;
+  latitude_start: number;
 
   @IsNumber()
-  longitudeCenter: number;
+  longitude_center: number;
 
   @IsNumber()
-  latitudeCenter: number;
+  latitude_center: number;
 
   @IsNotEmpty()
   @IsNotEmptyObject()
-  geoJson: any;
+  geojson: any;
 
   @IsNumber()
   distance: number;
@@ -41,10 +41,10 @@ export class Trace {
   elevation: Elevation;
 
   @IsNumber()
-  closingIn: number;
+  closing_in: number;
 
   @IsDate()
-  closingAt: Date;
+  closing_at: Date;
 
   @IsString()
   name: string;

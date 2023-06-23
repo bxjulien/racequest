@@ -49,11 +49,11 @@ const Closing = ({ trace }: { trace: Trace }) => {
   >(null);
 
   useEffect(() => {
-    if (!trace.closingAt)
-      trace.closingAt = getDateUntilNumberOfDays(trace.closingIn);
+    if (!trace.closing_at)
+      trace.closing_at = getDateUntilNumberOfDays(trace.closing_in);
 
-    setNumberOfDaysUntilClosing(getDaysFromNowToDate(trace.closingAt));
-  }, [trace.closingAt, trace.closingIn]);
+    setNumberOfDaysUntilClosing(getDaysFromNowToDate(trace.closing_at));
+  }, [trace.closing_at, trace.closing_in]);
 
   if (numberOfDaysUntilClosing === null) return null;
 
