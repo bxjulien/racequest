@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION insert_trace(
+CREATE OR REPLACE FUNCTION insert_race (
   _longitude_start NUMERIC,
   _latitude_start NUMERIC,
   _longitude_center NUMERIC,
@@ -9,10 +9,10 @@ CREATE OR REPLACE FUNCTION insert_trace(
   _elevation jsonb,
   _closing_in NUMERIC,
   _name TEXT
-) RETURNS SETOF traces AS $$
+) RETURNS SETOF races AS $$
 BEGIN
   RETURN QUERY
-  INSERT INTO traces (longitude_start, latitude_start, longitude_center, latitude_center, distance, geojson, direction, geohash, elevation, closing_at, name)
+  INSERT INTO races (longitude_start, latitude_start, longitude_center, latitude_center, distance, geojson, direction, geohash, elevation, closing_at, name)
   VALUES (
     _longitude_start,
     _latitude_start,

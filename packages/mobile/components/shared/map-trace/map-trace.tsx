@@ -65,6 +65,7 @@ export default function MapTrace({
           height: '100%',
           width: '100%',
         }}
+        loadingEnabled
         onMapReady={fitMapToCoordinates}
         initialRegion={{
           latitude: trace.latitude_center,

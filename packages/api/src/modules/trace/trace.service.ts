@@ -67,10 +67,10 @@ export class TraceService {
 
       if (distance >= _minDistance && distance <= _maxDistance) {
         traces.push({
-          longitudeStart: generateTracesDto.longitudeStart,
-          latitudeStart: generateTracesDto.latitudeStart,
-          longitudeCenter: longitudeCenter,
-          latitudeCenter: latitudeCenter,
+          longitudStart: generateTracesDto.longitude_start,
+          latitudeStart: generateTracesDto.latitude_start,
+          longitude_center: longitudeCenter,
+          latitude_center: latitudeCenter,
           geoJson,
           distance: +distance.toFixed(2),
           direction,
@@ -95,17 +95,30 @@ export class TraceService {
   async postTrace(postTraceDto: PostTraceDto): Promise<Trace> {
     const supabase = this.supabaseService.getSupabase();
 
+    const {
+      longitude_start,
+      latitude_start,
+      longitude_center,
+      latitude_center,
+      distance,
+      geojson,
+      direction,
+      elevation,
+      closing_in,
+      name,
+    } = postTraceDto.trace;
+
     const { data, error } = await supabase.rpc('insert_trace', {
-      _longitude_start: postTraceDto.trace.longitudeStart,
-      _latitude_start: postTraceDto.trace.latitudeStart,
-      _longitude_center: postTraceDto.trace.latitudeCenter,
-      _latitude_center: postTraceDto.trace.latitudeCenter,
-      _distance: postTraceDto.trace.distance,
-      _geojson: postTraceDto.trace.geoJson,
-      _direction: postTraceDto.trace.direction,
-      _elevation: postTraceDto.trace.elevation,
-      _closing_in: postTraceDto.closingIn,
-      _name: postTraceDto.name,
+      _longitude_start: longitude_start,
+      _latitude_start: latitude_start,
+      _longitude_center: longitude_center,
+      _latitude_center: latitude_center,
+      _distance: distance,
+      _geojson: geojson,
+      _direction: direction,
+      _elevation: elevation,
+      _closing_in: closing_in,
+      _name: name,
     });
 
     if (error) {

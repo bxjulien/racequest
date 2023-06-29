@@ -1,6 +1,6 @@
-CREATE OR REPLACE TABLE traces (
+CREATE TABLE races (
     id SERIAL PRIMARY KEY,
-    closing_at TIMESTAMPZ not null,
+    closing_at TIMESTAMPTZ not null,
     direction VARCHAR(50) not null,
     distance NUMERIC not null,
     elevation JSONB not null,
@@ -10,14 +10,14 @@ CREATE OR REPLACE TABLE traces (
     latitude_start NUMERIC not null,
     longitude_center NUMERIC not null,
     longitude_start NUMERIC not null,
-    name TEXT not null,
+    name TEXT not null
 );
 
-CREATE INDEX traces_geohash_index
-  ON public.traces
+CREATE INDEX races_geohash_index
+  ON public.races
   USING GIST (geohash);
 
-CREATE POLICY "traces read"
-  ON public.traces
+CREATE POLICY "races read"
+  ON public.races
   FOR SELECT
   USING (true);
