@@ -1,27 +1,19 @@
 import { Race } from '../types/race.type';
 import supabase from '../../lib/supabase/supabase.lib';
 
-export const getRaces = () => {
-  return supabase.from('countries').select('*');
-};
-
-export const getRace = async (id: number): Promise<Race> => {
+export const getRace = async (
+  id: number,
+  longitude: number | undefined,
+  latitude: number | undefined
+): Promise<Race> => {
   try {
-    const { data, error } = await supabase
-      .from('races')
-      .select('*')
-      .eq('id', id)
-      .single();
+    const response = await supabase.rpc('get_race', {
+      _id: id,
+      _longitude: longitude,
+      _latitude: latitude,
+    });
 
-    if (error) {
-      throw error;
-    }
-
-    if (!data) {
-      throw new Error('Race not found');
-    }
-
-    return data as Race;
+    return response.data as Race;
   } catch (error) {
     console.error(error);
     throw error;
@@ -35,9 +27,9 @@ export const getNearbyRaces = async (
 ): Promise<Race[]> => {
   try {
     const response = await supabase.rpc('get_nearby_races', {
-      longitude,
-      latitude,
-      radius,
+      _longitude: longitude,
+      _latitude: latitude,
+      _radius: radius,
     });
 
     return response.data as Race[];

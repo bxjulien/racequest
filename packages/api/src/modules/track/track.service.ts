@@ -73,7 +73,7 @@ export class TrackService {
 
         if (this.isDevelopment) {
           const gpxData = togpx(geojson.geometry);
-          fs.writeFileSync(`trace-${direction}.gpx`, gpxData);
+          fs.writeFileSync(`track-${direction}.gpx`, gpxData);
         }
       }
     }

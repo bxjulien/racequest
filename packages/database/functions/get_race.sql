@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION get_race(_id INT)
+CREATE OR REPLACE FUNCTION get_race(_id INT, _longitude FLOAT DEFAULT NULL, _latitude FLOAT DEFAULT NULL)
 RETURNS RECORD
 LANGUAGE SQL
 AS $$
@@ -8,7 +8,10 @@ AS $$
     latitude_start AS "latitudeStart",
     longitude_center AS "longitudeCenter",
     latitude_center AS "latitudeCenter",
-    ST_Distance(geohash, ST_Point(longitude_start, latitude_start)::geography) AS "distanceFrom",
+    CASE
+      WHEN _longitude IS NULL OR _longitude = 0 OR _latitude IS NULL OR _latitude = 0 THEN NULL
+      ELSE ST_Distance(geohash, ST_Point(_longitude, _latitude)::geography) 
+    END AS "distanceFrom",
     distance, 
     geojson,
     elevation,

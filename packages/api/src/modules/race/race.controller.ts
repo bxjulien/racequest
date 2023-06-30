@@ -10,11 +10,6 @@ import { PostRaceDto } from 'src/shared/dtos/post-race.dto';
 export class RaceController {
   constructor(private readonly raceService: RaceService) {}
 
-  @Get()
-  getAutoTracks(@Query() trackDto: TrackDto): Promise<AutoTrackDto[]> {
-    return this.raceService.getAutoTracks(trackDto);
-  }
-
   @Post()
   postRace(@Body() postRaceDto: PostRaceDto): Promise<Race> {
     return this.raceService.postRace(postRaceDto);

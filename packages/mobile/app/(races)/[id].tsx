@@ -1,27 +1,32 @@
 import { useLocalSearchParams } from 'expo-router';
-import React, { useState } from 'react';
 import { Dimensions, Text } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Trace } from '../../../api/src/shared/models/trace.model';
+import React, { SafeAreaView } from 'react-native-safe-area-context';
 import { useQuery } from 'react-query';
 import { getRace } from '../../shared/services/supabase.service';
-import MapTrace from '../../components/shared/map-track/map-track';
+import MapTrack from '../../components/shared/map-track/map-track';
 import BottomSheet from '@gorhom/bottom-sheet';
 import { useCallback } from 'react';
 import { useMemo } from 'react';
-import { useRef } from 'react';
 import { View } from 'react-native';
 import { StyleSheet } from 'react-native';
+import { useLocationContext } from '../../shared/contexts/location.context';
+import { Race } from '../../shared/types/race.type';
 
 const useRace = (id: string) => {
+  const { location } = useLocationContext();
+
   const {
     data: race,
     isError,
     isLoading,
-  } = useQuery<Trace>(`race-${id}`, () => getRace(+id), {
-    enabled: !!id,
-    staleTime: 1000 * 60, // 1 minute
-  });
+  } = useQuery<Race>(
+    `race-${id}`,
+    () => getRace(+id, location?.coords.longitude, location?.coords.latitude),
+    {
+      enabled: !!id,
+      staleTime: 60000, // 1 minute
+    }
+  );
 
   return { race, isError, isLoading };
 };
@@ -43,7 +48,10 @@ export default function Race({}): JSX.Element {
   if (race)
     return (
       <SafeAreaView style={styles.container}>
-        <MapTrace trace={race} height={Dimensions.get('window').height * 0.9} />
+        <MapTrack
+          track={race.track}
+          height={Dimensions.get('window').height * 0.9}
+        />
 
         <BottomSheet snapPoints={snapPoints} onChange={handleSheetChanges}>
           <View style={styles.contentContainer}>

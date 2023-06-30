@@ -13,7 +13,7 @@ export class PostRaceDto {
   @Type(() => TrackDto)
   @IsNotEmpty()
   @IsNotEmptyObject()
-  race: TrackDto;
+  track: TrackDto;
 
   @IsNumber()
   @IsPositive({ message: 'closingIn should be positive.' })

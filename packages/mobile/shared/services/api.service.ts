@@ -21,19 +21,19 @@ export const getAutoTracks = async (
   }
 };
 
-export const createRace = async (data: CreateRaceForm): Promise<Race> => {
+export const createRace = async (formData: CreateRaceForm): Promise<Race> => {
   try {
     const url = `${baseUrl}/race`;
 
     const body = {
-      race: data.race,
-      closingIn: data.closingIn,
-      name: data.name,
+      track: formData.track,
+      closingIn: formData.closingIn,
+      name: formData.name,
     };
 
-    const { data: race } = await axios.post(url, body);
+    const { data } = await axios.post(url, body);
 
-    return race;
+    return data as Race;
   } catch (error) {
     console.error(error);
     throw error;
