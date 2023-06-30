@@ -5,45 +5,45 @@ import {
   getDaysFromNowToDate,
 } from '../../../shared/utils/date.utils';
 
-import MapTrace from '../map-trace/map-trace';
-import { Trace } from '../../../../api/src/shared/models/trace.model';
+import MapTrack from '../map-track/map-track';
+import { Track } from '../../../shared/types/track.type';
 
 export default function TraceOverview({
-  trace,
+  track,
   isMapInteractive = true,
   withoutEndDate = false,
   containerStyle,
 }: {
-  trace: Trace;
+  track: Track;
   isMapInteractive?: boolean;
   withoutEndDate?: boolean;
   containerStyle?: ViewStyle;
 }) {
   return (
     <View style={containerStyle}>
-      <MapTrace
-        trace={trace}
+      <MapTrack
+        track={track}
         style={styles.map}
         isInteractive={isMapInteractive}
       />
       <View style={styles.infos}>
         <View>
           <Text style={styles.infoTitle}>Distance</Text>
-          <Text style={styles.infoValue}>{trace.distance}km</Text>
+          <Text style={styles.infoValue}>{track.distance}km</Text>
         </View>
 
         <View>
           <Text style={styles.infoTitle}>Dénivelé</Text>
-          <Text style={styles.infoValue}>{trace.elevation.total}m</Text>
+          <Text style={styles.infoValue}>{track.elevation.total}m</Text>
         </View>
 
-        {!withoutEndDate && <Closing trace={trace} />}
+        {/* {!withoutEndDate && <Closing trace={trace} />} */}
       </View>
     </View>
   );
 }
 
-const Closing = ({ trace }: { trace: Trace }) => {
+/* const Closing = ({ trace }: { trace: Trace }) => {
   const [numberOfDaysUntilClosing, setNumberOfDaysUntilClosing] = useState<
     number | null
   >(null);
@@ -68,7 +68,7 @@ const Closing = ({ trace }: { trace: Trace }) => {
       <Text style={styles.infoValue}>{closingText.value}</Text>
     </View>
   );
-};
+}; */
 
 const styles = StyleSheet.create({
   map: {

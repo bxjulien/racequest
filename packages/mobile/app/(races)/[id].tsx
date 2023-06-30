@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Trace } from '../../../api/src/shared/models/trace.model';
 import { useQuery } from 'react-query';
 import { getRace } from '../../shared/services/supabase.service';
-import MapTrace from '../../components/shared/map-trace/map-trace';
+import MapTrace from '../../components/shared/map-track/map-track';
 import BottomSheet from '@gorhom/bottom-sheet';
 import { useCallback } from 'react';
 import { useMemo } from 'react';

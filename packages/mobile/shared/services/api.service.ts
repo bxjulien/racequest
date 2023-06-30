@@ -1,16 +1,16 @@
-import { Trace } from '../../../api/src/shared/models/trace.model';
-import { CreateTraceForm } from '../types/create-trace-form';
+import { CreateRaceForm } from '../types/create-race-form';
 import axios from 'axios';
+import { Race } from '../types/race.type';
 
 const baseUrl = `http://10.15.193.232:3000/api`;
 
-export const getCreationTraces = async (
+export const getAutoTracks = async (
   longitude: number,
   latitude: number,
   distance: number
 ) => {
   try {
-    const url = `${baseUrl}/trace?longitudeStart=${longitude}&latitudeStart=${latitude}&distance=${distance}`;
+    const url = `${baseUrl}/track?longitudeStart=${longitude}&latitudeStart=${latitude}&distance=${distance}`;
 
     const { data } = await axios.get(encodeURI(url));
 
@@ -21,19 +21,19 @@ export const getCreationTraces = async (
   }
 };
 
-export const createTrace = async (data: CreateTraceForm): Promise<Trace> => {
+export const createRace = async (data: CreateRaceForm): Promise<Race> => {
   try {
-    const url = `${baseUrl}/trace`;
+    const url = `${baseUrl}/race`;
 
     const body = {
-      trace: data.trace,
+      race: data.race,
       closingIn: data.closingIn,
       name: data.name,
     };
 
-    const { data: trace } = await axios.post(url, body);
+    const { data: race } = await axios.post(url, body);
 
-    return trace;
+    return race;
   } catch (error) {
     console.error(error);
     throw error;

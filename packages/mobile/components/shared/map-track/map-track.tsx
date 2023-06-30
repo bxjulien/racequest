@@ -3,17 +3,17 @@ import { StyleSheet, View } from 'react-native';
 
 import MapView from 'react-native-maps';
 import { Polyline } from 'react-native-maps';
-import { Trace } from '../../../../api/src/shared/models/trace.model';
+import { Track } from '../../../shared/types/track.type';
 
-export default function MapTrace({
-  trace,
+export default function MapTrack({
+  track,
   strokeWidth = 2,
   height = 300,
   width = '100%',
   isInteractive = true,
   style,
 }: {
-  trace: Trace;
+  track: Track;
   strokeWidth?: number;
   height?: number;
   width?: number | string;
@@ -21,7 +21,7 @@ export default function MapTrace({
   style?: any;
 }) {
   const mapRef = useRef<MapView>(null);
-  const points = trace.geojson.geometry.coordinates.map(
+  const points = track.geojson.geometry.coordinates.map(
     ([longitude, latitude]: [longitude: number, latitude: number]) => ({
       latitude,
       longitude,
@@ -44,7 +44,7 @@ export default function MapTrace({
 
   useEffect(() => {
     fitMapToCoordinates();
-  }, [trace]);
+  }, [track]);
 
   return (
     <View
@@ -68,8 +68,8 @@ export default function MapTrace({
         loadingEnabled
         onMapReady={fitMapToCoordinates}
         initialRegion={{
-          latitude: trace.latitude_center,
-          longitude: trace.longitude_center,
+          latitude: track.latitudeCenter,
+          longitude: track.longitudeCenter,
           latitudeDelta: 0.04,
           longitudeDelta: 0.04,
         }}

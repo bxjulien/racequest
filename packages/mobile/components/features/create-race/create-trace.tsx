@@ -3,30 +3,29 @@ import { StyleSheet, Text } from 'react-native';
 
 import CreateTraceDistance from './distance/create-trace-distance';
 import CreateTraceDuration from './duration/create-trace-duration';
-import { CreateTraceForm } from '../../../shared/types/create-trace-form';
-import CreateTraceName from './name/create-trace-name';
+import { CreateRaceForm } from '../../../shared/types/create-race-form';
 import CreateTraceStartingPoint from './starting-point/starting-point';
 import { CreateTraceStep } from '../../../shared/types/create-trace-step';
-import CreateTraceSubmit from './submit/create-trace-submit';
-import CreateTraceSubmitSuccess from './submit/success/create-trace-success';
+import CreateTraceSubmit from './submit/submit';
+import Success from './submit/success/success';
 import FormSteps from '../../shared/form-steps/form-steps';
 import FormStepsFooter from '../../shared/form-steps/form-steps-footer';
 import { FormatType } from '../../../shared/enums/FormatType.enum';
 import { SearchPlace } from './starting-point/search-place/search-place';
-import SelectTrace from './select-trace/select-trace';
+import SelectTrack from './select-track/select-track';
 import { useLocationContext } from '../../../shared/contexts/location.context';
 import { useRouter } from 'expo-router';
 import { useMutation } from 'react-query';
 import {
-  createTrace,
-  getCreationTraces,
+  createRace,
+  getAutoTracks,
 } from '../../../shared/services/api.service';
 
 export default function CreateTrace() {
   const router = useRouter();
   const { location, address } = useLocationContext();
 
-  const creationTracesMutation = useMutation(
+  const getAutoTracksMutation = useMutation(
     ({
       longitude,
       latitude,
@@ -35,23 +34,23 @@ export default function CreateTrace() {
       longitude: number;
       latitude: number;
       distance: number;
-    }) => getCreationTraces(longitude, latitude, distance)
+    }) => getAutoTracks(longitude, latitude, distance)
   );
 
-  const createTraceMutation = useMutation(createTrace, {
+  const createRaceMutation = useMutation(createRace, {
     onSuccess: () => {
       goNext();
     },
   });
 
-  const [formData, setFormData] = useState<CreateTraceForm>({
+  const [formData, setFormData] = useState<CreateRaceForm>({
     format: FormatType.Short,
     startingPoint: {
       address: address,
       longitude: location?.coords.longitude || 0,
       latitude: location?.coords.latitude || 0,
     },
-    trace: null,
+    track: null,
     closingIn: 30,
     name: 'Course de Julien',
   });
@@ -66,7 +65,7 @@ export default function CreateTrace() {
     setCurrentStepIndex(currentStepIndex - 1);
   };
 
-  const getGeneratedTraces = () => {
+  const onGetAutoTracks = () => {
     const longitude = formData.startingPoint?.longitude;
     const latitude = formData.startingPoint?.latitude;
 
@@ -80,7 +79,7 @@ export default function CreateTrace() {
         ? 8
         : 14;
 
-    creationTracesMutation.mutate({
+    getAutoTracksMutation.mutate({
       longitude,
       latitude,
       distance,
@@ -128,7 +127,7 @@ export default function CreateTrace() {
               formData.startingPoint?.latitude &&
               formData.format
           )}
-          goNext={getGeneratedTraces}
+          goNext={onGetAutoTracks}
           goBack={goBack}
         />
       ),
@@ -137,18 +136,18 @@ export default function CreateTrace() {
       id: 3,
       title: 'On pars sur quel parcours ?',
       component: (
-        <SelectTrace
-          value={formData.trace}
-          setValue={(trace) => setFormData({ ...formData, trace })}
-          loading={creationTracesMutation.isLoading}
-          error={creationTracesMutation.isError}
-          traces={creationTracesMutation.data}
+        <SelectTrack
+          track={formData.track}
+          setTrack={(track) => setFormData({ ...formData, track })}
+          loading={getAutoTracksMutation.isLoading}
+          error={getAutoTracksMutation.isError}
+          tracks={getAutoTracksMutation.data}
         />
       ),
       footer: (
         <FormStepsFooter
           goNext={goNext}
-          canGoNext={Boolean(formData.trace)}
+          canGoNext={Boolean(formData.track)}
           goBack={goBack}
         />
       ),
@@ -179,7 +178,7 @@ export default function CreateTrace() {
         "Il ne reste plus qu'à créer la course et partir à l'aventure !",
       component: (
         <CreateTraceSubmit
-          trace={formData.trace}
+          track={formData.track}
           name={formData.name}
           setName={(name) => setFormData({ ...formData, name })}
         />
@@ -187,16 +186,16 @@ export default function CreateTrace() {
       footer: (
         <FormStepsFooter
           goNext={() => {
-            createTraceMutation.mutate(formData);
+            createRaceMutation.mutate(formData);
           }}
           goBack={goBack}
           goNextTitle={
-            createTraceMutation.isLoading
+            createRaceMutation.isLoading
               ? 'Création en cours...'
               : 'Créer la course'
           }
-          canGoNext={!createTraceMutation.isLoading}
-          canGoBack={!createTraceMutation.isLoading}
+          canGoNext={!createRaceMutation.isLoading}
+          canGoBack={!createRaceMutation.isLoading}
         />
       ),
     },
@@ -205,7 +204,7 @@ export default function CreateTrace() {
       title: 'Course créée !',
       subtitle:
         'Tous les utilisateurs Race Quest peuvent maintenant participer à votre course.',
-      component: <CreateTraceSubmitSuccess />,
+      component: <Success />,
       footer: (
         <FormStepsFooter
           goNext={() => {

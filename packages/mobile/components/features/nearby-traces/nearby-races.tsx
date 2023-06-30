@@ -7,13 +7,13 @@ import {
   Pressable,
 } from 'react-native';
 
-import NearbyTracesSkeleton from './nearby-traces.skeleton';
-import { Trace } from '../../../../api/src/shared/models/trace.model';
-import TraceOverview from '../../shared/trace-overview/trace-overview';
+import NearbyRacesSkeleton from './nearby-races.skeleton';
+import RaceOverview from '../../shared/trace-overview/race-overview';
 import { useLocationContext } from '../../../shared/contexts/location.context';
 import { useQuery } from 'react-query';
-import { getNearbyTraces } from '../../../shared/services/supabase.service';
+import { getNearbyRaces } from '../../../shared/services/supabase.service';
 import { useRouter } from 'expo-router';
+import { Race } from '../../../shared/types/race.type';
 
 const LEFT_MARGIN = 20;
 const RACES_GAP = 20;
@@ -21,7 +21,7 @@ const RACE_WIDTH = 280;
 const RADIUS = 1500000; // 1500km
 const STALE_TIME = 60000; // 1 minute
 
-export default function NearbyTraces() {
+export default function NearbyRaces() {
   const { location } = useLocationContext();
   const hasLocation = !!location && !!location.coords;
 
@@ -29,10 +29,10 @@ export default function NearbyTraces() {
     data: traces,
     isError,
     isLoading,
-  } = useQuery<Trace[]>(
+  } = useQuery<Race[]>(
     'nearby-traces',
     () =>
-      getNearbyTraces(
+      getNearbyRaces(
         location?.coords.longitude || 0,
         location?.coords.latitude || 0,
         RADIUS
@@ -43,7 +43,7 @@ export default function NearbyTraces() {
     }
   );
 
-  if (!hasLocation || isLoading) return <NearbyTracesSkeleton />;
+  if (!hasLocation || isLoading) return <NearbyRacesSkeleton />;
 
   if (isError) return <Text>Error</Text>;
 
@@ -54,7 +54,7 @@ export default function NearbyTraces() {
         data={traces}
         renderItem={({ item, index }) => (
           <TraceItem
-            trace={item}
+            race={item}
             style={{ marginLeft: index === 0 ? LEFT_MARGIN : 0 }}
           />
         )}
@@ -67,13 +67,13 @@ export default function NearbyTraces() {
   );
 }
 
-const TraceItem = ({ trace, style }: { trace: Trace; style: ViewStyle }) => {
+const TraceItem = ({ race, style }: { race: Race; style: ViewStyle }) => {
   const router = useRouter();
 
   return (
-    <Pressable onPress={() => router.push(`/(races)/${trace.id}`)}>
-      <TraceOverview
-        trace={trace}
+    <Pressable onPress={() => router.push(`/(races)/${race.id}`)}>
+      <RaceOverview
+        track={race.track}
         isMapInteractive={false}
         containerStyle={{ width: RACE_WIDTH, ...style }}
       />

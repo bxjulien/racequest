@@ -1,11 +1,11 @@
 import { FormatType } from '../enums/FormatType.enum';
 import { StartingPoint } from './starting-point.type';
-import { Trace } from '../../../api/src/shared/models/trace.model';
+import { Track } from './track.type';
 
-export type CreateTraceForm = {
+export type CreateRaceForm = {
   format: FormatType;
   startingPoint: StartingPoint | null;
-  trace: Trace | null;
+  track: Track | null;
   closingIn: number;
   name: string;
 };
