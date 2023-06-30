@@ -8,23 +8,23 @@ import {
 } from 'class-validator';
 
 import { Elevation } from '../types/elevation.type';
-import { TraceDirection } from '../enums/trace-direction.enum';
+import { TrackDirection } from '../enums/track-direction.enum';
 
-export class Trace {
+export class Race {
   @IsNumber()
   id: number;
 
   @IsNumber()
-  longitude_start: number;
+  longitudeStart: number;
 
   @IsNumber()
-  latitude_start: number;
+  latitudeStart: number;
 
   @IsNumber()
-  longitude_center: number;
+  longitudeCenter: number;
 
   @IsNumber()
-  latitude_center: number;
+  latitudeCenter: number;
 
   @IsNotEmpty()
   @IsNotEmptyObject()
@@ -33,18 +33,15 @@ export class Trace {
   @IsNumber()
   distance: number;
 
-  @IsEnum(TraceDirection)
-  direction: TraceDirection;
+  @IsEnum(TrackDirection)
+  direction: TrackDirection;
 
   geohash: string;
 
   elevation: Elevation;
 
-  @IsNumber()
-  closing_in: number;
-
   @IsDate()
-  closing_at: Date;
+  closingAt: Date;
 
   @IsString()
   name: string;

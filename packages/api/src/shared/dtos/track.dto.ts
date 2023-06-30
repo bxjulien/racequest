@@ -1,9 +1,9 @@
 import { IsEnum, IsNumber } from 'class-validator';
 
 import { Elevation } from '../types/elevation.type';
-import { TraceDirection } from '../enums/trace-direction.enum';
+import { TrackDirection } from '../enums/track-direction.enum';
 
-export class TraceDto {
+export class TrackDto {
   @IsNumber()
   longitudeStart: number;
 
@@ -16,13 +16,13 @@ export class TraceDto {
   @IsNumber()
   latitudeCenter: number;
 
-  geoJson: any;
+  geojson: any;
 
   @IsNumber()
   distance: number;
 
-  @IsEnum(TraceDirection)
-  direction: TraceDirection;
+  @IsEnum(TrackDirection)
+  direction: TrackDirection;
 
   elevation: Elevation;
 }

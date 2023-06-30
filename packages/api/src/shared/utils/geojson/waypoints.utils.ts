@@ -1,16 +1,16 @@
-import { TraceDirection } from '../../enums/trace-direction.enum';
+import { TrackDirection } from '../../enums/track-direction.enum';
 import { Coordinates } from '../../types/coordinates.type';
 
 export function createWaypoints(
   formatType: number,
   startingPoint: Coordinates,
-  direction: TraceDirection = TraceDirection.Clockwise,
+  direction: TrackDirection = TrackDirection.Clockwise,
 ): Coordinates[] {
   const waypointsNb = getNumberOfWaypoints(formatType);
 
   const angleIncrement: number =
     ((2 * Math.PI) / waypointsNb) *
-    (direction === TraceDirection.Clockwise ? 1 : -1);
+    (direction === TrackDirection.Clockwise ? 1 : -1);
 
   const waypointDistance: number = formatType / waypointsNb;
   const waypoints: Coordinates[] = [startingPoint];

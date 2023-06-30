@@ -6,14 +6,14 @@ import {
   IsString,
 } from 'class-validator';
 
-import { TraceDto } from './trace.dto';
+import { TrackDto } from './track.dto';
 import { Type } from 'class-transformer';
 
-export class PostTraceDto {
-  @Type(() => TraceDto)
+export class PostRaceDto {
+  @Type(() => TrackDto)
   @IsNotEmpty()
   @IsNotEmptyObject()
-  trace: TraceDto;
+  race: TrackDto;
 
   @IsNumber()
   @IsPositive({ message: 'closingIn should be positive.' })

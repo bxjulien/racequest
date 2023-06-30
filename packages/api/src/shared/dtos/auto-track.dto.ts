@@ -6,23 +6,23 @@ import {
   IsPositive,
 } from 'class-validator';
 
-import { TraceDirection } from '../enums/trace-direction.enum';
+import { TrackDirection } from '../enums/track-direction.enum';
 import { Type } from 'class-transformer';
 
-export class GenerateTracesDto {
+export class AutoTrackDto {
   @Type(() => Number)
   @IsLongitude()
-  longitude_start: number;
+  longitudeStart: number;
 
   @Type(() => Number)
   @IsLatitude()
-  latitude_start: number;
+  latitudeStart: number;
 
   @Type(() => Number)
   @IsPositive()
   distance: number;
 
   @IsOptional()
-  @IsEnum(TraceDirection)
-  direction: TraceDirection;
+  @IsEnum(TrackDirection)
+  direction: TrackDirection;
 }

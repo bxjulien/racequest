@@ -1,4 +1,4 @@
-export enum TraceDirection {
+export enum TrackDirection {
   Clockwise = 'clockwise',
   Counterclockwise = 'counterclockwise',
 }
