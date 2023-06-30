@@ -8,7 +8,7 @@ export const getRaces = () => {
 export const getRace = async (id: number): Promise<Race> => {
   try {
     const { data, error } = await supabase
-      .from('traces')
+      .from('races')
       .select('*')
       .eq('id', id)
       .single();

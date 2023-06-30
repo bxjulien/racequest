@@ -8,7 +8,7 @@ import {
 import MapTrack from '../map-track/map-track';
 import { Track } from '../../../shared/types/track.type';
 
-export default function TraceOverview({
+export default function RaceOverview({
   track,
   isMapInteractive = true,
   withoutEndDate = false,

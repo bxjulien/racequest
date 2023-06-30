@@ -30,7 +30,7 @@ export default function NearbyRaces() {
     isError,
     isLoading,
   } = useQuery<Race[]>(
-    'nearby-traces',
+    `nearby-races-${location?.coords.longitude}-${location?.coords.latitude}`,
     () =>
       getNearbyRaces(
         location?.coords.longitude || 0,
