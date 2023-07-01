@@ -41,7 +41,7 @@ export default function SelectTrack({
   return (
     <View style={styles.container}>
       {selectedTrack && (
-        <MapTrace height={350} trace={selectedTrack as Track} strokeWidth={4} />
+        <MapTrace height={350} track={selectedTrack} strokeWidth={4} />
       )}
 
       <View style={styles.radios}>

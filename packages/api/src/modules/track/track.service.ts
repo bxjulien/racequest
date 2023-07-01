@@ -4,7 +4,6 @@ import * as turf from '@turf/turf';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 
 import { ConfigService } from '@nestjs/config';
-import { AutoTrackDto } from '../../shared/dtos/auto-track.dto';
 import { GoogleMapsService } from '../google-maps/google-maps.service';
 import { MapboxService } from '../mapbox/mapbox.service';
 import { TrackDirection } from '../../shared/enums/track-direction.enum';
@@ -12,6 +11,7 @@ import { TrackDto } from 'src/shared/dtos/track.dto';
 import { removeDuplicatePoints } from '../../shared/utils/geojson/duplicates.utils';
 import { removeSharpAngles } from '../../shared/utils/geojson/angles.utils';
 import togpx from 'togpx';
+import { AutoTrackRequestDto } from 'src/shared/dtos/auto-track/auto-track-request.dto';
 
 @Injectable()
 export class TrackService {
@@ -26,19 +26,16 @@ export class TrackService {
       this.configService.get<string>('NODE_ENV') === 'development';
   }
 
-  async getAutoTracks(autoTracksDto: AutoTrackDto): Promise<TrackDto[]> {
+  async getAutoTracks(request: AutoTrackRequestDto): Promise<TrackDto[]> {
     const tracks: TrackDto[] = [];
 
-    const directions: TrackDirection[] = autoTracksDto.direction
-      ? [autoTracksDto.direction]
-      : [TrackDirection.Clockwise, TrackDirection.Counterclockwise];
+    const directions: TrackDirection[] = [
+      TrackDirection.Clockwise,
+      TrackDirection.Counterclockwise,
+    ];
 
     for (const direction of directions) {
-      const geojson = await this.mapboxService.getGeojson(
-        autoTracksDto,
-        direction,
-      );
-
+      const geojson = await this.mapboxService.getGeojson(request, direction);
       let { coordinates } = geojson.geometry;
 
       coordinates = removeDuplicatePoints(coordinates);
@@ -56,13 +53,13 @@ export class TrackService {
       const longitudeCenter = center.geometry.coordinates[0];
       const latitudeCenter = center.geometry.coordinates[1];
 
-      const _minDistance = autoTracksDto.distance * 0.5;
-      const _maxDistance = autoTracksDto.distance * 1.5;
+      const _minDistance = request.distance * 0.5;
+      const _maxDistance = request.distance * 1.5;
 
       if (distance >= _minDistance && distance <= _maxDistance) {
         tracks.push({
-          longitudeStart: autoTracksDto.longitudeStart,
-          latitudeStart: autoTracksDto.latitudeStart,
+          longitudeStart: request.longitudeStart,
+          latitudeStart: request.latitudeStart,
           longitudeCenter: longitudeCenter,
           latitudeCenter: latitudeCenter,
           geojson,

@@ -1,6 +1,6 @@
 import { ConfigService } from '@nestjs/config';
 import { Coordinates } from '../../shared/types/coordinates.type';
-import { AutoTrackDto } from '../../shared/dtos/auto-track.dto';
+import { AutoTrackRequestDto } from '../../shared/dtos/auto-track/auto-track-request.dto';
 import { Injectable } from '@nestjs/common';
 import { TrackDirection } from '../../shared/enums/track-direction.enum';
 import { createWaypoints } from '../../shared/utils/geojson/waypoints.utils';
@@ -22,7 +22,7 @@ export class MapboxService {
   }
 
   async getGeojson(
-    autoTrackDto: AutoTrackDto,
+    autoTrackDto: AutoTrackRequestDto,
     direction: TrackDirection,
   ): Promise<MapboxTrip> {
     const startingPoint: Coordinates = [

@@ -21,7 +21,7 @@ import {
   getAutoTracks,
 } from '../../../shared/services/api.service';
 
-export default function CreateTrace() {
+export default function CreateRace() {
   const router = useRouter();
   const { location, address } = useLocationContext();
 
@@ -84,6 +84,7 @@ export default function CreateTrace() {
       latitude,
       distance,
     });
+    
     goNext();
   };
 

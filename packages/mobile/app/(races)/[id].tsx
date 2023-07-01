@@ -31,7 +31,7 @@ const useRace = (id: string) => {
   return { race, isError, isLoading };
 };
 
-export default function Race({}): JSX.Element {
+export default function RaceScreen({}): JSX.Element {
   const { id } = useLocalSearchParams();
   const { race, isError, isLoading } = useRace(id as string);
 

@@ -6,10 +6,10 @@ import {
   IsPositive,
 } from 'class-validator';
 
-import { TrackDirection } from '../enums/track-direction.enum';
+import { TrackDirection } from '../../enums/track-direction.enum';
 import { Type } from 'class-transformer';
 
-export class AutoTrackDto {
+export class AutoTrackResponseDto {
   @Type(() => Number)
   @IsLongitude()
   longitudeStart: number;
