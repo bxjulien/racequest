@@ -2,7 +2,7 @@ import { CreateRaceForm } from '../types/create-race-form';
 import axios from 'axios';
 import { Race } from '../types/race.type';
 
-const baseUrl = `http://192.168.1.48:3000/api`;
+const baseUrl = `http://192.168.118.119:3000/api`;
 
 export const getAutoTracks = async (
   longitude: number,

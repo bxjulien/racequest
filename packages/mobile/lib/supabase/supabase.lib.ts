@@ -11,7 +11,7 @@ if (!SUPABASE_URL || !SUPABASE_API_KEY)
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_API_KEY, {
   auth: {
-    persistSession: true,
+    persistSession: false,
     autoRefreshToken: true,
     detectSessionInUrl: true,
   },

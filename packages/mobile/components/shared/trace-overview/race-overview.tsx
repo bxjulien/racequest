@@ -26,6 +26,7 @@ export default function RaceOverview({
         style={styles.map}
         isInteractive={isMapInteractive}
       />
+
       <View style={styles.infos}>
         <View>
           <Text style={styles.infoTitle}>Distance</Text>

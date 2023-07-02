@@ -1,6 +1,6 @@
 import { ConfigService } from '@nestjs/config';
 import { Coordinates } from '../../shared/types/coordinates.type';
-import { AutoTrackRequestDto } from '../../shared/dtos/auto-track/auto-track-request.dto';
+import { AutoTrackRequestDto } from '../../shared/dtos/auto-track-request.dto';
 import { Injectable } from '@nestjs/common';
 import { TrackDirection } from '../../shared/enums/track-direction.enum';
 import { createWaypoints } from '../../shared/utils/geojson/waypoints.utils';

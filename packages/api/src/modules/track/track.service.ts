@@ -11,7 +11,7 @@ import { TrackDto } from 'src/shared/dtos/track.dto';
 import { removeDuplicatePoints } from '../../shared/utils/geojson/duplicates.utils';
 import { removeSharpAngles } from '../../shared/utils/geojson/angles.utils';
 import togpx from 'togpx';
-import { AutoTrackRequestDto } from 'src/shared/dtos/auto-track/auto-track-request.dto';
+import { AutoTrackRequestDto } from 'src/shared/dtos/auto-track-request.dto';
 
 @Injectable()
 export class TrackService {

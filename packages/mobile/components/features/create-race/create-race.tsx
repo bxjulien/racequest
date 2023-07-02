@@ -20,6 +20,7 @@ import {
   createRace,
   getAutoTracks,
 } from '../../../shared/services/api.service';
+import { Race } from '../../../shared/types/race.type';
 
 export default function CreateRace() {
   const router = useRouter();
@@ -38,7 +39,8 @@ export default function CreateRace() {
   );
 
   const createRaceMutation = useMutation(createRace, {
-    onSuccess: () => {
+    onSuccess: (race) => {
+      setCreatedRace(race);
       goNext();
     },
   });
@@ -54,6 +56,8 @@ export default function CreateRace() {
     closingIn: 30,
     name: 'Course de Julien',
   });
+
+  const [createdRace, setCreatedRace] = useState<Race | null>(null);
 
   const goNext = () => {
     if (currentStepIndex === steps.length - 1) return;
@@ -84,7 +88,7 @@ export default function CreateRace() {
       latitude,
       distance,
     });
-    
+
     goNext();
   };
 
@@ -209,7 +213,7 @@ export default function CreateRace() {
       footer: (
         <FormStepsFooter
           goNext={() => {
-            router.push('/home');
+            router.push(`/(tabs)/races/${createdRace?.id}`);
           }}
           showGoBack={false}
           goNextTitle={'Consulter la course'}

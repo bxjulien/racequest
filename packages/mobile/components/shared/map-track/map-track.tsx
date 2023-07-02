@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import MapView from 'react-native-maps';
@@ -21,16 +21,20 @@ export default function MapTrack({
   style?: any;
 }) {
   const mapRef = useRef<MapView>(null);
-  const points = track.geojson.geometry.coordinates.map(
-    ([longitude, latitude]: [longitude: number, latitude: number]) => ({
-      latitude,
-      longitude,
-    })
+  const points = useMemo(
+    () =>
+      track.geojson.geometry.coordinates.map(
+        ([longitude, latitude]: [longitude: number, latitude: number]) => ({
+          latitude,
+          longitude,
+        })
+      ),
+    [track]
   );
 
   const fitMapToCoordinates = () => {
     if (mapRef.current) {
-      mapRef.current.fitToCoordinates(points, {
+      /*       mapRef.current.fitToCoordinates(points, {
         animated: true,
         edgePadding: {
           top: 10,
@@ -38,12 +42,13 @@ export default function MapTrack({
           bottom: 10,
           left: 10,
         },
-      });
+      }); */
     }
   };
 
   useEffect(() => {
-    fitMapToCoordinates();
+    console.log('track', track);
+    //fitMapToCoordinates();
   }, [track]);
 
   return (
@@ -66,10 +71,10 @@ export default function MapTrack({
           width: '100%',
         }}
         loadingEnabled
-        onMapReady={fitMapToCoordinates}
+        //onMapReady={fitMapToCoordinates}
         initialRegion={{
-          latitude: track.latitudeCenter,
-          longitude: track.longitudeCenter,
+          latitude: 0,
+          longitude: 0,
           latitudeDelta: 0.04,
           longitudeDelta: 0.04,
         }}
@@ -78,11 +83,11 @@ export default function MapTrack({
         rotateEnabled={isInteractive}
         pitchEnabled={isInteractive}
       >
-        <Polyline
+        {/*         <Polyline
           coordinates={points}
           strokeColor='red'
           strokeWidth={strokeWidth}
-        />
+        /> */}
       </MapView>
     </View>
   );

@@ -40,6 +40,7 @@ export default function NearbyRaces() {
     {
       enabled: hasLocation,
       staleTime: STALE_TIME,
+      retry: false,
     }
   );
 

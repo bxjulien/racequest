@@ -41,6 +41,7 @@ export class RaceService {
       _geojson: geojson,
       _direction: direction,
       _elevation: elevation,
+      _closing_in: postRaceDto.closingIn,
       _name: postRaceDto.name,
     });
 

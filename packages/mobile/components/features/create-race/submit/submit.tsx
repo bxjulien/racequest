@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import TraceOverview from '../../../shared/trace-overview/race-overview';
+import RaceOverview from '../../../shared/trace-overview/race-overview';
 import CreateTraceName from '../name/create-trace-name';
 import { CreateRaceForm } from '../../../../shared/types/create-race-form';
 import Error from './error/error';
@@ -17,7 +17,7 @@ export default function Submit({ name, setName, track }: SubmitProps) {
   return (
     <View style={styles.container}>
       <CreateTraceName value={name} setValue={setName} />
-      <TraceOverview track={track} />
+      <RaceOverview track={track} />
     </View>
   );
 }

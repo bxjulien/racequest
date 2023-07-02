@@ -1,7 +1,7 @@
 import { FlatList } from 'react-native';
 
 import React from 'react';
-import TraceOverviewSkeleton from '../../shared/trace-overview/trace-overview.skeleton';
+import RaceOverviewSkeleton from '../../shared/trace-overview/trace-overview.skeleton';
 
 export default function NearbyTracesSkeleton(): JSX.Element {
   const items = Array.from({ length: 3 });
@@ -9,7 +9,7 @@ export default function NearbyTracesSkeleton(): JSX.Element {
   return (
     <FlatList
       data={items}
-      renderItem={() => <TraceOverviewSkeleton />}
+      renderItem={() => <RaceOverviewSkeleton />}
       contentContainerStyle={{
         gap: 20,
       }}

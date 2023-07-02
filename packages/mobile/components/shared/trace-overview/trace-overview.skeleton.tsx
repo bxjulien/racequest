@@ -2,7 +2,7 @@ import { StyleSheet, View } from 'react-native';
 
 import SkeletonLoader from '../skeleton-loader/skeleton-loader';
 
-export default function TraceOverviewSkeleton({
+export default function RaceOverviewSkeleton({
   withoutEndDate = false,
 }: {
   withoutEndDate?: boolean;

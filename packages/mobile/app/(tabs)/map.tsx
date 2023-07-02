@@ -5,9 +5,10 @@ import MapView, { Marker, Polyline } from 'react-native-maps';
 import { useLocationContext } from '../../shared/contexts/location.context';
 import { MapViewRegion } from '../../shared/types/mapview-region.type';
 import { calculateRadius } from '../../shared/utils/geo.utils';
-import { Trace } from '../../../api/src/shared/models/trace.model';
 import { useQuery } from 'react-query';
-import { getNearbyTraces } from '../../shared/services/supabase.service';
+import { getNearbyRaces } from '../../shared/services/supabase.service';
+import { Race } from '../../shared/types/race.type';
+import { Track } from '../../shared/types/track.type';
 
 export default function MapScreen(): JSX.Element {
   const { location } = useLocationContext();
@@ -45,16 +46,16 @@ const NearbyTracesMap = ({
   hasLocation: boolean;
 }) => {
   const mapRef = React.useRef<MapView>(null);
-  const [activeTrace, setActiveTrace] = useState<Trace | null>(null);
+  const [activeTrac, setActiveTrack] = useState<Track | null>(null);
 
   const {
-    data: traces,
+    data: races,
     isError,
     refetch,
-  } = useQuery<Trace[]>(
-    `nearby-traces-map-${region.latitude}-${region.longitude}`,
+  } = useQuery<Race[]>(
+    `nearby-races-map-${region.latitude}-${region.longitude}`,
     () =>
-      getNearbyTraces(
+      getNearbyRaces(
         region.longitude,
         region.latitude,
         calculateRadius(region)
@@ -70,9 +71,9 @@ const NearbyTracesMap = ({
     refetch();
   }, [region]);
 
-  const handleTracePress = (trace: Trace) => {
-    setActiveTrace(trace);
-    const points = trace.geojson.geometry.coordinates.map(
+  const handleTracePress = (track: Track) => {
+    setActiveTrack(track);
+    const points = track.geojson.geometry.coordinates.map(
       ([longitude, latitude]: [longitude: number, latitude: number]) => ({
         latitude,
         longitude,
@@ -99,24 +100,24 @@ const NearbyTracesMap = ({
       initialRegion={region}
       showsUserLocation
       onRegionChangeComplete={handleRegionChange}
-      onPress={() => setActiveTrace(null)}
+      onPress={() => setActiveTrack(null)}
     >
-      {traces?.map((trace) => (
+      {races?.map((race) => (
         <Marker
-          key={trace.id}
+          key={race.id}
           coordinate={{
-            latitude: trace.latitude_start,
-            longitude: trace.longitude_start,
+            latitude: race.track.latitudeStart,
+            longitude: race.track.longitudeStart,
           }}
           title={'test'}
           description={'test desscription'}
-          onPress={() => handleTracePress(trace)}
+          onPress={() => handleTracePress(race.track)}
         />
       ))}
 
-      {activeTrace && activeTrace.geojson && (
+      {activeTrac && activeTrac.geojson && (
         <Polyline
-          coordinates={activeTrace.geojson.geometry.coordinates.map(
+          coordinates={activeTrac.geojson.geometry.coordinates.map(
             (coordinate: any) => ({
               latitude: coordinate[1],
               longitude: coordinate[0],
