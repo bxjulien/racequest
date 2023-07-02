@@ -1,55 +1,36 @@
 import { Injectable } from '@nestjs/common';
-
-import { ConfigService } from '@nestjs/config';
-
 import { PostRaceDto } from '../../shared/dtos/post-race.dto';
-import { SupabaseService } from '../supabase/supabase.service';
-import { Race } from '../../shared/models/race.model';
+import { Race } from '../../shared/entities/race.model';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { TrackRepository } from '../track/track.repository';
 
 @Injectable()
 export class RaceService {
-  private readonly isDevelopment: boolean = false;
-
   constructor(
-    private readonly supabaseService: SupabaseService,
-    private readonly configService: ConfigService,
-  ) {
-    this.isDevelopment =
-      this.configService.get<string>('NODE_ENV') === 'development';
-  }
+    @InjectRepository(Race)
+    private raceRepository: Repository<Race>,
+    @InjectRepository(TrackRepository)
+    private trackRepository: TrackRepository,
+  ) {}
 
   async postRace(postRaceDto: PostRaceDto): Promise<Race> {
-    const supabase = this.supabaseService.getSupabase();
+    console.log('postRaceDto', postRaceDto);
 
-    const {
-      longitudeStart,
-      latitudeStart,
-      longitudeCenter,
-      latitudeCenter,
-      distance,
-      geojson,
-      direction,
-      elevation,
-    } = postRaceDto.track;
+    const { track, ...raceData } = postRaceDto;
 
-    const { data, error } = await supabase.rpc('insert_race', {
-      _longitude_start: longitudeStart,
-      _latitude_start: latitudeStart,
-      _longitude_center: longitudeCenter,
-      _latitude_center: latitudeCenter,
-      _distance: distance,
-      _geojson: geojson,
-      _direction: direction,
-      _elevation: elevation,
-      _closing_in: postRaceDto.closingIn,
-      _name: postRaceDto.name,
+    // Create the Track entity
+    const savedTrack = await this.trackRepository.createWithGeohash(track);
+
+    // Create the Race entity and associate it with the Track entity
+    const race = this.raceRepository.create({
+      ...raceData,
+      track: savedTrack,
     });
+    const savedRace = await this.raceRepository.save(race);
 
-    if (error) {
-      console.error(error);
-      throw error;
-    }
+    console.log('savedRace', savedRace);
 
-    return data as Race;
+    return savedRace;
   }
 }

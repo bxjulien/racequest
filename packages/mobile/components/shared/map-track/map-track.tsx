@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useMemo } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import MapView from 'react-native-maps';
@@ -47,7 +47,6 @@ export default function MapTrack({
   };
 
   useEffect(() => {
-    console.log('track', track);
     //fitMapToCoordinates();
   }, [track]);
 

@@ -3,6 +3,7 @@ import * as turf from '@turf/turf';
 
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 
+import { AutoTrackRequestDto } from 'src/shared/dtos/auto-track-request.dto';
 import { ConfigService } from '@nestjs/config';
 import { GoogleMapsService } from '../google-maps/google-maps.service';
 import { MapboxService } from '../mapbox/mapbox.service';
@@ -11,7 +12,6 @@ import { TrackDto } from 'src/shared/dtos/track.dto';
 import { removeDuplicatePoints } from '../../shared/utils/geojson/duplicates.utils';
 import { removeSharpAngles } from '../../shared/utils/geojson/angles.utils';
 import togpx from 'togpx';
-import { AutoTrackRequestDto } from 'src/shared/dtos/auto-track-request.dto';
 
 @Injectable()
 export class TrackService {

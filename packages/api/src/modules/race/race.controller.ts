@@ -1,7 +1,7 @@
 import { Controller, Post, Body } from '@nestjs/common';
 
 import { RaceService } from './race.service';
-import { Race } from '../../shared/models/race.model';
+import { Race } from '../../shared/entities/race.model';
 import { PostRaceDto } from 'src/shared/dtos/post-race.dto';
 
 @Controller('race')
