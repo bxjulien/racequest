@@ -8,6 +8,7 @@ import { Race } from '../../shared/types/race.type';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { calculateRadius } from '../../shared/utils/geo.utils';
 import { getNearbyRaces } from '../../shared/services/api.service';
+import mapStyle from '../../assets/maps/style.json';
 import { useLocationContext } from '../../shared/contexts/location.context';
 import { useQuery } from 'react-query';
 
@@ -103,6 +104,10 @@ const NearbyTracesMap = ({
         showsUserLocation
         onRegionChangeComplete={handleRegionChange}
         onPress={() => setActiveRace(null)}
+        loadingEnabled
+        loadingBackgroundColor='#304A7D'
+        loadingIndicatorColor='#1D2C4D'
+        customMapStyle={mapStyle}
       >
         {races?.map((race) => (
           <Marker
@@ -125,7 +130,7 @@ const NearbyTracesMap = ({
                 longitude: coordinate[0],
               })
             )}
-            strokeColor={'#000'}
+            strokeColor={'white'}
             strokeWidth={6}
           />
         )}
