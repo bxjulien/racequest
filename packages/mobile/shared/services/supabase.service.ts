@@ -19,23 +19,3 @@ export const getRace = async (
     throw error;
   }
 };
-
-export const getNearbyRaces = async (
-  longitude: number,
-  latitude: number,
-  radius: number
-): Promise<Race[]> => {
-  try {
-    const { data, error } = await supabase.rpc('get_nearby_races', {
-      _longitude: longitude,
-      _latitude: latitude,
-      _radius: radius,
-    });
-
-    if (error) throw error;
-
-    return data as Race[];
-  } catch (error) {
-    throw error;
-  }
-};

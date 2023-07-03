@@ -10,7 +10,7 @@ export const getAutoTracks = async (
   distance: number
 ) => {
   try {
-    const url = `${baseUrl}/track?longitudeStart=${longitude}&latitudeStart=${latitude}&distance=${distance}`;
+    const url = `${baseUrl}/tracks/auto?longitudeStart=${longitude}&latitudeStart=${latitude}&distance=${distance}`;
 
     const { data } = await axios.get(encodeURI(url));
 
@@ -21,9 +21,26 @@ export const getAutoTracks = async (
   }
 };
 
+export const getNearbyRaces = async (
+  longitude: number,
+  latitude: number,
+  radius: number
+): Promise<Race[]> => {
+  try {
+    const url = `${baseUrl}/races/nearby?longitude=${longitude}&latitude=${latitude}&radius=${radius}`;
+
+    const { data } = await axios.get(url);
+
+    return data as Race[];
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 export const createRace = async (formData: CreateRaceForm): Promise<Race> => {
   try {
-    const url = `${baseUrl}/race`;
+    const url = `${baseUrl}/races`;
 
     const body = {
       track: formData.track,

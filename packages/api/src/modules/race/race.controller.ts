@@ -4,7 +4,7 @@ import { RaceService } from './race.service';
 import { Race } from '../../shared/entities/race.model';
 import { PostRaceDto } from 'src/shared/dtos/post-race.dto';
 
-@Controller('race')
+@Controller('races')
 export class RaceController {
   constructor(private readonly raceService: RaceService) {}
 

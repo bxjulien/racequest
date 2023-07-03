@@ -11,9 +11,9 @@ import NearbyRacesSkeleton from './nearby-races.skeleton';
 import RaceOverview from '../../shared/trace-overview/race-overview';
 import { useLocationContext } from '../../../shared/contexts/location.context';
 import { useQuery } from 'react-query';
-import { getNearbyRaces } from '../../../shared/services/supabase.service';
 import { useRouter } from 'expo-router';
 import { Race } from '../../../shared/types/race.type';
+import { getNearbyRaces } from '../../../shared/services/api.service';
 
 const LEFT_MARGIN = 20;
 const RACES_GAP = 20;

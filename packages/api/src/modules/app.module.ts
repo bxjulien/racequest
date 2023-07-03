@@ -11,6 +11,7 @@ import { TrackController } from './track/track.controller';
 import { TrackRepository } from './track/track.repository';
 import { TrackService } from './track/track.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { RaceRepository } from './race/race.repository';
 
 @Module({
   imports: [
@@ -38,7 +39,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     TrackService,
     MapboxService,
     GoogleMapsService,
+
     TrackRepository,
+    RaceRepository,
   ],
   controllers: [RaceController, TrackController],
 })
