@@ -1,6 +1,6 @@
-import CreateTrace from '../../components/features/create-trace/create-trace';
+import CreateRace from '../../components/features/create-race/create-race';
 import React from 'react';
 
-export default function CreateTraceScreen(): JSX.Element {
-  return <CreateTrace />;
+export default function CreateRaceScreen(): JSX.Element {
+  return <CreateRace />;
 }

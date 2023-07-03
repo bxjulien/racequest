@@ -1,6 +1,7 @@
 import { Coordinates } from 'src/shared/types/coordinates.type';
 import { Client } from '@googlemaps/google-maps-services-js';
 import { GMapsElevation } from 'src/shared/types/google-maps.type';
+
 const client = new Client();
 
 export async function getElevation(

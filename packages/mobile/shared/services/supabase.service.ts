@@ -1,46 +1,19 @@
-import { Trace } from '../../../api/src/shared/models/trace.model';
+import { Race } from '../types/race.type';
 import supabase from '../../lib/supabase/supabase.lib';
 
-export const getTraces = () => {
-  return supabase.from('countries').select('*');
-};
-
-export const getRace = async (id: number): Promise<Trace> => {
+export const getRace = async (
+  id: number,
+  longitude: number | undefined,
+  latitude: number | undefined
+): Promise<Race> => {
   try {
-    const { data, error } = await supabase
-      .from('traces')
-      .select('*')
-      .eq('id', id)
-      .single();
-
-    if (error) {
-      throw error;
-    }
-
-    if (!data) {
-      throw new Error('Trace not found');
-    }
-
-    return data as Trace;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-};
-
-export const getNearbyTraces = async (
-  longitude: number,
-  latitude: number,
-  radius: number
-): Promise<Trace[]> => {
-  try {
-    const response = await supabase.rpc('get_nearby_traces', {
-      longitude,
-      latitude,
-      radius,
+    const response = await supabase.rpc('get_race', {
+      _id: id,
+      _longitude: longitude,
+      _latitude: latitude,
     });
 
-    return response.data;
+    return response.data as Race;
   } catch (error) {
     console.error(error);
     throw error;
