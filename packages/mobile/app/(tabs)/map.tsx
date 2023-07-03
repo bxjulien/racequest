@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { StyleSheet } from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
-import { useLocationContext } from '../../shared/contexts/location.context';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+
+import BottomSheet from '@gorhom/bottom-sheet';
 import { MapViewRegion } from '../../shared/types/mapview-region.type';
-import { calculateRadius } from '../../shared/utils/geo.utils';
-import { useQuery } from 'react-query';
-import { getNearbyRaces } from '../../shared/services/supabase.service';
 import { Race } from '../../shared/types/race.type';
-import { Track } from '../../shared/types/track.type';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { calculateRadius } from '../../shared/utils/geo.utils';
+import { getNearbyRaces } from '../../shared/services/api.service';
+import { useLocationContext } from '../../shared/contexts/location.context';
+import { useQuery } from 'react-query';
 
 export default function MapScreen(): JSX.Element {
   const { location } = useLocationContext();
@@ -46,7 +47,7 @@ const NearbyTracesMap = ({
   hasLocation: boolean;
 }) => {
   const mapRef = React.useRef<MapView>(null);
-  const [activeTrac, setActiveTrack] = useState<Track | null>(null);
+  const [activeRace, setActiveRace] = useState<Race | null>(null);
 
   const {
     data: races,
@@ -62,7 +63,7 @@ const NearbyTracesMap = ({
       ),
     {
       enabled: hasLocation,
-      staleTime: 1000 * 60, // 1 minute
+      staleTime: 60000, // 1 minute
       keepPreviousData: true,
     }
   );
@@ -71,9 +72,9 @@ const NearbyTracesMap = ({
     refetch();
   }, [region]);
 
-  const handleTracePress = (track: Track) => {
-    setActiveTrack(track);
-    const points = track.geojson.geometry.coordinates.map(
+  const handleTracePress = (race: Race) => {
+    setActiveRace(race);
+    const points = race.track.geojson.geometry.coordinates.map(
       ([longitude, latitude]: [longitude: number, latitude: number]) => ({
         latitude,
         longitude,
@@ -91,43 +92,53 @@ const NearbyTracesMap = ({
     });
   };
 
-  if (isError) console.log('Error loading nearby traces');
+  if (isError) console.log('Error loading nearby races');
 
   return (
-    <MapView
-      ref={mapRef}
-      style={styles.map}
-      initialRegion={region}
-      showsUserLocation
-      onRegionChangeComplete={handleRegionChange}
-      onPress={() => setActiveTrack(null)}
-    >
-      {races?.map((race) => (
-        <Marker
-          key={race.id}
-          coordinate={{
-            latitude: race.track.latitudeStart,
-            longitude: race.track.longitudeStart,
-          }}
-          title={'test'}
-          description={'test desscription'}
-          onPress={() => handleTracePress(race.track)}
-        />
-      ))}
+    <View style={styles.container}>
+      <MapView
+        ref={mapRef}
+        style={styles.map}
+        initialRegion={region}
+        showsUserLocation
+        onRegionChangeComplete={handleRegionChange}
+        onPress={() => setActiveRace(null)}
+      >
+        {races?.map((race) => (
+          <Marker
+            key={race.id}
+            coordinate={{
+              latitude: race.track.latitudeStart,
+              longitude: race.track.longitudeStart,
+            }}
+            title={'test'}
+            description={'test desscription'}
+            onPress={() => handleTracePress(race)}
+          />
+        ))}
 
-      {activeTrac && activeTrac.geojson && (
-        <Polyline
-          coordinates={activeTrac.geojson.geometry.coordinates.map(
-            (coordinate: any) => ({
-              latitude: coordinate[1],
-              longitude: coordinate[0],
-            })
-          )}
-          strokeColor={'#000'}
-          strokeWidth={6}
-        />
+        {activeRace && activeRace.track.geojson && (
+          <Polyline
+            coordinates={activeRace.track.geojson.geometry.coordinates.map(
+              (coordinate: any) => ({
+                latitude: coordinate[1],
+                longitude: coordinate[0],
+              })
+            )}
+            strokeColor={'#000'}
+            strokeWidth={6}
+          />
+        )}
+      </MapView>
+
+      {activeRace && (
+        <BottomSheet snapPoints={['15%']}>
+          <View style={styles.bottomSheetContainer}>
+            <Text>{activeRace.name}</Text>
+          </View>
+        </BottomSheet>
       )}
-    </MapView>
+    </View>
   );
 };
 
@@ -137,5 +148,8 @@ const styles = StyleSheet.create({
   },
   map: {
     flex: 1,
+  },
+  bottomSheetContainer: {
+    alignItems: 'center',
   },
 });

@@ -1,26 +1,26 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text } from 'react-native';
-
-import CreateTraceDistance from './distance/create-trace-distance';
-import CreateTraceDuration from './duration/create-trace-duration';
-import { CreateRaceForm } from '../../../shared/types/create-race-form';
-import CreateTraceStartingPoint from './starting-point/starting-point';
-import { CreateTraceStep } from '../../../shared/types/create-trace-step';
-import CreateTraceSubmit from './submit/submit';
-import Success from './submit/success/success';
-import FormSteps from '../../shared/form-steps/form-steps';
-import FormStepsFooter from '../../shared/form-steps/form-steps-footer';
-import { FormatType } from '../../../shared/enums/FormatType.enum';
-import { SearchPlace } from './starting-point/search-place/search-place';
-import SelectTrack from './select-track/select-track';
-import { useLocationContext } from '../../../shared/contexts/location.context';
-import { useRouter } from 'expo-router';
-import { useMutation } from 'react-query';
 import {
   createRace,
   getAutoTracks,
 } from '../../../shared/services/api.service';
+
+import { CreateRaceForm } from '../../../shared/types/create-race-form';
+import CreateTraceDistance from './distance/create-trace-distance';
+import CreateTraceDuration from './duration/create-trace-duration';
+import CreateTraceStartingPoint from './starting-point/starting-point';
+import { CreateTraceStep } from '../../../shared/types/create-trace-step';
+import CreateTraceSubmit from './submit/submit';
+import FormSteps from '../../shared/form-steps/form-steps';
+import FormStepsFooter from '../../shared/form-steps/form-steps-footer';
+import { FormatType } from '../../../shared/enums/FormatType.enum';
 import { Race } from '../../../shared/types/race.type';
+import { SearchPlace } from './starting-point/search-place/search-place';
+import SelectTrack from './select-track/select-track';
+import Success from './submit/success/success';
+import { useLocationContext } from '../../../shared/contexts/location.context';
+import { useMutation } from 'react-query';
+import { useRouter } from 'expo-router';
 
 export default function CreateRace() {
   const router = useRouter();
@@ -213,7 +213,7 @@ export default function CreateRace() {
       footer: (
         <FormStepsFooter
           goNext={() => {
-            router.push(`/(tabs)/races/${createdRace?.id}`);
+            router.push(`/(races)/${createdRace?.id}`);
           }}
           showGoBack={false}
           goNextTitle={'Consulter la course'}

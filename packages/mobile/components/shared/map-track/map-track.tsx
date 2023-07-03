@@ -34,7 +34,7 @@ export default function MapTrack({
 
   const fitMapToCoordinates = () => {
     if (mapRef.current) {
-      /*       mapRef.current.fitToCoordinates(points, {
+      mapRef.current.fitToCoordinates(points, {
         animated: true,
         edgePadding: {
           top: 10,
@@ -42,12 +42,12 @@ export default function MapTrack({
           bottom: 10,
           left: 10,
         },
-      }); */
+      });
     }
   };
 
   useEffect(() => {
-    //fitMapToCoordinates();
+    fitMapToCoordinates();
   }, [track]);
 
   return (
@@ -70,7 +70,7 @@ export default function MapTrack({
           width: '100%',
         }}
         loadingEnabled
-        //onMapReady={fitMapToCoordinates}
+        onMapReady={fitMapToCoordinates}
         initialRegion={{
           latitude: 0,
           longitude: 0,
@@ -82,11 +82,11 @@ export default function MapTrack({
         rotateEnabled={isInteractive}
         pitchEnabled={isInteractive}
       >
-        {/*         <Polyline
+        <Polyline
           coordinates={points}
           strokeColor='red'
           strokeWidth={strokeWidth}
-        /> */}
+        />
       </MapView>
     </View>
   );

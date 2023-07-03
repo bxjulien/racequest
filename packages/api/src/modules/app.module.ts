@@ -5,13 +5,13 @@ import { MapboxService } from './mapbox/mapbox.service';
 import { Module } from '@nestjs/common';
 import { Race } from 'src/shared/entities/race.model';
 import { RaceController } from './race/race.controller';
+import { RaceRepository } from './race/race.repository';
 import { RaceService } from './race/race.service';
 import { Track } from 'src/shared/entities/track.model';
 import { TrackController } from './track/track.controller';
 import { TrackRepository } from './track/track.repository';
 import { TrackService } from './track/track.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { RaceRepository } from './race/race.repository';
 
 @Module({
   imports: [

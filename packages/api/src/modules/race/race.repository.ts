@@ -1,6 +1,6 @@
 import { InjectRepository } from '@nestjs/typeorm';
-import { Race } from 'src/shared/entities/race.model';
 import { Repository } from 'typeorm';
+import { Race } from 'src/shared/entities/race.model';
 
 export class RaceRepository extends Repository<Race> {
   constructor(
@@ -19,13 +19,16 @@ export class RaceRepository extends Repository<Race> {
     latitude: number,
     radius: number,
   ): Promise<Race[]> {
-    return this.raceRepository
+    const races = await this.raceRepository
       .createQueryBuilder('races')
+      .leftJoinAndSelect('races.track', 'track')
       .where(
-        'ST_DWithin(geohash::geography, ST_Point(:longitude, :latitude)::geography, :radius)',
+        'ST_DWithin(track.geohash::geography, ST_Point(:longitude, :latitude)::geography, :radius)',
         { longitude, latitude, radius },
       )
-      .orderBy('geohash <-> ST_Point(:longitude, :latitude)::geography')
-      .getRawMany();
+      .orderBy('track.geohash <-> ST_Point(:longitude, :latitude)::geography')
+      .getMany();
+
+    return races;
   }
 }

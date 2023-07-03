@@ -1,7 +1,7 @@
 import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { TrackDto } from 'src/shared/dtos/track.dto';
 import { Track } from 'src/shared/entities/track.model';
-import { Repository } from 'typeorm';
 
 export class TrackRepository extends Repository<Track> {
   constructor(

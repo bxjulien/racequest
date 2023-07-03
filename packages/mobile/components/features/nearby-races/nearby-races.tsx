@@ -1,19 +1,19 @@
 import {
   FlatList,
+  Pressable,
   StyleSheet,
   Text,
   View,
   ViewStyle,
-  Pressable,
 } from 'react-native';
 
 import NearbyRacesSkeleton from './nearby-races.skeleton';
+import { Race } from '../../../shared/types/race.type';
 import RaceOverview from '../../shared/trace-overview/race-overview';
+import { getNearbyRaces } from '../../../shared/services/api.service';
 import { useLocationContext } from '../../../shared/contexts/location.context';
 import { useQuery } from 'react-query';
 import { useRouter } from 'expo-router';
-import { Race } from '../../../shared/types/race.type';
-import { getNearbyRaces } from '../../../shared/services/api.service';
 
 const LEFT_MARGIN = 20;
 const RACES_GAP = 20;
@@ -26,7 +26,7 @@ export default function NearbyRaces() {
   const hasLocation = !!location && !!location.coords;
 
   const {
-    data: traces,
+    data: races,
     isError,
     isLoading,
   } = useQuery<Race[]>(
@@ -52,9 +52,9 @@ export default function NearbyRaces() {
     <View>
       <Text style={styles.title}>Les dernières courses à proximité</Text>
       <FlatList
-        data={traces}
+        data={races}
         renderItem={({ item, index }) => (
-          <TraceItem
+          <RaceItem
             race={item}
             style={{ marginLeft: index === 0 ? LEFT_MARGIN : 0 }}
           />
@@ -68,7 +68,7 @@ export default function NearbyRaces() {
   );
 }
 
-const TraceItem = ({ race, style }: { race: Race; style: ViewStyle }) => {
+const RaceItem = ({ race, style }: { race: Race; style: ViewStyle }) => {
   const router = useRouter();
 
   return (
