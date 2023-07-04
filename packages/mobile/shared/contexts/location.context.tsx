@@ -3,19 +3,18 @@
 import * as Location from 'expo-location';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
+
 import { getAddressFromCoordinates } from '../services/mapbox.service';
 
-interface LocationContextValue {
+type LocationContextValue = {
   location: Location.LocationObject | null;
   address: string | null;
   retryGetLocation: () => void;
-}
+};
 
-const LocationContext = createContext<LocationContextValue>({
-  location: null,
-  address: null,
-  retryGetLocation: () => {},
-});
+const LocationContext = createContext<LocationContextValue>(
+  {} as LocationContextValue
+);
 
 export const useLocationContext = () => useContext(LocationContext);
 

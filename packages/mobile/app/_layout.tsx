@@ -14,6 +14,7 @@ import { Image } from 'react-native';
 import LocationProvider from '../shared/contexts/location.context';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Slot } from 'expo-router';
+import ThemeContextProvider from '../shared/contexts/theme.context';
 
 const queryClient = new QueryClient();
 
@@ -65,11 +66,13 @@ export default function RootLayout() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <LocationProvider>
-        <SafeAreaProvider>
-          <Slot />
-        </SafeAreaProvider>
-      </LocationProvider>
+      <ThemeContextProvider>
+        <LocationProvider>
+          <SafeAreaProvider>
+            <Slot />
+          </SafeAreaProvider>
+        </LocationProvider>
+      </ThemeContextProvider>
     </QueryClientProvider>
   );
 }

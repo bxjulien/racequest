@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 
 import NearbyRacesSkeleton from './nearby-races.skeleton';
+import { RQText } from '../../shared/text/text';
 import { Race } from '../../../shared/types/race.type';
 import RaceOverview from '../../shared/trace-overview/race-overview';
 import { getNearbyRaces } from '../../../shared/services/api.service';
@@ -50,7 +51,7 @@ export default function NearbyRaces() {
 
   return (
     <View>
-      <Text style={styles.title}>Les dernières courses à proximité</Text>
+      <RQText style={styles.title}>Les dernières courses à proximité</RQText>
       <FlatList
         data={races}
         renderItem={({ item, index }) => (
