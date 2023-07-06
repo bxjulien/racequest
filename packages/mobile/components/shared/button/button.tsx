@@ -5,34 +5,40 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { TouchableOpacityProps } from 'react-native';
+import { useThemeContext } from '../../../shared/contexts/theme.context';
 
 export default function Button({
   title,
   onPress,
   disabled,
   loading,
-  color = 'violet',
   style,
 }: {
   title: string;
   onPress: () => void;
   disabled?: boolean;
   loading?: boolean;
-  color?: string;
   style?: TouchableOpacityProps['style'];
 }) {
+  const { theme } = useThemeContext();
+
+  const { backgroundColor, color } = useMemo(() => {
+    if (disabled || loading)
+      return {
+        backgroundColor: theme.cta.disabled,
+        color: theme.text.disabled,
+      };
+    return { backgroundColor: theme.cta.primary, color: theme.text.primary };
+  }, [disabled]);
+
   return (
     <TouchableOpacity
-      style={[
-        style,
-        styles.button,
-        { backgroundColor: disabled ? '#ccc' : color },
-      ]}
+      style={[style, styles.button, { backgroundColor }]}
       onPress={onPress}
       disabled={disabled}
-      activeOpacity={0.5}
+      activeOpacity={0.8}
     >
       {loading ? (
         <ActivityIndicator size='small' color='#fff' />

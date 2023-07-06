@@ -1,6 +1,7 @@
 import { StyleSheet, TextInput } from 'react-native';
 
 import React from 'react';
+import { useThemeContext } from '../../../shared/contexts/theme.context';
 
 type InputTextProps = {
   value: string;
@@ -17,9 +18,11 @@ export default function InputText({
   placeholder,
   editable = true,
 }: InputTextProps) {
+  const { theme } = useThemeContext();
+
   return (
     <TextInput
-      style={styles.input}
+      style={[styles.input, { color: theme.text.primary }]}
       value={value}
       onChangeText={onChange}
       placeholder={placeholder}
@@ -35,6 +38,5 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 20,
     paddingHorizontal: 20,
-    color: 'black',
   },
 });

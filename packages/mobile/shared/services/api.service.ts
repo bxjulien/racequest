@@ -1,8 +1,9 @@
+import { LOCAL_IP } from '../../constants';
 import { CreateRaceForm } from '../types/create-race-form';
 import { Race } from '../types/race.type';
 import axios from 'axios';
 
-const baseUrl = `http://192.168.1.84:3000/api`;
+const baseUrl = `http://${LOCAL_IP}:3000/api`;
 
 export const getAutoTracks = async (
   longitude: number,
@@ -28,6 +29,24 @@ export const getNearbyRaces = async (
 ): Promise<Race[]> => {
   try {
     const url = `${baseUrl}/races/nearby?longitude=${longitude}&latitude=${latitude}&radius=${radius}`;
+
+    const { data } = await axios.get(url);
+
+    return data as Race[];
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export const getNearbyShortRaces = async (
+  longitude: number,
+  latitude: number,
+  radius: number,
+  maxDistance: number
+): Promise<Race[]> => {
+  try {
+    const url = `${baseUrl}/races/nearby?longitude=${longitude}&latitude=${latitude}&radius=${radius}&maxDistance=${maxDistance}`;
 
     const { data } = await axios.get(url);
 

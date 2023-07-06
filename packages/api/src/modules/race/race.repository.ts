@@ -18,17 +18,23 @@ export class RaceRepository extends Repository<Race> {
     longitude: number,
     latitude: number,
     radius: number,
+    maxDistance?: number,
   ): Promise<Race[]> {
-    const races = await this.raceRepository
+    const queryBuilder = this.raceRepository
       .createQueryBuilder('races')
       .leftJoinAndSelect('races.track', 'track')
       .where(
         'ST_DWithin(track.geohash::geography, ST_Point(:longitude, :latitude)::geography, :radius)',
         { longitude, latitude, radius },
       )
-      .orderBy('track.geohash <-> ST_Point(:longitude, :latitude)::geography')
-      .getMany();
+      .orderBy('track.geohash <-> ST_Point(:longitude, :latitude)::geography');
 
+    if (maxDistance !== null && maxDistance !== undefined) {
+      queryBuilder.andWhere('track.distance <= :maxDistance', { maxDistance });
+      queryBuilder.orderBy('track.distance');
+    }
+
+    const races = await queryBuilder.getMany();
     return races;
   }
 }

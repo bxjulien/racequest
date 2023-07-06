@@ -3,6 +3,9 @@ import { CreateTraceStep } from '../../../shared/types/create-trace-step';
 import ProgressBar from '../progress-bar/progress-bar';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
+import { RQText } from '../text/text';
+import { FontSize } from '../../../shared/enums/font-size.enum';
+import { useThemeContext } from '../../../shared/contexts/theme.context';
 
 type FormStepsProps = {
   title: string;
@@ -19,23 +22,32 @@ export default function FormSteps({
   activeStepIndex,
   style,
 }: FormStepsProps) {
-  const { title: stepTitle, headerComponent, subtitle, component, footer } = steps[activeStepIndex];
+  const { theme } = useThemeContext();
+  const {
+    title: stepTitle,
+    headerComponent,
+    subtitle,
+    component,
+    footer,
+  } = steps[activeStepIndex];
   const progressPercentage = (100 / steps.length) * (activeStepIndex + 1);
 
   return (
-    <SafeAreaView style={[style, styles.container]}>
+    <SafeAreaView style={[styles.container, style]}>
       <View>
-        <Text style={styles.title}>{title}</Text>
+        <RQText style={styles.title} bold size={FontSize.xxxxx}>
+          {title}
+        </RQText>
         {withProgressBar && (
           <ProgressBar
             progress={progressPercentage}
-            color={'#6200ee'} // todo replace hardcoded color theme
-            height={2}
+            color={theme.cta.primary}
+            backgroundColor={theme.bg.neutral}
           />
         )}
       </View>
 
-      <Text style={styles.stepTitle}>{stepTitle}</Text>
+      <RQText style={styles.stepTitle} bold size={FontSize.xxxl}>{stepTitle}</RQText>
 
       <ScrollView
         contentContainerStyle={styles.scrollContent}
@@ -44,9 +56,7 @@ export default function FormSteps({
         <View style={styles.content}>
           {headerComponent && headerComponent}
 
-          {subtitle && (
-            <Text style={styles.stepSubtitle}>{subtitle}</Text>
-          )}
+          {subtitle && <RQText style={styles.stepSubtitle} color={theme.text.secondary}>{subtitle}</RQText>}
 
           {component && component}
         </View>
@@ -63,22 +73,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
     textAlign: 'center',
-    paddingBottom: 20,
+    paddingVertical: 20,
   },
   stepTitle: {
-    fontSize: 22,
-    fontWeight: 'bold',
     marginVertical: 20,
   },
   content: {
     flex: 1,
   },
   stepSubtitle: {
-    fontSize: 18,
-    color: 'grey',
+    fontSize: FontSize.l,
     marginBottom: 20,
   },
   scrollContent: {

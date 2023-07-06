@@ -16,11 +16,12 @@ export class RaceService {
   ) {}
 
   async getNearbyRaces(request: NearbyRacesRequestDto): Promise<Race[]> {
-    const { longitude, latitude, radius } = request;
+    const { longitude, latitude, radius, maxDistance } = request;
     const races = await this.raceRepository.getNearbyRaces(
       longitude,
       latitude,
       radius,
+      maxDistance,
     );
 
     return races;

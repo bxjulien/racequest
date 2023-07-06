@@ -11,6 +11,10 @@ import { getNearbyRaces } from '../../shared/services/api.service';
 import mapStyle from '../../assets/maps/style.json';
 import { useLocationContext } from '../../shared/contexts/location.context';
 import { useQuery } from 'react-query';
+import { useThemeContext } from '../../shared/contexts/theme.context';
+import ConsultRace from '../../components/features/consult-race/consult-race';
+import RaceOverview from '../../components/shared/trace-overview/race-overview';
+import { RQText } from '../../components/shared/text/text';
 
 export default function MapScreen(): JSX.Element {
   const { location } = useLocationContext();
@@ -47,6 +51,8 @@ const NearbyTracesMap = ({
   handleRegionChange: (newRegion: MapViewRegion) => void;
   hasLocation: boolean;
 }) => {
+  const { theme } = useThemeContext();
+
   const mapRef = React.useRef<MapView>(null);
   const [activeRace, setActiveRace] = useState<Race | null>(null);
 
@@ -137,10 +143,13 @@ const NearbyTracesMap = ({
       </MapView>
 
       {activeRace && (
-        <BottomSheet snapPoints={['15%']}>
-          <View style={styles.bottomSheetContainer}>
-            <Text>{activeRace.name}</Text>
-          </View>
+        <BottomSheet
+          snapPoints={['15%', '45%']}
+          handleIndicatorStyle={{ backgroundColor: theme.bg.neutral }}
+          backgroundStyle={{ backgroundColor: theme.bg.primary }}
+          style={{ paddingHorizontal: 10 }}
+        >
+          <RaceOverview race={activeRace} track={activeRace.track} withoutMap />
         </BottomSheet>
       )}
     </View>
@@ -153,8 +162,5 @@ const styles = StyleSheet.create({
   },
   map: {
     flex: 1,
-  },
-  bottomSheetContainer: {
-    alignItems: 'center',
   },
 });

@@ -1,9 +1,20 @@
 import Icon from '../../components/shared/icon/icon';
 import { Tabs } from 'expo-router';
+import { useThemeContext } from '../../shared/contexts/theme.context';
 
 export default () => {
+  const { theme } = useThemeContext();
+
   return (
-    <Tabs>
+    <Tabs
+      screenOptions={{
+        tabBarStyle: {
+          backgroundColor: theme.bg.primary,
+        },
+        tabBarActiveTintColor: theme.cta.primary,
+        tabBarInactiveTintColor: theme.cta.disabled,
+      }}
+    >
       <Tabs.Screen
         name='home'
         options={{

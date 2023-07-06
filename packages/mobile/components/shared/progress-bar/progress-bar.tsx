@@ -3,14 +3,14 @@ import React, { useEffect, useRef } from 'react';
 
 type ProgressBarProps = {
   progress: number;
-  color?: string;
-  height?: number;
+  color: string;
+  backgroundColor: string;
 };
 
 export default function ProgressBar({
   progress,
-  height,
   color,
+  backgroundColor,
 }: ProgressBarProps) {
   const progressAnim = useRef(new Animated.Value(0)).current;
 
@@ -28,7 +28,7 @@ export default function ProgressBar({
   });
 
   return (
-    <View style={[styles.container]}>
+    <View style={[{ backgroundColor }, styles.container]}>
       <Animated.View
         style={[
           styles.progressBar,
@@ -43,7 +43,6 @@ export default function ProgressBar({
 const styles = StyleSheet.create({
   container: {
     height: 10,
-    backgroundColor: '#ccc',
     borderRadius: 4,
   },
   progressBar: {

@@ -1,6 +1,9 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import React from 'react';
+import { useThemeContext } from '../../../shared/contexts/theme.context';
+import { RQText } from '../text/text';
+import { FontSize } from '../../../shared/enums/font-size.enum';
 
 type RadioButtonValue = string | number | boolean | Date | undefined;
 
@@ -25,6 +28,7 @@ export const RadioButton = ({
   canUnselect,
   disabled,
 }: RadioButtonProps) => {
+  const { theme } = useThemeContext();
   const isChecked = selectedValue === value;
 
   return (
@@ -32,28 +36,51 @@ export const RadioButton = ({
       style={[
         style,
         styles.container,
-        isChecked && styles.checked,
         disabled && styles.disabled,
+        {
+          backgroundColor: isChecked ? theme.bg[900] : theme.bg.primary,
+          borderColor: isChecked ? theme.cta.primary : theme.cta.neutral,
+        },
       ]}
       disabled={disabled}
       onPress={() => onValueChange && onValueChange(value)}
-      activeOpacity={0.5}
+      activeOpacity={0.8}
     >
       <View style={styles.main}>
-        <View style={[styles.circle, isChecked && styles.circleChecked]}>
+        <View
+          style={[
+            {
+              borderColor: isChecked ? theme.cta.primary : theme.cta.neutral,
+            },
+            styles.circle,
+          ]}
+        >
           {isChecked && canUnselect ? (
             <Text style={styles.cross}>X</Text>
           ) : (
-            isChecked && <View style={styles.innerCircle} />
+            isChecked && (
+              <View
+                style={[
+                  { backgroundColor: theme.cta.primary },
+                  styles.innerCircle,
+                ]}
+              />
+            )
           )}
         </View>
-        <Text style={[styles.label, Boolean(description) && styles.bold]}>
+        <RQText
+          style={{ ...styles.label, color: theme.text.primary }}
+          bold={Boolean(description)}
+          size={Boolean(description) ? FontSize.l : FontSize.xxl}
+        >
           {label}
-        </Text>
+        </RQText>
       </View>
       {description && (
         <View style={styles.description}>
-          <Text>{description}</Text>
+          <RQText color={theme.text.secondary} size={FontSize.m}>
+            {description}
+          </RQText>
         </View>
       )}
     </TouchableOpacity>
@@ -62,15 +89,9 @@ export const RadioButton = ({
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 20,
-    paddingVertical: 30,
-    borderWidth: 2,
-    borderColor: '#ccc',
+    padding: 20,
+    borderWidth: 1,
     borderRadius: 20,
-  },
-  checked: {
-    borderColor: '#6200ee',
-    backgroundColor: '#ebeaf5',
   },
   disabled: {
     opacity: 0.4,
@@ -84,18 +105,13 @@ const styles = StyleSheet.create({
     height: 24,
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: '#ccc',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  circleChecked: {
-    borderColor: '#6200ee',
   },
   innerCircle: {
     width: 13,
     height: 13,
     borderRadius: 6,
-    backgroundColor: '#6200ee',
   },
   cross: {
     fontSize: 13,
@@ -104,13 +120,8 @@ const styles = StyleSheet.create({
   label: {
     marginLeft: 20,
   },
-  bold: {
-    fontWeight: 'bold',
-    fontSize: 18,
-  },
   description: {
     marginTop: 10,
     marginLeft: 45,
-    opacity: 0.7,
   },
 });

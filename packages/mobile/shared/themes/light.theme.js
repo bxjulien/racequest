@@ -10,11 +10,11 @@ export const light = {
       600: '#002178',
       700: '#001066',
       800: '#000D54',
-      900: '#090311',
+      primary: '#090311',
     },
     text: {
       primary: '#F8F1F5',
-      secondary: '#090311',
+      secondary: '#7286D3',
     },
   },
 };

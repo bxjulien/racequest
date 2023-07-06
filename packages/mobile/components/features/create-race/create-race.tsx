@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text } from 'react-native';
 import {
   createRace,
   getAutoTracks,
@@ -21,8 +20,10 @@ import Success from './submit/success/success';
 import { useLocationContext } from '../../../shared/contexts/location.context';
 import { useMutation } from 'react-query';
 import { useRouter } from 'expo-router';
+import { useThemeContext } from '../../../shared/contexts/theme.context';
 
 export default function CreateRace() {
+  const { theme } = useThemeContext();
   const router = useRouter();
   const { location, address } = useLocationContext();
 
@@ -230,13 +231,7 @@ export default function CreateRace() {
       title='🚀 Créer une course'
       steps={steps}
       activeStepIndex={currentStepIndex}
-      style={styles.container}
+      style={{ paddingHorizontal: 15, backgroundColor: theme.bg.primary }}
     />
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    paddingHorizontal: 15,
-  },
-});
