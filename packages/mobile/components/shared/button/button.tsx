@@ -10,13 +10,13 @@ import { TouchableOpacityProps } from 'react-native';
 import { useThemeContext } from '../../../shared/contexts/theme.context';
 
 export default function Button({
-  title,
+  children,
   onPress,
   disabled,
   loading,
   style,
 }: {
-  title: string;
+  children?: React.ReactNode;
   onPress: () => void;
   disabled?: boolean;
   loading?: boolean;
@@ -43,7 +43,7 @@ export default function Button({
       {loading ? (
         <ActivityIndicator size='small' color='#fff' />
       ) : (
-        <Text style={styles.buttonText}>{title}</Text>
+        <Text style={styles.buttonText}>{children}</Text>
       )}
     </TouchableOpacity>
   );

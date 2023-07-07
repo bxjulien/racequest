@@ -21,10 +21,11 @@ export default function HomeScreen() {
       </ScrollView>
 
       <Button
-        title={'Créer une course'}
         onPress={() => router.push('/(races)/create')}
         style={styles.floatingButton}
-      />
+      >
+        Créer une course
+      </Button>
     </SafeAreaView>
   );
 }

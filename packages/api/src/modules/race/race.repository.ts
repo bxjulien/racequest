@@ -29,7 +29,7 @@ export class RaceRepository extends Repository<Race> {
       )
       .orderBy('track.geohash <-> ST_Point(:longitude, :latitude)::geography');
 
-    if (maxDistance !== null && maxDistance !== undefined) {
+    if (maxDistance !== null && maxDistance !== undefined && maxDistance > 0) {
       queryBuilder.andWhere('track.distance <= :maxDistance', { maxDistance });
       queryBuilder.orderBy('track.distance');
     }

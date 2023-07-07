@@ -24,20 +24,16 @@ export default function FormStepsFooter({
     <View style={styles.footer}>
       {showGoBack && (
         <Button
-          title={goBackTitle}
           style={styles.backButton}
-          onPress={goBack}
+          onPress={goBack || (() => {})}
           disabled={!canGoBack}
-          color='orange'
-        />
+        >
+          {goBackTitle}
+        </Button>
       )}
-      <Button
-        style={styles.nextButton}
-        color='#6200ee'
-        title={goNextTitle}
-        onPress={goNext}
-        disabled={!canGoNext}
-      />
+      <Button style={styles.nextButton} onPress={goNext} disabled={!canGoNext}>
+        {goNextTitle}
+      </Button>
     </View>
   );
 }

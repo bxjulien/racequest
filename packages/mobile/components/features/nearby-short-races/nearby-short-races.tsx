@@ -2,7 +2,7 @@ import { Text } from 'react-native';
 
 import RaceListSkeleton from '../../shared/race-list/race-list.skeleton';
 import { Race } from '../../../shared/types/race.type';
-import { getNearbyShortRaces } from '../../../shared/services/api.service';
+import { getNearbyRaces } from '../../../shared/services/api.service';
 import { useLocationContext } from '../../../shared/contexts/location.context';
 import { useQuery } from 'react-query';
 import { RaceList } from '../../shared/race-list/race-list';
@@ -23,7 +23,7 @@ export default function NearbyShortRaces() {
   } = useQuery<Race[]>(
     `nearby-short-races-${location?.coords.longitude}-${location?.coords.latitude}`,
     () =>
-      getNearbyShortRaces(
+      getNearbyRaces(
         location?.coords.longitude || 0,
         location?.coords.latitude || 0,
         NEARBY_RACES_RADIUS,

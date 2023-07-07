@@ -1,6 +1,7 @@
 import Icon from '../../components/shared/icon/icon';
 import { Tabs } from 'expo-router';
 import { useThemeContext } from '../../shared/contexts/theme.context';
+import { IconType } from '../../shared/enums/IconType.enum';
 
 export default () => {
   const { theme } = useThemeContext();
@@ -32,6 +33,16 @@ export default () => {
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Icon name='map' color={color} size={size} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name='user'
+        options={{
+          tabBarLabel: 'Compte',
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => (
+            <Icon name='user' color={color} size={size} type={IconType.FontAwesome} />
           ),
         }}
       />
