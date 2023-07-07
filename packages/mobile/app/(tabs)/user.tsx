@@ -8,11 +8,13 @@ import { useRouter } from 'expo-router';
 
 export default function UserScreen() {
   const router = useRouter();
-  const { session, user, logout } = useAuthContext();
+  const { user, session, logout } = useAuthContext();
 
   useEffect(() => {
-    if (!session || !user) return router.push('/(tabs)/home');
-  }, [session, user]);
+    if (!user || !session) {
+      router.push('/(auth)/login');
+    }
+  }, [user, session]);
 
   return (
     <SafeAreaView>

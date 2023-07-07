@@ -1,20 +1,19 @@
+import { ScrollView, StyleSheet, View } from 'react-native';
+
 import Button from '../../components/shared/button/button';
 import NearbyRaces from '../../components/features/nearby-races/nearby-races';
+import NearbyShortRaces from '../../components/features/nearby-short-races/nearby-short-races';
+import { RQText } from '../../components/shared/text/text';
 import React from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { StyleSheet, ScrollView, Dimensions } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useThemeContext } from '../../shared/contexts/theme.context';
-import NearbyShortRaces from '../../components/features/nearby-short-races/nearby-short-races';
 
 export default function HomeScreen() {
   const { theme } = useThemeContext();
   const router = useRouter();
 
   return (
-    <SafeAreaView
-      style={[styles.container, { backgroundColor: theme.bg.primary }]}
-    >
+    <View style={[styles.container, { backgroundColor: theme.bg.primary }]}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <NearbyRaces />
         <NearbyShortRaces />
@@ -26,7 +25,7 @@ export default function HomeScreen() {
       >
         Créer une course
       </Button>
-    </SafeAreaView>
+    </View>
   );
 }
 

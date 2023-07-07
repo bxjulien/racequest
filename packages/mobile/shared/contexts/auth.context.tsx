@@ -17,7 +17,7 @@ type AuthContextValue = {
   session: AuthSession | null;
   error: AuthError | null;
 
-  user: User | undefined;
+  user: User | null;
   userLoading: boolean;
   userError: boolean;
 
@@ -46,6 +46,8 @@ export default function AuthContextProvider({
   const [authUser, setAuthUser] = useState<AuthUser | null>(null);
   const [error, setError] = useState<AuthError | null>(null);
 
+  const [user, setUser] = useState<User | null>(null);
+
   const [signInLoading, setSignInLoading] = useState(false);
   const [signInError, setSignInError] = useState<AuthError | null>(null);
 
@@ -53,18 +55,14 @@ export default function AuthContextProvider({
   const [signUpError, setSignUpError] = useState<AuthError | null>(null);
   const [signUpSuccess, setSignUpSuccess] = useState(false);
 
-  const {
-    data: user,
-    isError: userError,
-    isLoading: userLoading,
-  } = useQuery<User>(
+  const { isError: userError, isLoading: userLoading } = useQuery<User>(
     `user-${authUser?.id}`,
     () => getUser(session!.access_token),
     {
       enabled: Boolean(session?.access_token && authUser),
       retry: false,
       onSuccess: (data) => {
-        console.log('user', data);
+        setUser(data);
       },
       onError: (error) => {
         console.error('error', error);
@@ -92,6 +90,11 @@ export default function AuthContextProvider({
           setSession(session);
           setAuthUser(session?.user ?? null);
 
+          if (event === 'SIGNED_OUT') {
+            console.log('SIGNED_OUT');
+            setUser(null);
+          }
+
           // TODO handle specific auth events:
           // if (event === 'PASSWORD_RECOVERY') handlePasswordRecovery();
           // if (event === 'USER_UPDATED') handleUserUpdated();
@@ -103,6 +106,8 @@ export default function AuthContextProvider({
       };
     })();
   }, []);
+
+  console.log(user);
 
   const signUpWithPassword = async (data: PasswordSignIn) => {
     setSignUpLoading(true);

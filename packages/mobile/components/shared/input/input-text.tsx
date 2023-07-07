@@ -1,6 +1,6 @@
+import React, { useState } from 'react';
 import { StyleSheet, TextInput } from 'react-native';
 
-import React from 'react';
 import { useThemeContext } from '../../../shared/contexts/theme.context';
 
 type InputTextProps = {
@@ -19,14 +19,24 @@ export default function InputText({
   editable = true,
 }: InputTextProps) {
   const { theme } = useThemeContext();
+  const [isFocused, setFocused] = useState(false);
 
   return (
     <TextInput
-      style={[styles.input, { color: theme.text.primary }]}
+      style={[
+        styles.input,
+        {
+          color: theme.text.primary,
+          borderColor: isFocused ? theme.cta.primary : theme.cta.neutral,
+        },
+      ]}
+      placeholderTextColor={theme.text.secondary}
       value={value}
       onChangeText={onChange}
       placeholder={placeholder}
       editable={editable}
+      onFocus={() => setFocused(true)}
+      onBlur={() => setFocused(false)}
     />
   );
 }
@@ -34,8 +44,7 @@ export default function InputText({
 const styles = StyleSheet.create({
   input: {
     height: 80,
-    borderColor: '#ccc',
-    borderWidth: 2,
+    borderWidth: 1,
     borderRadius: 20,
     paddingHorizontal: 20,
   },

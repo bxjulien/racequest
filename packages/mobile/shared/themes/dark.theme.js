@@ -2,7 +2,8 @@ export const dark = {
   cta: {
     primary: '#7286D3',
     secondary: '#F8F1F5',
-    disabled: '#e3e9ff',
+    ternary: 'orange',
+    disabled: 'silver',
     neutral: 'white',
     cancel: '#F8F1F5',
   },
@@ -22,6 +23,7 @@ export const dark = {
   text: {
     primary: 'white',
     secondary: 'silver',
+    ternary: 'orange',
     disabled: '#e3e9ff',
   },
 };

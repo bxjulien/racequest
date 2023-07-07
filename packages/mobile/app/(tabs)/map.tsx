@@ -1,20 +1,17 @@
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import BottomSheet from '@gorhom/bottom-sheet';
 import { MapViewRegion } from '../../shared/types/mapview-region.type';
 import { Race } from '../../shared/types/race.type';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import RaceOverview from '../../components/shared/trace-overview/race-overview';
 import { calculateRadius } from '../../shared/utils/geo.utils';
 import { getNearbyRaces } from '../../shared/services/api.service';
 import mapStyle from '../../assets/maps/style.json';
 import { useLocationContext } from '../../shared/contexts/location.context';
 import { useQuery } from 'react-query';
 import { useThemeContext } from '../../shared/contexts/theme.context';
-import ConsultRace from '../../components/features/consult-race/consult-race';
-import RaceOverview from '../../components/shared/trace-overview/race-overview';
-import { RQText } from '../../components/shared/text/text';
 
 export default function MapScreen(): JSX.Element {
   const { location } = useLocationContext();
@@ -32,13 +29,11 @@ export default function MapScreen(): JSX.Element {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <NearbyTracesMap
-        region={region}
-        handleRegionChange={handleRegionChange}
-        hasLocation={hasLocation}
-      />
-    </SafeAreaView>
+    <NearbyTracesMap
+      region={region}
+      handleRegionChange={handleRegionChange}
+      hasLocation={hasLocation}
+    />
   );
 }
 

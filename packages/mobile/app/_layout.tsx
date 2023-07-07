@@ -10,12 +10,14 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import React, { useEffect, useState } from 'react';
 
 import { Asset } from 'expo-asset';
+import AuthContextProvider from '../shared/contexts/auth.context';
 import { Image } from 'react-native';
 import LocationProvider from '../shared/contexts/location.context';
+import { RQText } from '../components/shared/text/text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Slot } from 'expo-router';
-import ThemeContextProvider, { useThemeContext } from '../shared/contexts/theme.context';
-import AuthContextProvider from '../shared/contexts/auth.context';
+import ThemeContextProvider from '../shared/contexts/theme.context';
 
 const queryClient = new QueryClient();
 
@@ -71,7 +73,14 @@ export default function RootLayout() {
         <ThemeContextProvider>
           <LocationProvider>
             <SafeAreaProvider>
-              <Slot />
+              <SafeAreaView style={{ flex: 1, backgroundColor: 'black' }}>
+                <RQText
+                  style={{ backgroundColor: 'black', textAlign: 'center' }}
+                >
+                  Race Quest alpha
+                </RQText>
+                <Slot />
+              </SafeAreaView>
             </SafeAreaProvider>
           </LocationProvider>
         </ThemeContextProvider>

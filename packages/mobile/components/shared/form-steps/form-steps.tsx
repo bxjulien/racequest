@@ -1,10 +1,10 @@
-import { StyleSheet, Text, View, ViewStyle } from 'react-native';
+import { StyleSheet, View, ViewStyle } from 'react-native';
+
 import { CreateTraceStep } from '../../../shared/types/create-trace-step';
-import ProgressBar from '../progress-bar/progress-bar';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { ScrollView } from 'react-native-gesture-handler';
-import { RQText } from '../text/text';
 import { FontSize } from '../../../shared/enums/font-size.enum';
+import ProgressBar from '../progress-bar/progress-bar';
+import { RQText } from '../text/text';
+import { ScrollView } from 'react-native-gesture-handler';
 import { useThemeContext } from '../../../shared/contexts/theme.context';
 
 type FormStepsProps = {
@@ -33,7 +33,7 @@ export default function FormSteps({
   const progressPercentage = (100 / steps.length) * (activeStepIndex + 1);
 
   return (
-    <SafeAreaView style={[styles.container, style]}>
+    <View style={[styles.container, style]}>
       <View>
         <RQText style={styles.title} bold size={FontSize.xxxxx}>
           {title}
@@ -47,7 +47,9 @@ export default function FormSteps({
         )}
       </View>
 
-      <RQText style={styles.stepTitle} bold size={FontSize.xxxl}>{stepTitle}</RQText>
+      <RQText style={styles.stepTitle} bold size={FontSize.xxxl}>
+        {stepTitle}
+      </RQText>
 
       <ScrollView
         contentContainerStyle={styles.scrollContent}
@@ -56,14 +58,18 @@ export default function FormSteps({
         <View style={styles.content}>
           {headerComponent && headerComponent}
 
-          {subtitle && <RQText style={styles.stepSubtitle} color={theme.text.secondary}>{subtitle}</RQText>}
+          {subtitle && (
+            <RQText style={styles.stepSubtitle} color={theme.text.secondary}>
+              {subtitle}
+            </RQText>
+          )}
 
           {component && component}
         </View>
 
         {footer && footer}
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
