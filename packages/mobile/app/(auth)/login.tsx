@@ -1,19 +1,24 @@
-import React, { useState } from 'react';
-import { SafeAreaView } from 'react-native';
-import supabase from '../../lib/supabase/supabase.lib';
-import InputText from '../../components/shared/input/input-text';
+import React, { useEffect, useState } from 'react';
+
 import Button from '../../components/shared/button/button';
+import InputText from '../../components/shared/input/input-text';
 import { RQText } from '../../components/shared/text/text';
-import { useRouter } from 'expo-router';
+import { SafeAreaView } from 'react-native';
 import { useAuthContext } from '../../shared/contexts/auth.context';
+import { useRouter } from 'expo-router';
 
 export default function LoginScreen() {
-  const { signInLoading, signInError, signInWithPassword } = useAuthContext();
+  const { user, session, signInLoading, signInError, signInWithPassword } =
+    useAuthContext();
 
   const router = useRouter();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  useEffect(() => {
+    if (user && session) return router.push('/(tabs)/user');
+  }, [user, session]);
 
   const handleLogin = async () => {
     signInWithPassword({ email, password });

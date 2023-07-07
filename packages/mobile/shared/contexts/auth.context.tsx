@@ -1,15 +1,17 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import supabase from '../../lib/supabase/supabase.lib';
 import {
   AuthError,
   AuthSession,
   AuthTokenResponse,
   User as AuthUser,
 } from '@supabase/supabase-js';
-import { User } from '../types/user/user';
-import { useQuery } from 'react-query';
-import { getUser } from '../services/api.service';
+import React, { createContext, useContext, useEffect, useState } from 'react';
+
 import { PasswordSignIn } from '../types/password-sign-in.type';
+import { User } from '../types/user/user';
+import { getUser } from '../services/api.service';
+import supabase from '../../lib/supabase/supabase.lib';
+import { useQuery } from 'react-query';
+import { useRouter } from 'expo-router';
 
 type AuthContextValue = {
   session: AuthSession | null;
@@ -27,6 +29,8 @@ type AuthContextValue = {
   signInWithPassword: (data: PasswordSignIn) => void;
   signInLoading: boolean;
   signInError: AuthError | null;
+
+  logout: () => void;
 };
 
 const AuthContext = createContext({} as AuthContextValue);
@@ -36,6 +40,8 @@ export default function AuthContextProvider({
 }: {
   children: React.ReactNode;
 }) {
+  const router = useRouter();
+
   const [session, setSession] = useState<AuthSession | null>(null);
   const [authUser, setAuthUser] = useState<AuthUser | null>(null);
   const [error, setError] = useState<AuthError | null>(null);
@@ -129,6 +135,11 @@ export default function AuthContextProvider({
 
     setSignInError(null);
     setSignInLoading(false);
+    router.push('/(tabs)/user');
+  };
+
+  const logout = async () => {
+    await supabase.auth.signOut();
   };
 
   const value: AuthContextValue = {
@@ -147,6 +158,8 @@ export default function AuthContextProvider({
     signInWithPassword,
     signInLoading,
     signInError,
+
+    logout,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
