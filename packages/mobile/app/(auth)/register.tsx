@@ -30,12 +30,7 @@ export default function RegisterScreen() {
   };
 
   return (
-    <ScrollView
-      contentContainerStyle={styles.container}
-      style={{ flex: 1 }}
-      keyboardShouldPersistTaps='handled'
-      keyboardDismissMode='on-drag'
-    >
+    <ScrollView contentContainerStyle={styles.container} style={{ flex: 1 }}>
       <View>
         <RQText size={FontSize.xxxxxx} bold style={styles.title}>
           Prêt à vous lancer ?
@@ -58,6 +53,7 @@ export default function RegisterScreen() {
           placeholder='Mot de passe'
           value={password}
           onChange={(text) => setPassword(text)}
+          type='password'
         />
 
         <Button onPress={handleRegister} loading={signUpLoading}>
@@ -67,7 +63,11 @@ export default function RegisterScreen() {
         {signUpError && <RQText>{signUpError.message}</RQText>}
       </View>
       <AuthProviders />
-      <AuthSwitch goTo='/(auth)/login' />
+      <AuthSwitch
+        goTo='/(auth)/login'
+        text='Vous avez déjà un compte ?'
+        actionText='Connectez-vous'
+      />
     </ScrollView>
   );
 }

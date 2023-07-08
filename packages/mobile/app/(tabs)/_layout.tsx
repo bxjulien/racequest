@@ -1,7 +1,7 @@
 import Icon from '../../components/shared/icon/icon';
+import { IconType } from '../../shared/enums/IconType.enum';
 import { Tabs } from 'expo-router';
 import { useThemeContext } from '../../shared/contexts/theme.context';
-import { IconType } from '../../shared/enums/IconType.enum';
 
 export default () => {
   const { theme } = useThemeContext();
@@ -11,9 +11,13 @@ export default () => {
       screenOptions={{
         tabBarStyle: {
           backgroundColor: theme.bg.primary,
+          borderTopColor: theme.bg.neutral,
         },
         tabBarActiveTintColor: theme.cta.primary,
         tabBarInactiveTintColor: theme.cta.disabled,
+      }}
+      sceneContainerStyle={{
+        backgroundColor: theme.bg.primary,
       }}
     >
       <Tabs.Screen
@@ -42,7 +46,12 @@ export default () => {
           tabBarLabel: 'Compte',
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
-            <Icon name='user' color={color} size={size} type={IconType.FontAwesome} />
+            <Icon
+              name='user'
+              color={color}
+              size={size}
+              type={IconType.FontAwesome}
+            />
           ),
         }}
       />

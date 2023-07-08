@@ -1,8 +1,8 @@
-import axios from 'axios';
 import { CreateRaceForm } from '../types/create-race-form';
-import { Race } from '../types/race.type';
 import { LOCAL_IP } from '../../constants';
+import { Race } from '../types/race.type';
 import { RequestMethod } from '../enums/request-method';
+import axios from 'axios';
 
 const baseUrl = `http://${LOCAL_IP}:3000/api`;
 
@@ -59,15 +59,21 @@ export const getNearbyRaces = async (
   return request(url);
 };
 
-export const createRace = async (formData: CreateRaceForm): Promise<Race> => {
+export const createRace = async (
+  formData: CreateRaceForm,
+  accessToken: string
+): Promise<Race> => {
   const url = `${baseUrl}/races`;
   const body = {
     track: formData.track,
     closingIn: formData.closingIn,
     name: formData.name,
   };
+  const headers = {
+    Authorization: `Bearer ${accessToken}`,
+  };
 
-  return request(url, RequestMethod.POST, body);
+  return request(url, RequestMethod.POST, body, headers);
 };
 
 export const getUser = async (accessToken: string) => {

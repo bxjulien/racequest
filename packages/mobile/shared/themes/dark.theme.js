@@ -10,7 +10,7 @@ export const dark = {
     error: '#FF0000',
     success: '#00FF00',
     warning: '#FFA500',
-    danger: '#FF0000',
+    danger: '#fa3c62',
   },
   bg: {
     neutral: 'white',
@@ -34,6 +34,6 @@ export const dark = {
     error: '#FF0000',
     success: '#00FF00',
     warning: '#FFA500',
-    danger: '#FF0000',
+    danger: 'white',
   },
 };

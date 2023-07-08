@@ -6,18 +6,20 @@ import {
   MaterialCommunityIcons,
   MaterialIcons,
 } from '@expo/vector-icons';
+import { Image, View } from 'react-native';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import React, { useEffect, useState } from 'react';
+import ThemeContextProvider, {
+  useThemeContext,
+} from '../shared/contexts/theme.context';
 
 import { Asset } from 'expo-asset';
 import AuthContextProvider from '../shared/contexts/auth.context';
-import { Image } from 'react-native';
 import LocationProvider from '../shared/contexts/location.context';
 import { RQText } from '../components/shared/text/text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Slot } from 'expo-router';
-import ThemeContextProvider from '../shared/contexts/theme.context';
 
 const queryClient = new QueryClient();
 
@@ -73,18 +75,7 @@ export default function RootLayout() {
         <ThemeContextProvider>
           <LocationProvider>
             <SafeAreaProvider>
-              <SafeAreaView style={{ flex: 1 }}>
-                <RQText
-                  style={{
-                    backgroundColor: 'black',
-                    color: 'orange',
-                    textAlign: 'center',
-                  }}
-                >
-                  Race Quest alpha
-                </RQText>
-                <Slot />
-              </SafeAreaView>
+              <App />
             </SafeAreaProvider>
           </LocationProvider>
         </ThemeContextProvider>
@@ -92,3 +83,29 @@ export default function RootLayout() {
     </QueryClientProvider>
   );
 }
+
+const App = () => {
+  const { theme } = useThemeContext();
+
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <RQText
+        style={{
+          backgroundColor: 'black',
+          color: 'orange',
+          textAlign: 'center',
+        }}
+      >
+        Race Quest alpha
+      </RQText>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: theme.bg.primary,
+        }}
+      >
+        <Slot />
+      </View>
+    </SafeAreaView>
+  );
+};

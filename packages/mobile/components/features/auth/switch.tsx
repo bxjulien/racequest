@@ -3,7 +3,15 @@ import { RQText } from '../../shared/text/text';
 import { useRouter } from 'expo-router';
 import { useThemeContext } from '../../../shared/contexts/theme.context';
 
-export default function AuthSwitch({ goTo }: { goTo: string }): JSX.Element {
+export default function AuthSwitch({
+  goTo,
+  text,
+  actionText,
+}: {
+  goTo: string;
+  text: string;
+  actionText: string;
+}): JSX.Element {
   const router = useRouter();
   const { theme } = useThemeContext();
 
@@ -12,8 +20,8 @@ export default function AuthSwitch({ goTo }: { goTo: string }): JSX.Element {
       style={{ flexDirection: 'row', justifyContent: 'center' }}
       onPress={() => router.push(goTo)}
     >
-      <RQText>Vous n'avez pas de compte ?</RQText>
-      <RQText color={theme.text.ternary}> S'inscrire</RQText>
+      <RQText>{text}</RQText>
+      <RQText color={theme.text.ternary}>{` ${actionText}`}</RQText>
     </Pressable>
   );
 }

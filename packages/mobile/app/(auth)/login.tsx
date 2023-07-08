@@ -32,7 +32,6 @@ export default function LoginScreen() {
   return (
     <ScrollView
       contentContainerStyle={styles.container}
-      style={{ flex: 1 }}
       keyboardShouldPersistTaps='handled'
       keyboardDismissMode='on-drag'
     >
@@ -58,6 +57,7 @@ export default function LoginScreen() {
           placeholder='Mot de passe'
           value={password}
           onChange={(text) => setPassword(text)}
+          type='password'
         />
 
         <Button onPress={handleLogin} loading={signInLoading}>
@@ -67,7 +67,11 @@ export default function LoginScreen() {
         {signInError && <RQText>{signInError.message}</RQText>}
       </View>
       <AuthProviders />
-      <AuthSwitch goTo='/(auth)/register' />
+      <AuthSwitch
+        goTo='/(auth)/register'
+        text={"Vous n'avez pas de compte ?"}
+        actionText='Inscrivez-vous'
+      />
     </ScrollView>
   );
 }

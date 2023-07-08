@@ -62,6 +62,7 @@ export default function AuthContextProvider({
       enabled: Boolean(session?.access_token && authUser),
       retry: false,
       onSuccess: (data) => {
+        console.log('🚀 ~ file: auth.context.tsx:65 ~ fetched user');
         setUser(data);
       },
       onError: (error) => {
@@ -85,15 +86,12 @@ export default function AuthContextProvider({
 
       const { data: authListener } = supabase.auth.onAuthStateChange(
         async (event, session) => {
-          console.log('🚀 ~ file: auth.context.tsx:70 ~ event:', event);
+          if (event === 'SIGNED_OUT') {
+            setUser(null);
+          }
 
           setSession(session);
           setAuthUser(session?.user ?? null);
-
-          if (event === 'SIGNED_OUT') {
-            console.log('SIGNED_OUT');
-            setUser(null);
-          }
 
           // TODO handle specific auth events:
           // if (event === 'PASSWORD_RECOVERY') handlePasswordRecovery();
@@ -106,8 +104,6 @@ export default function AuthContextProvider({
       };
     })();
   }, []);
-
-  console.log(user);
 
   const signUpWithPassword = async (data: PasswordSignIn) => {
     setSignUpLoading(true);

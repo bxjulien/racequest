@@ -1,7 +1,11 @@
 import { fakerFR as faker } from '@faker-js/faker';
 
 export const getFakeUsername = (): string => {
-  let username = `${faker.animal.type()} ${faker.word.adjective()}`;
-  username = username.charAt(0).toUpperCase() + username.slice(1);
+  let animal = faker.animal.type();
+  animal = animal.charAt(0).toUpperCase() + animal.slice(1);
+  let adjective = faker.word.adjective();
+  adjective = adjective.charAt(0).toUpperCase() + adjective.slice(1);
+
+  const username = `${animal}${adjective}`;
   return username;
 };
