@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 
 import Button from '../../components/shared/button/button';
+import { ColorType } from '../../shared/enums/color-type.enum';
 import { RQText } from '../../components/shared/text/text';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuthContext } from '../../shared/contexts/auth.context';
@@ -11,16 +12,16 @@ export default function UserScreen() {
   const { user, session, logout } = useAuthContext();
 
   useEffect(() => {
-    if (!user || !session) {
-      router.push('/(auth)/login');
-    }
+    if (!user || !session) router.push('/(auth)/login');
   }, [user, session]);
 
   return (
     <SafeAreaView>
       <RQText>user</RQText>
 
-      <Button onPress={logout}>logout</Button>
+      <Button onPress={logout} type={ColorType.Danger}>
+        Se déconnecter
+      </Button>
     </SafeAreaView>
   );
 }

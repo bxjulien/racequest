@@ -6,6 +6,11 @@ export const dark = {
     disabled: 'silver',
     neutral: 'white',
     cancel: '#F8F1F5',
+
+    error: '#FF0000',
+    success: '#00FF00',
+    warning: '#FFA500',
+    danger: '#FF0000',
   },
   bg: {
     neutral: 'white',
@@ -25,5 +30,10 @@ export const dark = {
     secondary: 'silver',
     ternary: 'orange',
     disabled: '#e3e9ff',
+
+    error: '#FF0000',
+    success: '#00FF00',
+    warning: '#FFA500',
+    danger: '#FF0000',
   },
 };

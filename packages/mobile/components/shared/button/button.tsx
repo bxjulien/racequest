@@ -3,9 +3,12 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  ViewStyle,
 } from 'react-native';
-
 import React, { useMemo } from 'react';
+
+import { ColorType } from '../../../shared/enums/color-type.enum';
+import { RQText } from '../text/text';
 import { TouchableOpacityProps } from 'react-native';
 import { useThemeContext } from '../../../shared/contexts/theme.context';
 
@@ -15,35 +18,44 @@ export default function Button({
   disabled,
   loading,
   style,
+  type,
 }: {
   children?: React.ReactNode;
   onPress: () => void;
   disabled?: boolean;
   loading?: boolean;
-  style?: TouchableOpacityProps['style'];
+  style?: ViewStyle;
+  bgColor?: string;
+  color?: string;
+  type?: ColorType;
 }) {
   const { theme } = useThemeContext();
 
-  const { backgroundColor, color } = useMemo(() => {
-    if (disabled || loading)
-      return {
-        backgroundColor: theme.cta.disabled,
-        color: theme.text.disabled,
-      };
-    return { backgroundColor: theme.cta.primary, color: theme.text.primary };
-  }, [disabled]);
+  const { backgroundColor, textColor, opacity } = useMemo(() => {
+    let _style = {
+      backgroundColor: theme.cta[type || 'primary'],
+      textColor: theme.text[type || 'primary'],
+      opacity: 1,
+    };
+
+    if (disabled || loading) _style.opacity = 0.5;
+
+    return _style;
+  }, [disabled, loading]);
 
   return (
     <TouchableOpacity
-      style={[style, styles.button, { backgroundColor }]}
+      style={[styles.button, style, { opacity, backgroundColor }]}
       onPress={onPress}
-      disabled={disabled}
+      disabled={disabled || loading}
       activeOpacity={0.8}
     >
       {loading ? (
-        <ActivityIndicator size='small' color='#fff' />
+        <ActivityIndicator size='small' color={textColor} />
       ) : (
-        <Text style={styles.buttonText}>{children}</Text>
+        <RQText style={styles.buttonText} color={textColor}>
+          {children}
+        </RQText>
       )}
     </TouchableOpacity>
   );
@@ -58,7 +70,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   buttonText: {
-    color: '#fff',
     fontWeight: 'bold',
     fontSize: 16,
   },

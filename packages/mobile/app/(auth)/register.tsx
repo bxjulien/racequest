@@ -1,7 +1,8 @@
-import { Pressable, StyleSheet, View } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { ScrollView, StyleSheet, View } from 'react-native';
 
 import AuthProviders from '../../components/features/auth/providers';
+import AuthSwitch from '../../components/features/auth/switch';
 import Button from '../../components/shared/button/button';
 import { FontSize } from '../../shared/enums/font-size.enum';
 import InputText from '../../components/shared/input/input-text';
@@ -14,20 +15,27 @@ export default function RegisterScreen() {
   const router = useRouter();
 
   const { theme } = useThemeContext();
-  const { signUpLoading, signUpError, signUpSuccess, signUpWithPassword } =
+  const { user, session, signUpLoading, signUpError, signUpWithPassword } =
     useAuthContext();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  if (signUpLoading) return <RQText>Loading...</RQText>;
+  useEffect(() => {
+    if (user && session) return router.push('/(tabs)/user');
+  }, [user, session]);
 
   const handleRegister = async () => {
     signUpWithPassword({ email, password });
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      contentContainerStyle={styles.container}
+      style={{ flex: 1 }}
+      keyboardShouldPersistTaps='handled'
+      keyboardDismissMode='on-drag'
+    >
       <View>
         <RQText size={FontSize.xxxxxx} bold style={styles.title}>
           Prêt à vous lancer ?
@@ -40,7 +48,6 @@ export default function RegisterScreen() {
           Créez votre compte
         </RQText>
       </View>
-
       <View style={styles.inputs}>
         <InputText
           placeholder='Email'
@@ -52,19 +59,16 @@ export default function RegisterScreen() {
           value={password}
           onChange={(text) => setPassword(text)}
         />
-        <Button onPress={handleRegister}>Créer mon compte</Button>
+
+        <Button onPress={handleRegister} loading={signUpLoading}>
+          Créer mon compte
+        </Button>
+
+        {signUpError && <RQText>{signUpError.message}</RQText>}
       </View>
-
       <AuthProviders />
-
-      <Pressable
-        style={{ flexDirection: 'row', justifyContent: 'center' }}
-        onPress={() => router.push('/(auth)/login')}
-      >
-        <RQText>Vous avez déjà un compte ?</RQText>
-        <RQText color={theme.text.ternary}> Se connecter</RQText>
-      </Pressable>
-    </View>
+      <AuthSwitch goTo='/(auth)/login' />
+    </ScrollView>
   );
 }
 

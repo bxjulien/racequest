@@ -46,10 +46,8 @@ const styles = StyleSheet.create({
   },
   backButton: {
     flex: 0.25,
-    color: 'red',
   },
   nextButton: {
     flex: 1,
-    height: 80,
   },
 });

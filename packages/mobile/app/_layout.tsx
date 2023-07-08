@@ -73,9 +73,13 @@ export default function RootLayout() {
         <ThemeContextProvider>
           <LocationProvider>
             <SafeAreaProvider>
-              <SafeAreaView style={{ flex: 1, backgroundColor: 'black' }}>
+              <SafeAreaView style={{ flex: 1 }}>
                 <RQText
-                  style={{ backgroundColor: 'black', textAlign: 'center' }}
+                  style={{
+                    backgroundColor: 'black',
+                    color: 'orange',
+                    textAlign: 'center',
+                  }}
                 >
                   Race Quest alpha
                 </RQText>

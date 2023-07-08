@@ -1,7 +1,8 @@
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
+import { ScrollView, StyleSheet, View } from 'react-native';
 
 import AuthProviders from '../../components/features/auth/providers';
+import AuthSwitch from '../../components/features/auth/switch';
 import Button from '../../components/shared/button/button';
 import { FontSize } from '../../shared/enums/font-size.enum';
 import InputText from '../../components/shared/input/input-text';
@@ -28,8 +29,6 @@ export default function LoginScreen() {
     signInWithPassword({ email, password });
   };
 
-  if (signInLoading) return <RQText>Loading...</RQText>;
-
   return (
     <ScrollView
       contentContainerStyle={styles.container}
@@ -49,7 +48,6 @@ export default function LoginScreen() {
           Conectez-vous à votre compte
         </RQText>
       </View>
-
       <View style={styles.inputs}>
         <InputText
           placeholder='Email'
@@ -62,19 +60,14 @@ export default function LoginScreen() {
           onChange={(text) => setPassword(text)}
         />
 
-        <Button onPress={handleLogin}>Connexion</Button>
+        <Button onPress={handleLogin} loading={signInLoading}>
+          Connexion
+        </Button>
+
+        {signInError && <RQText>{signInError.message}</RQText>}
       </View>
-
       <AuthProviders />
-
-      <Pressable
-        style={{ flexDirection: 'row', justifyContent: 'center' }}
-        onPress={() => router.push('/(auth)/register')}
-      >
-        <RQText>Vous n'avez pas de compte ?</RQText>
-        <RQText color={theme.text.ternary}> S'inscrire</RQText>
-      </Pressable>
-      {signInError && <RQText>{signInError.message}</RQText>}
+      <AuthSwitch goTo='/(auth)/register' />
     </ScrollView>
   );
 }
