@@ -30,11 +30,7 @@ export default function LoginScreen() {
   };
 
   return (
-    <ScrollView
-      contentContainerStyle={styles.container}
-      keyboardShouldPersistTaps='handled'
-      keyboardDismissMode='on-drag'
-    >
+    <ScrollView contentContainerStyle={styles.container}>
       <View>
         <RQText size={FontSize.xxxxxx} bold style={styles.title}>
           Vous revoilà !
@@ -48,6 +44,10 @@ export default function LoginScreen() {
         </RQText>
       </View>
       <View style={styles.inputs}>
+        {signInError && (
+          <RQText color={theme.cta.danger}>{signInError.message}</RQText>
+        )}
+
         <InputText
           placeholder='Email'
           value={email}
@@ -63,9 +63,8 @@ export default function LoginScreen() {
         <Button onPress={handleLogin} loading={signInLoading}>
           Connexion
         </Button>
-
-        {signInError && <RQText>{signInError.message}</RQText>}
       </View>
+
       <AuthProviders />
       <AuthSwitch
         goTo='/(auth)/register'
@@ -78,12 +77,10 @@ export default function LoginScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    gap: 20,
+    gap: 80,
     paddingHorizontal: 20,
     paddingBottom: 40,
     paddingTop: 20,
-    justifyContent: 'space-between',
   },
   title: {
     textAlign: 'center',

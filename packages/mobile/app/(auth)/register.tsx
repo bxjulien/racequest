@@ -15,8 +15,14 @@ export default function RegisterScreen() {
   const router = useRouter();
 
   const { theme } = useThemeContext();
-  const { user, session, signUpLoading, signUpError, signUpWithPassword } =
-    useAuthContext();
+  const {
+    user,
+    session,
+    signUpLoading,
+    signUpError,
+    signUpWithPassword,
+    signUpSuccess,
+  } = useAuthContext();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -30,7 +36,7 @@ export default function RegisterScreen() {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container} style={{ flex: 1 }}>
+    <ScrollView contentContainerStyle={styles.container}>
       <View>
         <RQText size={FontSize.xxxxxx} bold style={styles.title}>
           Prêt à vous lancer ?
@@ -43,48 +49,82 @@ export default function RegisterScreen() {
           Créez votre compte
         </RQText>
       </View>
-      <View style={styles.inputs}>
-        <InputText
-          placeholder='Email'
-          value={email}
-          onChange={(text) => setEmail(text)}
-        />
-        <InputText
-          placeholder='Mot de passe'
-          value={password}
-          onChange={(text) => setPassword(text)}
-          type='password'
-        />
+      {signUpSuccess ? (
+        <Success />
+      ) : (
+        <View style={styles.inputs}>
+          {signUpError && (
+            <RQText color={theme.cta.danger}>{signUpError.message}</RQText>
+          )}
 
-        <Button onPress={handleRegister} loading={signUpLoading}>
-          Créer mon compte
-        </Button>
+          <InputText
+            placeholder='Email'
+            value={email}
+            onChange={(text) => setEmail(text)}
+          />
 
-        {signUpError && <RQText>{signUpError.message}</RQText>}
-      </View>
-      <AuthProviders />
-      <AuthSwitch
-        goTo='/(auth)/login'
-        text='Vous avez déjà un compte ?'
-        actionText='Connectez-vous'
-      />
+          <InputText
+            placeholder='Mot de passe'
+            value={password}
+            onChange={(text) => setPassword(text)}
+            type='password'
+          />
+
+          <Button onPress={handleRegister} loading={signUpLoading}>
+            Créer mon compte
+          </Button>
+        </View>
+      )}
+
+      {!signUpSuccess && (
+        <View style={{ gap: 80 }}>
+          <AuthProviders />
+          <AuthSwitch
+            goTo='/(auth)/login'
+            text='Vous avez déjà un compte ?'
+            actionText='Connectez-vous'
+          />
+        </View>
+      )}
     </ScrollView>
   );
 }
 
+const Success = () => {
+  const router = useRouter();
+  const { theme } = useThemeContext();
+
+  return (
+    <View style={styles.inputs}>
+      <RQText style={styles.success} size={FontSize.xxxl}>
+        Compte créé avec succès ! 🏃‍♂️
+      </RQText>
+      <RQText color={theme.text.ternary} bold>
+        Un email de confirmation vous a été envoyé. Vous devez confirmer votre
+        adresse email avant de pouvoir vous connecter.
+      </RQText>
+
+      <Button onPress={() => router.push('/(auth)/login')}>
+        J'ai confirmé mon adresse email !
+      </Button>
+    </View>
+  );
+};
+
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    gap: 20,
+    gap: 80,
     paddingHorizontal: 20,
     paddingBottom: 40,
     paddingTop: 20,
-    justifyContent: 'space-between',
   },
   title: {
     textAlign: 'center',
   },
   inputs: {
     gap: 30,
+  },
+  success: {
+    textAlign: 'center',
   },
 });
