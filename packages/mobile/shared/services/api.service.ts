@@ -59,6 +59,12 @@ export const getNearbyRaces = async (
   return request(url);
 };
 
+export const getRace = async (id: number): Promise<Race> => {
+  const url = `${baseUrl}/races/${id}`;
+
+  return request(url);
+};
+
 export const createRace = async (
   formData: CreateRaceForm,
   accessToken: string

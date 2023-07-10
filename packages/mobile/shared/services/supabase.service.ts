@@ -1,7 +1,7 @@
 import { Race } from '../types/race.type';
 import supabase from '../../lib/supabase/supabase.lib';
 
-export const getRace = async (
+/* export const getRace = async (
   id: number,
   longitude: number | undefined,
   latitude: number | undefined
@@ -18,4 +18,4 @@ export const getRace = async (
     console.error(error);
     throw error;
   }
-};
+}; */

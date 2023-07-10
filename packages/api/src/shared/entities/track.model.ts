@@ -2,7 +2,7 @@ import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 
 import { Elevation } from '../types/elevation.type';
 
-@Entity({ name: 'tracks' })
+@Entity({ name: 'Tracks' })
 export class Track {
   @PrimaryGeneratedColumn()
   id: number;

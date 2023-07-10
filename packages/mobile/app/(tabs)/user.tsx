@@ -1,16 +1,15 @@
+import { Image, ScrollView, StyleSheet, View } from 'react-native';
 import React, { useEffect } from 'react';
-import { Redirect, useRouter } from 'expo-router';
-import { ScrollView, StyleSheet } from 'react-native';
 
 import Button from '../../components/shared/button/button';
 import { ColorType } from '../../shared/enums/color-type.enum';
-import CreatedRaces from '../../components/features/user/created-races';
 import { FontSize } from '../../shared/enums/font-size.enum';
 import { RQText } from '../../components/shared/text/text';
+import { RaceList } from '../../components/shared/race-list/race-list';
+import { Redirect } from 'expo-router';
 import { useAuthContext } from '../../shared/contexts/auth.context';
 
 export default function UserScreen() {
-  const router = useRouter();
   const { user, session, userLoading, userError, logout } = useAuthContext();
 
   if (!userLoading && (!user || !session))
@@ -21,11 +20,20 @@ export default function UserScreen() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <RQText size={FontSize.xxxxxx} bold>
-        {user.username}
-      </RQText>
+      <View>
+        <Image
+          source={{ uri: user.pp }}
+          style={{ width: 50, height: 50, borderRadius: 50 }}
+        />
+        <RQText size={FontSize.xxxxxx} bold>
+          {user.username}
+        </RQText>
+      </View>
 
-      <CreatedRaces />
+      <RaceList
+        title="Les courses dont vous êtes l'organisateur"
+        races={user.createdRaces}
+      />
 
       <Button onPress={logout} type={ColorType.Danger}>
         Se déconnecter
@@ -36,8 +44,7 @@ export default function UserScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     padding: 20,
-    justifyContent: 'space-between',
+    gap: 20,
   },
 });

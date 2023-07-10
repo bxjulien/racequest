@@ -1,10 +1,13 @@
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
+import { AuthModule } from './auth/auth.module';
 import { GoogleMapsService } from './google-maps/google-maps.service';
 import { MapboxService } from './mapbox/mapbox.service';
 import { Module } from '@nestjs/common';
 import { Race } from 'src/shared/entities/race.model';
 import { RaceController } from './race/race.controller';
+import { RaceEvent } from 'src/shared/entities/race-event';
+import { RaceEventRunner } from 'src/shared/entities/race-event-runner';
 import { RaceRepository } from './race/race.repository';
 import { RaceService } from './race/race.service';
 import { Track } from 'src/shared/entities/track.model';
@@ -12,11 +15,10 @@ import { TrackController } from './track/track.controller';
 import { TrackRepository } from './track/track.repository';
 import { TrackService } from './track/track.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserService } from './user/user.service';
 import { User } from 'src/shared/entities/user.model';
 import { UserController } from './user/user.controller';
-import { SupabaseService } from './supabase/supabase.service';
-import { AuthModule } from './auth/auth.module';
+import { UserRepository } from './user/user.repository';
+import { UserService } from './user/user.service';
 
 @Module({
   imports: [
@@ -37,7 +39,7 @@ import { AuthModule } from './auth/auth.module';
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([Race, Track, User]),
+    TypeOrmModule.forFeature([Race, Track, User, RaceEvent, RaceEventRunner]),
   ],
   providers: [
     RaceService,
@@ -47,8 +49,9 @@ import { AuthModule } from './auth/auth.module';
     MapboxService,
     GoogleMapsService,
 
-    TrackRepository,
     RaceRepository,
+    TrackRepository,
+    UserRepository,
   ],
   controllers: [RaceController, TrackController, UserController],
 })

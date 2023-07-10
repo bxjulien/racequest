@@ -9,3 +9,8 @@ export const getFakeUsername = (): string => {
   const username = `${animal}${adjective}`;
   return username;
 };
+
+export const getFakeProfilePicture = (): string => {
+  const pp = faker.image.avatar();
+  return pp;
+};

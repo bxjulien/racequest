@@ -14,6 +14,18 @@ export class RaceRepository extends Repository<Race> {
     );
   }
 
+  async getRaceById(id: number): Promise<Race> {
+    const queryBuilder = this.raceRepository
+      .createQueryBuilder('races')
+      .leftJoinAndSelect('races.track', 'track')
+      .where('races.id = :id', { id })
+      .getOne();
+
+    const race = await queryBuilder;
+
+    return race;
+  }
+
   async getNearbyRaces(
     longitude: number,
     latitude: number,

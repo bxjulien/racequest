@@ -1,32 +1,27 @@
-import { useLocalSearchParams } from 'expo-router';
-import { Dimensions, Text } from 'react-native';
-import React, { SafeAreaView } from 'react-native-safe-area-context';
-import { useQuery } from 'react-query';
-import { getRace } from '../../shared/services/supabase.service';
-import MapTrack from '../../components/shared/map-track/map-track';
+import { Dimensions, View } from 'react-native';
+
 import BottomSheet from '@gorhom/bottom-sheet';
-import { useCallback } from 'react';
-import { useMemo } from 'react';
-import { View } from 'react-native';
-import { StyleSheet } from 'react-native';
-import { useLocationContext } from '../../shared/contexts/location.context';
+import MapTrack from '../../components/shared/map-track/map-track';
+import { RQText } from '../../components/shared/text/text';
 import { Race } from '../../shared/types/race.type';
+import RaceOverview from '../../components/shared/trace-overview/race-overview';
+import { StyleSheet } from 'react-native';
+import { getRace } from '../../shared/services/api.service';
+import { useCallback } from 'react';
+import { useLocalSearchParams } from 'expo-router';
+import { useMemo } from 'react';
+import { useQuery } from 'react-query';
+import { useThemeContext } from '../../shared/contexts/theme.context';
 
 const useRace = (id: string) => {
-  const { location } = useLocationContext();
-
   const {
     data: race,
     isError,
     isLoading,
-  } = useQuery<Race>(
-    `race-${id}`,
-    () => getRace(+id, location?.coords.longitude, location?.coords.latitude),
-    {
-      enabled: !!id,
-      staleTime: 60000, // 1 minute
-    }
-  );
+  } = useQuery<Race>(`race-${id}`, () => getRace(+id), {
+    enabled: !!id,
+    staleTime: 60000, // 1 minute
+  });
 
   return { race, isError, isLoading };
 };
@@ -35,33 +30,39 @@ export default function RaceScreen({}): JSX.Element {
   const { id } = useLocalSearchParams();
   const { race, isError, isLoading } = useRace(id as string);
 
-  const snapPoints = useMemo(() => ['15%', '60%', '85%'], []);
+  const { theme } = useThemeContext();
+
+  const snapPoints = useMemo(() => ['35%', '70%'], []);
 
   const handleSheetChanges = useCallback((index: number) => {
     console.log('handleSheetChanges', index);
   }, []);
 
-  if (isLoading) return <Text>Loading</Text>;
+  if (isLoading) return <RQText>Loading</RQText>;
 
-  if (isError) return <Text>Error</Text>;
+  if (isError) return <RQText>Error</RQText>;
 
   if (race)
     return (
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         <MapTrack
           track={race.track}
           height={Dimensions.get('window').height * 0.9}
         />
 
-        <BottomSheet snapPoints={snapPoints} onChange={handleSheetChanges}>
-          <View style={styles.contentContainer}>
-            <Text>{race.name}</Text>
-          </View>
+        <BottomSheet
+          snapPoints={snapPoints}
+          onChange={handleSheetChanges}
+          handleIndicatorStyle={{ backgroundColor: theme.bg.neutral }}
+          backgroundStyle={{ backgroundColor: theme.bg.primary }}
+          style={{ paddingHorizontal: 10 }}
+        >
+          <RaceOverview race={race} track={race.track} withoutMap />
         </BottomSheet>
-      </SafeAreaView>
+      </View>
     );
 
-  return <Text>Not found</Text>;
+  return <RQText>Not found</RQText>;
 }
 
 const styles = StyleSheet.create({
