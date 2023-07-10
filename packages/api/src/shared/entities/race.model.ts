@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 
 import { Track } from './track.model';
+import { User } from './user.model';
 
 @Entity({ name: 'races' })
 export class Race {
@@ -22,4 +23,8 @@ export class Race {
   @OneToOne(() => Track)
   @JoinColumn()
   track: Track;
+
+  @OneToOne(() => User)
+  @JoinColumn()
+  creator: User;
 }

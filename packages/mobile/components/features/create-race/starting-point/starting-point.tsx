@@ -1,12 +1,11 @@
+import MapView, { Marker } from 'react-native-maps';
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-import MapView, { Marker } from 'react-native-maps';
-
-import React, { useEffect } from 'react';
 import { StartingPoint } from '../../../../shared/types/starting-point.type';
-
-import { useLocationContext } from '../../../../shared/contexts/location.context';
 import { getAddressFromCoordinates } from '../../../../shared/services/mapbox.service';
+import mapStyle from '../../../../assets/maps/style.json';
+import { useLocationContext } from '../../../../shared/contexts/location.context';
 
 export default function CreateTraceStartingPoint({
   value,
@@ -50,6 +49,10 @@ export default function CreateTraceStartingPoint({
         }}
         showsUserLocation
         onLongPress={onLongPress}
+        loadingEnabled
+        loadingBackgroundColor='#304A7D'
+        loadingIndicatorColor='#1D2C4D'
+        customMapStyle={mapStyle}
       >
         {value?.longitude && value?.latitude && (
           <Marker
@@ -68,7 +71,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     minHeight: 400,
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: 'lightgrey',
     borderRadius: 10,
     overflow: 'hidden',

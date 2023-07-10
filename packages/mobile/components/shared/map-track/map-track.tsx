@@ -4,6 +4,8 @@ import { StyleSheet, View } from 'react-native';
 import MapView from 'react-native-maps';
 import { Polyline } from 'react-native-maps';
 import { Track } from '../../../shared/types/track.type';
+import mapStyle from '../../../assets/maps/style.json';
+import { useThemeContext } from '../../../shared/contexts/theme.context';
 
 export default function MapTrack({
   track,
@@ -20,6 +22,8 @@ export default function MapTrack({
   isInteractive?: boolean;
   style?: any;
 }) {
+  const { theme } = useThemeContext();
+
   const mapRef = useRef<MapView>(null);
   const points = useMemo(
     () =>
@@ -59,6 +63,7 @@ export default function MapTrack({
           width,
           minHeight: height,
           minWidth: width,
+          borderColor: theme.cta.neutral,
         },
         style,
       ]}
@@ -69,7 +74,6 @@ export default function MapTrack({
           height: '100%',
           width: '100%',
         }}
-        loadingEnabled
         onMapReady={fitMapToCoordinates}
         initialRegion={{
           latitude: 0,
@@ -77,6 +81,10 @@ export default function MapTrack({
           latitudeDelta: 0.04,
           longitudeDelta: 0.04,
         }}
+        loadingEnabled
+        loadingBackgroundColor='#304A7D'
+        loadingIndicatorColor='#1D2C4D'
+        customMapStyle={mapStyle}
         scrollEnabled={isInteractive}
         zoomEnabled={isInteractive}
         rotateEnabled={isInteractive}
@@ -84,7 +92,7 @@ export default function MapTrack({
       >
         <Polyline
           coordinates={points}
-          strokeColor='red'
+          strokeColor='white'
           strokeWidth={strokeWidth}
         />
       </MapView>
@@ -95,8 +103,7 @@ export default function MapTrack({
 const styles = StyleSheet.create({
   container: {
     overflow: 'hidden',
-    borderWidth: 2,
-    borderColor: 'lightgrey',
+    borderWidth: 1,
     borderRadius: 10,
   },
 });

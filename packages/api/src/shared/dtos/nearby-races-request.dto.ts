@@ -13,4 +13,8 @@ export class NearbyRacesRequestDto {
   @IsNumber()
   @Transform(({ value }) => Number(value))
   radius: number;
+
+  @IsNumber()
+  @Transform(({ value }) => Number(value))
+  maxDistance?: number;
 }

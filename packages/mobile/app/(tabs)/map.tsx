@@ -1,15 +1,17 @@
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import BottomSheet from '@gorhom/bottom-sheet';
 import { MapViewRegion } from '../../shared/types/mapview-region.type';
 import { Race } from '../../shared/types/race.type';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import RaceOverview from '../../components/shared/trace-overview/race-overview';
 import { calculateRadius } from '../../shared/utils/geo.utils';
 import { getNearbyRaces } from '../../shared/services/api.service';
+import mapStyle from '../../assets/maps/style.json';
 import { useLocationContext } from '../../shared/contexts/location.context';
 import { useQuery } from 'react-query';
+import { useThemeContext } from '../../shared/contexts/theme.context';
 
 export default function MapScreen(): JSX.Element {
   const { location } = useLocationContext();
@@ -27,13 +29,11 @@ export default function MapScreen(): JSX.Element {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <NearbyTracesMap
-        region={region}
-        handleRegionChange={handleRegionChange}
-        hasLocation={hasLocation}
-      />
-    </SafeAreaView>
+    <NearbyTracesMap
+      region={region}
+      handleRegionChange={handleRegionChange}
+      hasLocation={hasLocation}
+    />
   );
 }
 
@@ -46,6 +46,8 @@ const NearbyTracesMap = ({
   handleRegionChange: (newRegion: MapViewRegion) => void;
   hasLocation: boolean;
 }) => {
+  const { theme } = useThemeContext();
+
   const mapRef = React.useRef<MapView>(null);
   const [activeRace, setActiveRace] = useState<Race | null>(null);
 
@@ -103,6 +105,10 @@ const NearbyTracesMap = ({
         showsUserLocation
         onRegionChangeComplete={handleRegionChange}
         onPress={() => setActiveRace(null)}
+        loadingEnabled
+        loadingBackgroundColor='#304A7D'
+        loadingIndicatorColor='#1D2C4D'
+        customMapStyle={mapStyle}
       >
         {races?.map((race) => (
           <Marker
@@ -125,17 +131,20 @@ const NearbyTracesMap = ({
                 longitude: coordinate[0],
               })
             )}
-            strokeColor={'#000'}
+            strokeColor={'white'}
             strokeWidth={6}
           />
         )}
       </MapView>
 
       {activeRace && (
-        <BottomSheet snapPoints={['15%']}>
-          <View style={styles.bottomSheetContainer}>
-            <Text>{activeRace.name}</Text>
-          </View>
+        <BottomSheet
+          snapPoints={['15%', '45%']}
+          handleIndicatorStyle={{ backgroundColor: theme.bg.neutral }}
+          backgroundStyle={{ backgroundColor: theme.bg.primary }}
+          style={{ paddingHorizontal: 10 }}
+        >
+          <RaceOverview race={activeRace} track={activeRace.track} withoutMap />
         </BottomSheet>
       )}
     </View>
@@ -148,8 +157,5 @@ const styles = StyleSheet.create({
   },
   map: {
     flex: 1,
-  },
-  bottomSheetContainer: {
-    alignItems: 'center',
   },
 });

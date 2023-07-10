@@ -12,6 +12,11 @@ import { TrackController } from './track/track.controller';
 import { TrackRepository } from './track/track.repository';
 import { TrackService } from './track/track.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserService } from './user/user.service';
+import { User } from 'src/shared/entities/user.model';
+import { UserController } from './user/user.controller';
+import { SupabaseService } from './supabase/supabase.service';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -19,7 +24,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       isGlobal: true,
     }),
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
+      imports: [ConfigModule, AuthModule],
       useFactory: async (configService: ConfigService) => ({
         type: 'postgres',
         host: configService.get('SUPABASE_HOST'),
@@ -32,17 +37,19 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([Race, Track]),
+    TypeOrmModule.forFeature([Race, Track, User]),
   ],
   providers: [
     RaceService,
     TrackService,
+    UserService,
+
     MapboxService,
     GoogleMapsService,
 
     TrackRepository,
     RaceRepository,
   ],
-  controllers: [RaceController, TrackController],
+  controllers: [RaceController, TrackController, UserController],
 })
 export class AppModule {}

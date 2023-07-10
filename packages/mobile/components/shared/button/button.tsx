@@ -3,41 +3,59 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  ViewStyle,
 } from 'react-native';
+import React, { useMemo } from 'react';
 
-import React from 'react';
+import { ColorType } from '../../../shared/enums/color-type.enum';
+import { RQText } from '../text/text';
 import { TouchableOpacityProps } from 'react-native';
+import { useThemeContext } from '../../../shared/contexts/theme.context';
 
 export default function Button({
-  title,
+  children,
   onPress,
   disabled,
   loading,
-  color = 'violet',
   style,
+  type,
 }: {
-  title: string;
+  children?: React.ReactNode;
   onPress: () => void;
   disabled?: boolean;
   loading?: boolean;
+  style?: ViewStyle;
+  bgColor?: string;
   color?: string;
-  style?: TouchableOpacityProps['style'];
+  type?: ColorType;
 }) {
+  const { theme } = useThemeContext();
+
+  const { backgroundColor, textColor, opacity } = useMemo(() => {
+    let _style = {
+      backgroundColor: theme.cta[type || 'primary'],
+      textColor: theme.text[type || 'primary'],
+      opacity: 1,
+    };
+
+    if (disabled || loading) _style.opacity = 0.5;
+
+    return _style;
+  }, [disabled, loading]);
+
   return (
     <TouchableOpacity
-      style={[
-        style,
-        styles.button,
-        { backgroundColor: disabled ? '#ccc' : color },
-      ]}
+      style={[styles.button, style, { opacity, backgroundColor }]}
       onPress={onPress}
-      disabled={disabled}
-      activeOpacity={0.5}
+      disabled={disabled || loading}
+      activeOpacity={0.8}
     >
       {loading ? (
-        <ActivityIndicator size='small' color='#fff' />
+        <ActivityIndicator size='small' color={textColor} />
       ) : (
-        <Text style={styles.buttonText}>{title}</Text>
+        <RQText style={styles.buttonText} color={textColor}>
+          {children}
+        </RQText>
       )}
     </TouchableOpacity>
   );
@@ -45,14 +63,13 @@ export default function Button({
 
 const styles = StyleSheet.create({
   button: {
-    minHeight: 50,
+    minHeight: 60,
     borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 16,
   },
   buttonText: {
-    color: '#fff',
     fontWeight: 'bold',
     fontSize: 16,
   },

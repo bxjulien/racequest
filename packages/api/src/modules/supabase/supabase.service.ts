@@ -1,7 +1,7 @@
 import { SupabaseClient, createClient } from '@supabase/supabase-js';
 
 import { ConfigService } from '@nestjs/config';
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 
 @Injectable()
 export class SupabaseService {
@@ -21,7 +21,17 @@ export class SupabaseService {
     this.supabase = createClient(this.supabaseUrl, this.supabaseApiKey);
   }
 
-  getSupabase(): SupabaseClient {
-    return this.supabase;
+  async validateUser(token: string) {
+    try {
+      const { data: user, error } = await this.supabase.auth.getUser(token);
+
+      if (error || !user) {
+        throw new UnauthorizedException('Invalid token');
+      }
+
+      return user;
+    } catch (error) {
+      throw new UnauthorizedException('Invalid token');
+    }
   }
 }

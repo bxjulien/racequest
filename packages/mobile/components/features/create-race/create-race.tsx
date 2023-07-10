@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text } from 'react-native';
 import {
   createRace,
   getAutoTracks,
@@ -18,12 +17,17 @@ import { Race } from '../../../shared/types/race.type';
 import { SearchPlace } from './starting-point/search-place/search-place';
 import SelectTrack from './select-track/select-track';
 import Success from './submit/success/success';
+import { useAuthContext } from '../../../shared/contexts/auth.context';
 import { useLocationContext } from '../../../shared/contexts/location.context';
 import { useMutation } from 'react-query';
 import { useRouter } from 'expo-router';
+import { useThemeContext } from '../../../shared/contexts/theme.context';
 
 export default function CreateRace() {
   const router = useRouter();
+
+  const { user, session } = useAuthContext();
+  const { theme } = useThemeContext();
   const { location, address } = useLocationContext();
 
   const getAutoTracksMutation = useMutation(
@@ -38,12 +42,21 @@ export default function CreateRace() {
     }) => getAutoTracks(longitude, latitude, distance)
   );
 
-  const createRaceMutation = useMutation(createRace, {
-    onSuccess: (race) => {
-      setCreatedRace(race);
-      goNext();
-    },
-  });
+  const createRaceMutation = useMutation(
+    ({
+      formData,
+      accessToken,
+    }: {
+      formData: CreateRaceForm;
+      accessToken: string;
+    }) => createRace(formData, accessToken),
+    {
+      onSuccess: (race) => {
+        setCreatedRace(race);
+        goNext();
+      },
+    }
+  );
 
   const [formData, setFormData] = useState<CreateRaceForm>({
     format: FormatType.Short,
@@ -54,7 +67,7 @@ export default function CreateRace() {
     },
     track: null,
     closingIn: 30,
-    name: 'Course de Julien',
+    name: `Course de ${user!.username}`,
   });
 
   const [createdRace, setCreatedRace] = useState<Race | null>(null);
@@ -191,7 +204,10 @@ export default function CreateRace() {
       footer: (
         <FormStepsFooter
           goNext={() => {
-            createRaceMutation.mutate(formData);
+            createRaceMutation.mutate({
+              formData,
+              accessToken: session!.access_token,
+            });
           }}
           goBack={goBack}
           goNextTitle={
@@ -230,13 +246,7 @@ export default function CreateRace() {
       title='🚀 Créer une course'
       steps={steps}
       activeStepIndex={currentStepIndex}
-      style={styles.container}
+      style={{ paddingHorizontal: 15, backgroundColor: theme.bg.primary }}
     />
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    paddingHorizontal: 15,
-  },
-});

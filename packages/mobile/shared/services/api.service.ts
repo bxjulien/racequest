@@ -1,58 +1,86 @@
 import { CreateRaceForm } from '../types/create-race-form';
+import { LOCAL_IP } from '../../constants';
 import { Race } from '../types/race.type';
+import { RequestMethod } from '../enums/request-method';
 import axios from 'axios';
 
-const baseUrl = `http://192.168.1.84:3000/api`;
+const baseUrl = `http://${LOCAL_IP}:3000/api`;
+
+const request = async (
+  url: string,
+  method: string = RequestMethod.GET,
+  body: any = null,
+  headers: any = {}
+) => {
+  try {
+    const response = await axios({
+      url,
+      method,
+      data: body,
+      headers,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
 
 export const getAutoTracks = async (
   longitude: number,
   latitude: number,
   distance: number
 ) => {
-  try {
-    const url = `${baseUrl}/tracks/auto?longitudeStart=${longitude}&latitudeStart=${latitude}&distance=${distance}`;
+  const params = new URLSearchParams({
+    longitudeStart: longitude.toString(),
+    latitudeStart: latitude.toString(),
+    distance: distance.toString(),
+  });
+  const url = `${baseUrl}/tracks/auto?${params.toString()}`;
 
-    const { data } = await axios.get(encodeURI(url));
-
-    return data;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
+  return request(url);
 };
 
 export const getNearbyRaces = async (
   longitude: number,
   latitude: number,
-  radius: number
+  radius: number,
+  maxDistance?: number
 ): Promise<Race[]> => {
-  try {
-    const url = `${baseUrl}/races/nearby?longitude=${longitude}&latitude=${latitude}&radius=${radius}`;
+  const params = new URLSearchParams({
+    longitude: longitude.toString(),
+    latitude: latitude.toString(),
+    radius: radius.toString(),
+    maxDistance: maxDistance?.toString() ?? '',
+  });
+  const url = `${baseUrl}/races/nearby?${params.toString()}`;
 
-    const { data } = await axios.get(url);
-
-    return data as Race[];
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
+  return request(url);
 };
 
-export const createRace = async (formData: CreateRaceForm): Promise<Race> => {
-  try {
-    const url = `${baseUrl}/races`;
+export const createRace = async (
+  formData: CreateRaceForm,
+  accessToken: string
+): Promise<Race> => {
+  const url = `${baseUrl}/races`;
+  const body = {
+    track: formData.track,
+    closingIn: formData.closingIn,
+    name: formData.name,
+  };
+  const headers = {
+    Authorization: `Bearer ${accessToken}`,
+  };
 
-    const body = {
-      track: formData.track,
-      closingIn: formData.closingIn,
-      name: formData.name,
-    };
+  return request(url, RequestMethod.POST, body, headers);
+};
 
-    const { data } = await axios.post(url, body);
+export const getUser = async (accessToken: string) => {
+  const url = `${baseUrl}/users/me`;
+  const headers = {
+    Authorization: `Bearer ${accessToken}`,
+  };
 
-    return data as Race;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
+  return request(url, RequestMethod.GET, null, headers);
 };

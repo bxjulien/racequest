@@ -1,45 +1,42 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, ViewStyle } from 'react-native';
-import {
-  getDateUntilNumberOfDays,
-  getDaysFromNowToDate,
-} from '../../../shared/utils/date.utils';
-
 import MapTrack from '../map-track/map-track';
 import { Track } from '../../../shared/types/track.type';
+import { TrackMacro } from './macro/track-macro';
+import { Race } from '../../../shared/types/race.type';
+import { RQText } from '../text/text';
+import { FontSize } from '../../../shared/enums/font-size.enum';
 
 export default function RaceOverview({
+  race,
   track,
   isMapInteractive = true,
   withoutEndDate = false,
+  withoutMap = false,
   containerStyle,
 }: {
+  race?: Race;
   track: Track;
   isMapInteractive?: boolean;
   withoutEndDate?: boolean;
+  withoutMap?: boolean;
   containerStyle?: ViewStyle;
 }) {
   return (
-    <View style={containerStyle}>
-      <MapTrack
-        track={track}
-        style={styles.map}
-        isInteractive={isMapInteractive}
-      />
-
-      <View style={styles.infos}>
-        <View>
-          <Text style={styles.infoTitle}>Distance</Text>
-          <Text style={styles.infoValue}>{track.distance}km</Text>
-        </View>
-
-        <View>
-          <Text style={styles.infoTitle}>Dénivelé</Text>
-          <Text style={styles.infoValue}>{track.elevation.total}m</Text>
-        </View>
-
-        {/* {!withoutEndDate && <Closing trace={trace} />} */}
-      </View>
+    <View style={[styles.container, containerStyle]}>
+      {!withoutMap && (
+        <MapTrack
+          track={track}
+          style={styles.map}
+          isInteractive={isMapInteractive}
+        />
+      )}
+      {race && (
+        <RQText size={FontSize.l} bold>
+          {race.name}
+        </RQText>
+      )}
+      <TrackMacro track={track} />
     </View>
   );
 }
@@ -72,22 +69,10 @@ export default function RaceOverview({
 }; */
 
 const styles = StyleSheet.create({
+  container: {
+    gap: 5,
+  },
   map: {
-    borderWidth: 2,
-    borderColor: 'lightgrey',
     borderRadius: 10,
-  },
-  infos: {
-    marginTop: 5,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  infoTitle: {
-    color: 'grey',
-    fontSize: 12,
-  },
-  infoValue: {
-    fontWeight: 'bold',
-    fontSize: 18,
   },
 });
