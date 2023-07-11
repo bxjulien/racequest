@@ -33,5 +33,5 @@ export class Race {
   creator: User;
 
   @OneToMany(() => RaceEvent, (raceEvent) => raceEvent.race)
-  raceEvents: RaceEvent[];
+  events: RaceEvent[];
 }

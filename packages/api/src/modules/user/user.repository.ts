@@ -18,6 +18,8 @@ export class UserRepository extends Repository<User> {
     const _user = await this.userRepository
       .createQueryBuilder('user')
       .where('user.id = :id', { id: id })
+      .leftJoinAndSelect('user.subscribedEvents', 'subscribedEvents')
+      .leftJoinAndSelect('subscribedEvents.event', 'event')
       .leftJoinAndSelect('user.createdRaces', 'race', 'race.isActive = true')
       .leftJoinAndSelect('race.track', 'track')
       .getOne();

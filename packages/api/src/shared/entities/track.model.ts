@@ -1,6 +1,13 @@
-import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Index,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 import { Elevation } from '../types/elevation.type';
+import { Race } from './race.model';
 
 @Entity({ name: 'Tracks' })
 export class Track {
@@ -34,4 +41,9 @@ export class Track {
 
   @Column({ type: 'jsonb' })
   elevation: Elevation;
+
+  /* RELATION */
+
+  @OneToOne(() => Race)
+  race: Race;
 }

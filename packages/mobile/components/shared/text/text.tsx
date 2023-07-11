@@ -1,7 +1,7 @@
 import { Text, TextStyle } from 'react-native';
 
-import { useThemeContext } from '../../../shared/contexts/theme.context';
 import { FontSize } from '../../../shared/enums/font-size.enum';
+import { useThemeContext } from '../../../shared/contexts/theme.context';
 
 export const RQText = ({
   children,
@@ -9,12 +9,14 @@ export const RQText = ({
   size = FontSize.m,
   bold,
   color,
+  center,
 }: {
   children?: React.ReactNode;
   style?: TextStyle;
   size?: number;
   bold?: boolean;
   color?: string;
+  center?: boolean;
 }) => {
   const { theme } = useThemeContext();
 
@@ -25,6 +27,7 @@ export const RQText = ({
           fontSize: size,
           fontWeight: bold ? 'bold' : 'normal',
           color: color || theme.text.primary,
+          textAlign: center ? 'center' : 'left',
         },
         style,
       ]}

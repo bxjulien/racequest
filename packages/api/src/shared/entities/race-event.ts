@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 
 import { Race } from './race.model';
-import { RaceEventRunner } from './race-event-runner';
+import { RaceEventSubscription } from './race-event-subscription';
 
 @Entity({ name: 'RaceEvents' })
 export class RaceEvent {
@@ -28,12 +28,12 @@ export class RaceEvent {
 
   /* RELATIONS */
 
-  @ManyToOne(() => Race, (race) => race.raceEvents)
+  @ManyToOne(() => Race, (race) => race.events)
   race: Race;
 
   @OneToMany(
-    () => RaceEventRunner,
-    (raceEventRunner) => raceEventRunner.raceEvent,
+    () => RaceEventSubscription,
+    (RaceEventSubscription) => RaceEventSubscription.event,
   )
-  raceEventRunners: RaceEventRunner[];
+  subscriptions: RaceEventSubscription[];
 }

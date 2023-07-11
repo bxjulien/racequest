@@ -7,7 +7,8 @@ import { Module } from '@nestjs/common';
 import { Race } from 'src/shared/entities/race.model';
 import { RaceController } from './race/race.controller';
 import { RaceEvent } from 'src/shared/entities/race-event';
-import { RaceEventRunner } from 'src/shared/entities/race-event-runner';
+import { RaceEventSubscription } from 'src/shared/entities/race-event-subscription';
+import { RaceEventSubscriptionResult } from 'src/shared/entities/race-event-subscription-result';
 import { RaceRepository } from './race/race.repository';
 import { RaceService } from './race/race.service';
 import { Track } from 'src/shared/entities/track.model';
@@ -39,7 +40,14 @@ import { UserService } from './user/user.service';
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([Race, Track, User, RaceEvent, RaceEventRunner]),
+    TypeOrmModule.forFeature([
+      Race,
+      Track,
+      User,
+      RaceEvent,
+      RaceEventSubscription,
+      RaceEventSubscriptionResult,
+    ]),
   ],
   providers: [
     RaceService,

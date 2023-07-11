@@ -14,7 +14,7 @@ import {
   getTodayAtMidnight,
 } from 'src/shared/utils/date.utils';
 import { ConflictException, NotFoundException } from '@nestjs/common';
-import { RaceEventRunner } from 'src/shared/entities/race-event-runner';
+import { RaceEventSubscription } from 'src/shared/entities/race-event-subscription';
 
 @Injectable()
 export class RaceService {
@@ -27,8 +27,8 @@ export class RaceService {
     private userRepository: UserRepository,
     @InjectRepository(RaceEvent)
     private raceEventRepository: Repository<RaceEvent>,
-    @InjectRepository(RaceEventRunner)
-    private raceEventRunnerRepository: Repository<RaceEventRunner>,
+    @InjectRepository(RaceEventSubscription)
+    private RaceEventSubscriptionRepository: Repository<RaceEventSubscription>,
   ) {}
 
   async getRaceById(id: number): Promise<Race> {
@@ -59,9 +59,9 @@ export class RaceService {
     });
 
     const race = this.raceRepository.create({
-      ...raceData,
-      creator,
+      name: raceData.name,
       track: savedTrack,
+      creator,
     });
 
     const savedRace = await this.raceRepository.save(race);
@@ -79,36 +79,40 @@ export class RaceService {
   async subscribeToRace(
     raceId: number,
     userId: string,
-  ): Promise<RaceEventRunner> {
-    const raceEvent = await this.raceEventRepository.findOne({
-      where: { race: { id: raceId } },
-    });
-    const user = await this.userRepository.findOne({
-      where: { id: userId },
-    });
+  ): Promise<RaceEventSubscription> {
+    const currentRaceEvent = await this.raceEventRepository
+      .createQueryBuilder('raceEvent')
+      .orderBy('raceEvent.editionCount', 'DESC')
+      .getOne();
 
-    if (!raceEvent) {
+    if (!currentRaceEvent) {
       throw new NotFoundException(`RaceEvent with Race ID ${raceId} not found`);
     }
+
+    const user: User = await this.userRepository.findOne({
+      where: { id: userId },
+    });
 
     if (!user) {
       throw new NotFoundException(`User with ID ${userId} not found`);
     }
 
-    const existingSubscription = await this.raceEventRunnerRepository.findOne({
-      where: { raceEvent: { id: raceEvent.id }, user: { id: userId } },
-    });
+    const existingSubscription =
+      await this.RaceEventSubscriptionRepository.findOne({
+        where: { event: { id: currentRaceEvent.id }, user: { id: userId } },
+      });
 
     if (existingSubscription) {
       throw new ConflictException('User is already subscribed to this race');
     }
 
-    const raceEventRunner = this.raceEventRunnerRepository.create({
-      raceEvent,
+    const RaceEventSubscription = this.RaceEventSubscriptionRepository.create({
+      event: currentRaceEvent,
       user,
     });
-    await this.raceEventRunnerRepository.save(raceEventRunner);
 
-    return raceEventRunner;
+    await this.RaceEventSubscriptionRepository.save(RaceEventSubscription);
+
+    return RaceEventSubscription;
   }
 }

@@ -16,7 +16,7 @@ export class TrackRepository extends Repository<Track> {
   }
 
   async createWithGeohash(track: TrackDto): Promise<Track> {
-    const newTrack = this.trackRepository
+    const insertResult = await this.trackRepository
       .createQueryBuilder('track')
       .insert()
       .into(Track)
@@ -27,6 +27,12 @@ export class TrackRepository extends Repository<Track> {
       })
       .execute();
 
-    return (await newTrack).raw[0];
+    const newTrackId = insertResult.identifiers[0].id;
+
+    const newTrack = await this.trackRepository.findOne({
+      where: { id: newTrackId },
+    });
+
+    return newTrack;
   }
 }

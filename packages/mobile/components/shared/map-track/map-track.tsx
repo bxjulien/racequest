@@ -103,7 +103,6 @@ export default function MapTrack({
 const styles = StyleSheet.create({
   container: {
     overflow: 'hidden',
-    borderWidth: 1,
     borderRadius: 10,
   },
 });

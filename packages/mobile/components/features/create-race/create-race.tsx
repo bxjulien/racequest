@@ -197,6 +197,7 @@ export default function CreateRace() {
       component: (
         <CreateTraceSubmit
           track={formData.track}
+          closingIn={formData.closingIn}
           name={formData.name}
           setName={(name) => setFormData({ ...formData, name })}
         />

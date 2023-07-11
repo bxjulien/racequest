@@ -139,7 +139,7 @@ const NearbyTracesMap = ({
 
       {activeRace && (
         <BottomSheet
-          snapPoints={['15%', '45%']}
+          snapPoints={['25%', '45%']}
           handleIndicatorStyle={{ backgroundColor: theme.bg.neutral }}
           backgroundStyle={{ backgroundColor: theme.bg.primary }}
           style={{ paddingHorizontal: 10 }}

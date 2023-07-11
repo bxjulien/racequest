@@ -18,6 +18,8 @@ export class RaceRepository extends Repository<Race> {
     const queryBuilder = this.raceRepository
       .createQueryBuilder('races')
       .leftJoinAndSelect('races.track', 'track')
+      .leftJoinAndSelect('races.creator', 'creator')
+      .leftJoinAndSelect('races.events', 'raceEvent')
       .where('races.id = :id', { id })
       .getOne();
 

@@ -13,3 +13,28 @@ export function getDateUntilNumberOfDays(days: number) {
 
   return date;
 }
+
+export function getShortDate(date: Date) {
+  const month = date.toLocaleString('fr-FR', { month: 'long' });
+  const day = date.getDate();
+
+  return `${day} ${month}`;
+}
+
+export function getVerboseDate(date: Date) {
+  const days = getDaysFromNowToDate(date);
+
+  if (days === 0) {
+    return "Aujourd'hui";
+  }
+
+  if (days === 1) {
+    return 'Demain';
+  }
+
+  if (days === 2) {
+    return 'Après-demain';
+  }
+
+  return `Dans ${days} jours`;
+}

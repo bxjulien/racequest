@@ -1,10 +1,10 @@
-import { Race } from '../../../shared/types/race.type';
-import { useRouter } from 'expo-router';
-import { FontSize } from '../../../shared/enums/font-size.enum';
 import { FlatList, Pressable, StyleSheet, View, ViewStyle } from 'react-native';
 
+import { FontSize } from '../../../shared/enums/font-size.enum';
 import { RQText } from '../../shared/text/text';
+import { Race } from '../../../shared/types/race.type';
 import RaceOverview from '../../shared/trace-overview/race-overview';
+import { useRouter } from 'expo-router';
 
 const LEFT_MARGIN = 20;
 const RACES_GAP = 20;
@@ -55,6 +55,7 @@ const RaceItem = ({ race, style }: { race: Race; style: ViewStyle }) => {
         track={race.track}
         isMapInteractive={false}
         containerStyle={{ width: RACE_WIDTH, ...style }}
+        lightMacro
       />
     </Pressable>
   );

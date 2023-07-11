@@ -90,3 +90,12 @@ export const getUser = async (accessToken: string) => {
 
   return request(url, RequestMethod.GET, null, headers);
 };
+
+export const subscribeToRace = async (raceId: number, accessToken: string) => {
+  const url = `${baseUrl}/races/${raceId}/subscribe`;
+  const headers = {
+    Authorization: `Bearer ${accessToken}`,
+  };
+
+  return request(url, RequestMethod.POST, null, headers);
+};

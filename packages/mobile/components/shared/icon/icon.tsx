@@ -3,10 +3,10 @@ import {
   MaterialCommunityIcons,
   MaterialIcons,
 } from '@expo/vector-icons';
+import { Text, View, ViewStyle } from 'react-native';
 
 import { IconType } from '../../../shared/enums/IconType.enum';
 import React from 'react';
-import { Text } from 'react-native';
 
 const ICON_COMPONENTS: any = {
   FontAwesome,
@@ -19,15 +19,21 @@ export default function Icon({
   type = IconType.MaterialIcons,
   size = 24,
   color = 'black',
+  style,
 }: {
   name: any;
   type?: string;
   size?: number;
   color?: string;
+  style?: ViewStyle;
 }) {
   const IconComponent = ICON_COMPONENTS[type];
 
   if (!IconComponent) return <Text>Invalid icon type: {type}</Text>;
 
-  return <IconComponent name={name} size={size} color={color} />;
+  return (
+    <View style={style}>
+      <IconComponent name={name} size={size} color={color} />
+    </View>
+  );
 }

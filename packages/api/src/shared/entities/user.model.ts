@@ -1,7 +1,7 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 import { Race } from './race.model';
-import { RaceEventRunner } from './race-event-runner';
+import { RaceEventSubscription } from './race-event-subscription';
 import { Role } from '../enums/role.enum';
 
 @Entity({ name: 'Users' })
@@ -29,6 +29,9 @@ export class User {
   @OneToMany(() => Race, (race) => race.creator)
   createdRaces: Race[];
 
-  @OneToMany(() => RaceEventRunner, (raceEventRunner) => raceEventRunner.user)
-  raceEventRunners: RaceEventRunner[];
+  @OneToMany(
+    () => RaceEventSubscription,
+    (RaceEventSubscription) => RaceEventSubscription.user,
+  )
+  subscribedEvents: RaceEventSubscription[];
 }

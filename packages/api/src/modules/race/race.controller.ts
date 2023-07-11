@@ -15,9 +15,7 @@ import { PostRaceDto } from 'src/shared/dtos/post-race.dto';
 import { NearbyRacesRequestDto } from 'src/shared/dtos/nearby-races-request.dto';
 import { JwtAuthGuard } from '../auth/jwt.guard';
 import { RequestWithUser } from 'src/shared/types/request-with-user';
-import { getUser } from '../../../../mobile/shared/services/api.service';
-import { User } from 'src/shared/entities/user.model';
-import { RaceEventRunner } from 'src/shared/entities/race-event-runner';
+import { RaceEventSubscription } from 'src/shared/entities/race-event-subscription';
 
 @Controller('races')
 export class RaceController {
@@ -47,7 +45,7 @@ export class RaceController {
   subscribeToRace(
     @Req() request: RequestWithUser,
     @Param('id') id: number,
-  ): Promise<RaceEventRunner> {
+  ): Promise<RaceEventSubscription> {
     return this.raceService.subscribeToRace(id, request.user.id);
   }
 }

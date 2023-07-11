@@ -11,17 +11,12 @@ import { UserRepository } from './user.repository';
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User)
+    @InjectRepository(UserRepository)
     private readonly userRepository: UserRepository,
   ) {}
 
   async getCurrentUser(user: JwtUser) {
-    const _user = await this.userRepository
-      .createQueryBuilder('user')
-      .where('user.id = :id', { id: user.id })
-      .leftJoinAndSelect('user.createdRaces', 'race', 'race.isActive = true')
-      .leftJoinAndSelect('race.track', 'track')
-      .getOne();
+    const _user = await this.userRepository.getUserById(user.id);
 
     if (!_user) return this.createNewUser(user);
 
