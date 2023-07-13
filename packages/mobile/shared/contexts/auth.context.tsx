@@ -18,6 +18,7 @@ type AuthContextValue = {
   error: AuthError | null;
 
   user: User | null;
+  setUser: (user: User | null) => void;
   userLoading: boolean;
   userError: boolean;
 
@@ -148,6 +149,7 @@ export default function AuthContextProvider({
     error,
 
     user,
+    setUser,
     userLoading,
     userError,
 

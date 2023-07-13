@@ -26,7 +26,7 @@ import { useThemeContext } from '../../../shared/contexts/theme.context';
 export default function CreateRace() {
   const router = useRouter();
 
-  const { user, session } = useAuthContext();
+  const { user, setUser, session } = useAuthContext();
   const { theme } = useThemeContext();
   const { location, address } = useLocationContext();
 
@@ -103,6 +103,23 @@ export default function CreateRace() {
     });
 
     goNext();
+  };
+
+  const onSubmit = () => {
+    createRaceMutation.mutate(
+      {
+        formData,
+        accessToken: session!.access_token,
+      },
+      {
+        onSuccess: (_createdRace) => {
+          setUser({
+            ...user!,
+            createdRaces: [_createdRace, ...user!.createdRaces],
+          });
+        },
+      }
+    );
   };
 
   const steps: CreateTraceStep[] = [
@@ -204,12 +221,7 @@ export default function CreateRace() {
       ),
       footer: (
         <FormStepsFooter
-          goNext={() => {
-            createRaceMutation.mutate({
-              formData,
-              accessToken: session!.access_token,
-            });
-          }}
+          goNext={onSubmit}
           goBack={goBack}
           goNextTitle={
             createRaceMutation.isLoading

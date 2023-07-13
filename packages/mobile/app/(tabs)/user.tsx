@@ -8,15 +8,14 @@ import { RQText } from '../../components/shared/text/text';
 import { RaceList } from '../../components/shared/race-list/race-list';
 import { Redirect } from 'expo-router';
 import { useAuthContext } from '../../shared/contexts/auth.context';
+import UserSkeleton from '../../components/features/user/user.skeleton';
 
 export default function UserScreen() {
   const { user, session, userLoading, userError, logout } = useAuthContext();
 
-  if (!userLoading && (!user || !session))
-    return <Redirect href='/(auth)/login' />;
+  if (userLoading) return <UserSkeleton />;
 
-  if (!user || userError)
-    return <RQText>Erreur lors de la récupération de votre compte.</RQText>;
+  if (!user || !session) return <Redirect href='/(auth)/login' />;
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
