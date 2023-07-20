@@ -19,8 +19,6 @@ export const TrackMacroLight = ({
 }) => {
   const { theme } = useThemeContext();
 
-  console.log(closingIn);
-
   return (
     <View style={styles.infos}>
       <View>

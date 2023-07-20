@@ -22,7 +22,7 @@ const request = async (
 
     return response.data;
   } catch (error) {
-    console.error(error);
+    console.error(`url: ${url} | error: ${error}`);
     throw error;
   }
 };
@@ -91,8 +91,8 @@ export const getUser = async (accessToken: string) => {
   return request(url, RequestMethod.GET, null, headers);
 };
 
-export const subscribeToRace = async (raceId: number, accessToken: string) => {
-  const url = `${baseUrl}/races/${raceId}/subscribe`;
+export const subscribeToRace = async (eventId: number, accessToken: string) => {
+  const url = `${baseUrl}/races/events/${eventId}/subscribe`;
   const headers = {
     Authorization: `Bearer ${accessToken}`,
   };

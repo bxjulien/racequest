@@ -94,7 +94,7 @@ const NearbyTracesMap = ({
     });
   };
 
-  if (isError) console.log('Error loading nearby races');
+  if (isError) console.error('Error loading nearby races');
 
   return (
     <View style={styles.container}>

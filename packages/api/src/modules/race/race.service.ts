@@ -77,16 +77,17 @@ export class RaceService {
   }
 
   async subscribeToRace(
-    raceId: number,
+    eventId: number,
     userId: string,
   ): Promise<RaceEventSubscription> {
     const currentRaceEvent = await this.raceEventRepository
       .createQueryBuilder('raceEvent')
+      .where('raceEvent.id = :eventId', { eventId })
       .orderBy('raceEvent.editionCount', 'DESC')
       .getOne();
 
     if (!currentRaceEvent) {
-      throw new NotFoundException(`RaceEvent with Race ID ${raceId} not found`);
+      throw new NotFoundException(`RaceEvent with ID ${eventId} not found`);
     }
 
     const user: User = await this.userRepository.findOne({
@@ -106,13 +107,16 @@ export class RaceService {
       throw new ConflictException('User is already subscribed to this race');
     }
 
-    const RaceEventSubscription = this.RaceEventSubscriptionRepository.create({
+    const raceEventSubscription = this.RaceEventSubscriptionRepository.create({
       event: currentRaceEvent,
       user,
     });
 
-    await this.RaceEventSubscriptionRepository.save(RaceEventSubscription);
+    const savedRaceEventSubscription =
+      await this.RaceEventSubscriptionRepository.save(raceEventSubscription);
 
-    return RaceEventSubscription;
+    console.log('savedRaceEventSubscription', savedRaceEventSubscription);
+
+    return savedRaceEventSubscription;
   }
 }

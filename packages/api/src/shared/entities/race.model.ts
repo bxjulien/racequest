@@ -4,6 +4,7 @@ import {
   JoinColumn,
   OneToMany,
   OneToOne,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -28,7 +29,7 @@ export class Race {
   @JoinColumn()
   track: Track;
 
-  @OneToOne(() => User)
+  @ManyToOne(() => User)
   @JoinColumn()
   creator: User;
 

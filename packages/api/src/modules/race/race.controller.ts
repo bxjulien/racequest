@@ -40,7 +40,7 @@ export class RaceController {
     return this.raceService.postRace(postRaceDto, request.user.id);
   }
 
-  @Post(':id/subscribe')
+  @Post('events/:id/subscribe')
   @UseGuards(JwtAuthGuard)
   subscribeToRace(
     @Req() request: RequestWithUser,

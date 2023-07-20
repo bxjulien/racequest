@@ -24,6 +24,10 @@ export function getShortDate(date: Date) {
 export function getVerboseDate(date: Date) {
   const days = getDaysFromNowToDate(date);
 
+  if (days < 0) {
+    return 'Date passée';
+  }
+
   if (days === 0) {
     return "Aujourd'hui";
   }

@@ -9,8 +9,17 @@ import React from 'react';
 import { Track } from '../../../../shared/types/track.type';
 import { getVerboseDate } from '../../../../shared/utils/date.utils';
 import { useThemeContext } from '../../../../shared/contexts/theme.context';
+import { RaceEvent } from '../../../../shared/types/race-event.type';
 
-export const TrackMacro = ({ track, race }: { track: Track; race?: Race }) => {
+export const TrackMacro = ({
+  track,
+  race,
+  event,
+}: {
+  track: Track;
+  race?: Race;
+  event?: RaceEvent;
+}) => {
   const { theme } = useThemeContext();
 
   const macros = [
@@ -31,14 +40,9 @@ export const TrackMacro = ({ track, race }: { track: Track; race?: Race }) => {
     {
       id: 3,
       title: 'Se termine',
-      value:
-        race && race.events
-          ? getVerboseDate(
-              new Date(race.events[race.events?.length - 1]?.endDate)
-            )
-          : null,
+      value: race && event ? getVerboseDate(new Date(event.endDate)) : null,
       icon: 'calendar-clock',
-      show: race && race.events,
+      show: race && event,
     },
   ];
 

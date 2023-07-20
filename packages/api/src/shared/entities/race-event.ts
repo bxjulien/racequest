@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -29,6 +30,7 @@ export class RaceEvent {
   /* RELATIONS */
 
   @ManyToOne(() => Race, (race) => race.events)
+  @JoinColumn()
   race: Race;
 
   @OneToMany(

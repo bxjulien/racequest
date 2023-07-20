@@ -63,7 +63,6 @@ export default function AuthContextProvider({
       enabled: Boolean(session?.access_token && authUser),
       retry: false,
       onSuccess: (data) => {
-        console.log('🚀 ~ file: auth.context.tsx:65 ~ fetched user');
         setUser(data);
       },
       onError: (error) => {

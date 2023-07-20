@@ -23,7 +23,7 @@ import { useThemeContext } from '../../shared/contexts/theme.context';
 const SNAP_POINTS = ['35%', '70%'];
 
 const useRace = (id: string) => {
-  const [currentEvent, setCurrentEvent] = useState<RaceEvent | null>(null);
+  const [currentEvent, setCurrentEvent] = useState<RaceEvent | undefined>();
 
   const {
     data: race,
@@ -72,7 +72,8 @@ export default function RaceScreen({}): JSX.Element {
             <RQText size={FontSize.xxxl} bold center>
               {race.name}
             </RQText>
-            <TrackMacro track={race.track} race={race} />
+
+            <TrackMacro track={race.track} race={race} event={currentEvent} />
 
             {currentEvent && (
               <View style={styles.contentContainer}>
@@ -126,11 +127,8 @@ const Subscription = ({
     ({ eventId, accessToken }: { eventId: number; accessToken: string }) =>
       subscribeToRace(eventId, accessToken),
     {
-      onSuccess: (t) => {
+      onSuccess: () => {
         setHasUserSubscribed(true);
-      },
-      onError: (e) => {
-        console.log(e);
       },
     }
   );
